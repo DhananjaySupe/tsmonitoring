@@ -1,0 +1,9 @@
+{
+    "require": {
+        "monolog/monolog": "^3.7",
+        "guzzlehttp/guzzle": "^7.9",
+        "google/auth": "^1.47",
+        "google/cloud-core": "^1.59",
+        "mpdf/mpdf": "^8.2"
+    }
+}

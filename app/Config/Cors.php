@@ -34,7 +34,13 @@ class Cors extends BaseConfig
          *   - ['http://localhost:8080']
          *   - ['https://www.example.com']
          */
-        'allowedOrigins' => [],
+        // Allowed origins. Cannot use "*" when supportsCredentials = true.
+        // Add any front-end origins you use, e.g. Postman, local dev, etc.
+        'allowedOrigins' => [
+            'http://tsmonitoring.loc',
+            'http://localhost',
+            'http://127.0.0.1',
+        ],
 
         /**
          * Origin regex patterns for the `Access-Control-Allow-Origin` header.
@@ -57,7 +63,8 @@ class Cors extends BaseConfig
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
          */
-        'supportsCredentials' => false,
+        // Allow credentials (Authorization headers, etc.) in cross-origin requests
+        'supportsCredentials' => true,
 
         /**
          * Set headers to allow.
@@ -68,7 +75,15 @@ class Cors extends BaseConfig
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
          */
-        'allowedHeaders' => [],
+        // Common headers plus Authorization and custom API headers
+        'allowedHeaders' => [
+            'Content-Type',
+            'Accept',
+            'Authorization',
+            'X-Requested-With',
+            'X-API-KEY',
+            'X-ACCESS-TOKEN',
+        ],
 
         /**
          * Set headers to expose.
@@ -79,7 +94,9 @@ class Cors extends BaseConfig
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
          */
-        'exposedHeaders' => [],
+        'exposedHeaders' => [
+            'Authorization',
+        ],
 
         /**
          * Set methods to allow.
@@ -93,7 +110,7 @@ class Cors extends BaseConfig
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
          */
-        'allowedMethods' => [],
+        'allowedMethods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
         /**
          * Set how many seconds the results of a preflight request can be cached.

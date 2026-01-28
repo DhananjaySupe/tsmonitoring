@@ -12,6 +12,9 @@ use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
+use App\Filters\RateLimiter;
+use App\Filters\MaintenanceMode;
+use App\Filters\InputSanitizer;
 
 class Filters extends BaseFilters
 {
@@ -34,6 +37,9 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'ratelimiter'   => RateLimiter::class,
+        'maintenance'   => MaintenanceMode::class,
+        'inputsanitize' => InputSanitizer::class,
     ];
 
     /**
@@ -73,8 +79,10 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             // 'honeypot',
-            // 'csrf',
             // 'invalidchars',
+            'maintenance',
+            // Enable CSRF for non-API routes
+            'csrf' => ['except' => ['api/*']],
         ],
         'after' => [
             // 'honeypot',
@@ -106,5 +114,13 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        // Apply CORS and input sanitization for all API routes
+        'cors' => [
+            'before' => ['api/*'],
+        ],
+        'inputsanitize' => [
+            'before' => ['api/*'],
+        ],
+    ];
 }
