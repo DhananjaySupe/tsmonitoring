@@ -2001,6 +2001,126 @@
           }
         }
       ]
+    },
+    {
+      "name": "Inspections",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"allocation_id\": 1,\n  \"asset_id\": 1,\n  \"shift_id\": 1,\n  \"questions_answers_data\": [\n    { \"que\": 1, \"ans\": \"YES\", \"photo\": \"https://example.com/photo1.jpg\" },\n    { \"que\": 2, \"ans\": \"YES\", \"photo\": \"https://example.com/photo2.jpg\" },\n    { \"que\": 3, \"ans\": \"NO\", \"photo\": \"https://example.com/photo3.jpg\" }\n  ],\n  \"overall_status\": \"COMPLIANT\",\n  \"compliance_score\": 85.5,\n  \"notes\": \"All areas checked.\",\n  \"latitude\": 28.6139,\n  \"longitude\": 77.2090\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/inspections/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "inspections",
+                "new"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Upload",
+      "item": [
+        {
+          "name": "Upload Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "description": "Image file (JPEG, PNG, GIF, WebP). Creates large + thumb; returns large path/URL.",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/image",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "upload",
+                "image"
+              ]
+            },
+            "description": "Upload image via multipart. Resizes using config imageSizes; stores to S3 or assets/upload. Response returns only the large image path."
+          }
+        },
+        {
+          "name": "Upload Image (Base64)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"image\": \"<base64 string or data:image/jpeg;base64,...>\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/image",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "upload",
+                "image"
+              ]
+            },
+            "description": "Upload image via JSON body. Send \"image\" or \"photo\" as base64 (optional data:image/...;base64, prefix). Returns large image path."
+          }
+        }
+      ]
     }
   ],
   "variable": [

@@ -201,8 +201,9 @@ CREATE TABLE `inspections` (
   `questions_answers_data` text DEFAULT NULL COMMENT 'JSON',
   `compliance_score` decimal(5,2) DEFAULT NULL,
   `overall_status` enum('COMPLIANT','NON_COMPLIANT','PARTIAL') NOT NULL,
-  `photos` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`photos`)),
   `notes` text DEFAULT NULL,
+  `latitude` decimal(10,8) DEFAULT NULL,
+  `longitude` decimal(11,8) DEFAULT NULL,
   `submitted_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

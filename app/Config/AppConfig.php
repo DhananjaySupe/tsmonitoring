@@ -7,9 +7,6 @@
 		public $appName = 'Tentage and Sanitation';
 		public $appDesc = "Tentage and Sanitation";
 		public $appEmails = array();
-		public $defaultCSS = array();
-		public $defaultJS = array();
-		public $defaultMETA = array();
 		public $cssVersion = '1.0.0';
 		public $jsVersion = '1.0.0';
 		/** */
@@ -20,20 +17,30 @@
 		public $appDownloadQr = 'assets/images/appqrcode/appurl.webp';
 		/* JWT */
 		public $jwt_secret = 'VNyLbLP7aGg9YKZXlshZqkRFahRLgf1L';
-		public $jwt_expiry = 36000; // in sec - 10 hours
-
-		/* Session */
-		public $single_login = true; // true or false
+		/* JWT Expiry in seconds */
+		public $jwt_expiry = 36000;
+		/* Single Login */
+		public $single_login = true;
+		/* User Code Prefix */
 		public $userCodePrefix = 'KSH';
-		public $maxOtpAttempts = 5; // maximum OTP attempts
-		public $otpExpiry = 10; // OTP expiry in minutes
-
-		/* User Type Permissions */
-		public $checkUserTypePermissions = true; // true or false
+		/* Maximum OTP Attempts */
+		public $maxOtpAttempts = 5;
+		/* OTP Expiry in minutes*/
+		public $otpExpiry = 10;
+		/* Check User Type Permissions */
+		public $checkUserTypePermissions = true;
+		/* AWS S3 */
+		public $S3 = array(
+			'enabled' => false,
+			'key' => '',
+			'secret' => '',
+			'bucket' => '',
+			'region' => '',
+		);
 
 		public $imageSizes = array(
-        'large' => array(800, 600),
-        'thumb' => array(340, 255),
+        'large'  => array(1024, 768),
+		'thumb'  => array(240, 240),
 		);
 
 		public $twoFactorAuth = array(
@@ -54,15 +61,6 @@
 			$this->appEmails = array(
 			'enabled' => true,
             'admin' => 'admin@example.com'
-			);
-
-			$this->defaultCSS = array(
-			);
-
-			$this->defaultJS = array(
-			);
-
-			$this->defaultMETA = array(
 			);
 		}
 	}

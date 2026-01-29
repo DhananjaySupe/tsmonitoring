@@ -20,8 +20,9 @@ class InspectionsModel extends Model
         'questions_answers_data',
         'compliance_score',
         'overall_status',
-        'photos',
         'notes',
+        'latitude',
+        'longitude',
         'submitted_at',
     ];
 }

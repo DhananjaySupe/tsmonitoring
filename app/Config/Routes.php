@@ -88,4 +88,8 @@ $routes->group('api', ['namespace' => 'App\Controllers'], static function (Route
 
     $routes->get('get-allocations', 'SanitationAssetAllocations::getallocations');
     $routes->get('get-allocation-details/(:num)', 'SanitationAssetAllocations::allocationDetails/$1');
+
+    $routes->post('inspections/new', 'Inspections::create');
+
+    $routes->post('upload/image', 'Upload::image');
 });
