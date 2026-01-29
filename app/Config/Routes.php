@@ -62,9 +62,30 @@ $routes->group('api', ['namespace' => 'App\Controllers'], static function (Route
     $routes->post('questions/edit/(:num)', 'Questions::edit/$1');
     $routes->post('questions/delete/(:num)', 'Questions::delete/$1');
 
+    $routes->get('sanitation-assets', 'SanitationAssets::index');
+    $routes->get('sanitation-assets/view/(:num)', 'SanitationAssets::view/$1');
+    $routes->post('sanitation-assets/new', 'SanitationAssets::create');
+    $routes->post('sanitation-assets/edit/(:num)', 'SanitationAssets::edit/$1');
+    $routes->post('sanitation-assets/delete/(:num)', 'SanitationAssets::delete/$1');
+
     $routes->get('asset-types', 'AssetTypes::index');
     $routes->get('asset-types/view/(:num)', 'AssetTypes::view/$1');
     $routes->post('asset-types/new', 'AssetTypes::create');
     $routes->post('asset-types/edit/(:num)', 'AssetTypes::edit/$1');
     $routes->post('asset-types/delete/(:num)', 'AssetTypes::delete/$1');
+
+    $routes->get('vendors', 'Vendors::index');
+    $routes->get('vendors/view/(:num)', 'Vendors::view/$1');
+    $routes->post('vendors/new', 'Vendors::create');
+    $routes->post('vendors/edit/(:num)', 'Vendors::edit/$1');
+    $routes->post('vendors/delete/(:num)', 'Vendors::delete/$1');
+
+    $routes->get('sanitation-asset-allocations', 'SanitationAssetAllocations::index');
+    $routes->get('sanitation-asset-allocations/view/(:num)', 'SanitationAssetAllocations::view/$1');
+    $routes->post('sanitation-asset-allocations/new', 'SanitationAssetAllocations::create');
+    $routes->post('sanitation-asset-allocations/edit/(:num)', 'SanitationAssetAllocations::edit/$1');
+    $routes->post('sanitation-asset-allocations/delete/(:num)', 'SanitationAssetAllocations::delete/$1');
+
+    $routes->get('get-allocations', 'SanitationAssetAllocations::getallocations');
+    $routes->get('allocation-details/(:num)', 'SanitationAssetAllocations::allocationDetails/$1');
 });

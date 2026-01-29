@@ -12,6 +12,7 @@ class InspectionsModel extends Model
         'inspection_id',
         'allocation_id',
         'asset_id',
+        'shift_id',
         'swachhagrahi_id',
         'inspection_date',
         'total_questions',

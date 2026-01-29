@@ -1525,6 +1525,482 @@
           }
         }
       ]
+    },
+    {
+      "name": "Vendors",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/vendors?page=1&per_page=25&keywords=&status=&order_by_col=vendor_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vendors"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "vendor_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/vendors/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vendors",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vendor_name\": \"ABC Supplies\",\n  \"vendor_code\": \"V001\",\n  \"contact_person\": \"John Doe\",\n  \"contact_email\": \"john@abc.com\",\n  \"contact_phone\": \"911234567890\",\n  \"address\": \"123 Main St\",\n  \"status\": \"ACTIVE\",\n  \"user_id\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vendors/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vendors",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vendor_name\": \"ABC Supplies Updated\",\n  \"vendor_code\": \"V001\",\n  \"contact_person\": \"Jane Doe\",\n  \"contact_email\": \"jane@abc.com\",\n  \"contact_phone\": \"919876543210\",\n  \"address\": \"456 Oak Ave\",\n  \"status\": \"ACTIVE\",\n  \"user_id\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vendors/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vendors",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vendors/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vendors",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sanitation Asset Allocations",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-asset-allocations?page=1&per_page=25&asset_id=&swachhagrahi_id=&shift_id=&status=&allocation_date_from=&allocation_date_to=&order_by_col=allocation_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-asset-allocations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "asset_id",
+                  "value": ""
+                },
+                {
+                  "key": "swachhagrahi_id",
+                  "value": ""
+                },
+                {
+                  "key": "shift_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "allocation_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "allocation_date_to",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "allocation_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Allocations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/GetAllocation?page=1&per_page=25&status=&allocation_date_from=&allocation_date_to=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "GetAllocation"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "allocation_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "allocation_date_to",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-asset-allocations/details/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-asset-allocations",
+                "details",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-asset-allocations/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-asset-allocations",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_id\": 1,\n  \"swachhagrahi_id\": 1,\n  \"shift_id\": 1,\n  \"allocated_by\": 1,\n  \"allocation_date\": \"2025-01-28\",\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-asset-allocations/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-asset-allocations",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_id\": 1,\n  \"swachhagrahi_id\": 1,\n  \"shift_id\": 1,\n  \"allocated_by\": 1,\n  \"allocation_date\": \"2025-01-28\",\n  \"status\": \"COMPLETED\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-asset-allocations/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-asset-allocations",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-asset-allocations/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-asset-allocations",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
   "variable": [

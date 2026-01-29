@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 28, 2026 at 04:04 PM
+-- Generation Time: Jan 29, 2026 at 10:16 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -58,6 +58,21 @@ CREATE TABLE `asset_types` (
   `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `asset_types`
+--
+
+INSERT INTO `asset_types` (`asset_type_id`, `type`, `name`, `description`, `questions`, `status`) VALUES
+(1, 'SANITATION', 'Type-1 FRP Septic Tank', 'Fiber Reinforced Plastic (FRP) Toilets (with Septic Tank)', '1,2,3,4,5,6,7,8,9,10,11,12,13,14', 1),
+(2, 'SANITATION', 'Type-2 FRP Soak Pit', 'Fiber Reinforced Plastic (FRP) Toilets (with Soak Pit)', '1,2,15,4,5,6,7,8,9,10,11,12,13,14', 1),
+(3, 'SANITATION', 'Type-3 FRP Urinals', 'Fiber Reinforced Plastic (FRP) Urinals (with Septic Tank / Soak Pit)', '3,16,17,9', 1),
+(4, 'SANITATION', 'Type-4 Prefab Steel Septic Tank', 'Prefabricated Steel Toilets with Septic Tank', '1,2,3,4,5,6,7,8,9,10,11,12,13,14', 1),
+(5, 'SANITATION', 'Type-5 Prefab Steel Soak Pit', 'Prefabricated Steel Toilets (with soak pit)', '1,2,15,4,5,6,7,8,9,10,11,12,13,14', 1),
+(6, 'SANITATION', 'Type-6 Kanath Soak Pit', 'Tentage / Kanath Toilets (with soak pit) – Integrated Structure (Sub Structure & Super Structure)', '5,10,11,12,13,14,15,16', 1),
+(8, 'SANITATION', 'Type-8 Govt Cemented Toilets', 'Govt Cemented Toilets 4x4 and 8x8', '3,4,5,6,7,8,10,12,13,14,15', 1),
+(9, 'SANITATION', 'Type-9 Vehicle Mounted Mobile Toilets', 'Vehicle mounted mobile toilets –10 toilets/ unit', '0', 1),
+(10, 'SANITATION', 'Type-10 Special Toilets – VIP', 'Special Toilets – Specially Designed Structures VIP', '0', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -94,6 +109,16 @@ CREATE TABLE `circles` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `circles`
+--
+
+INSERT INTO `circles` (`circle_id`, `circle_name`, `circle_code`, `sector_id`, `boundary_coordinates`, `created_at`) VALUES
+(1, 'Circle A', 'CIRC001', 1, NULL, '2026-01-24 08:13:23'),
+(2, 'Circle B', 'CIRC002', 1, NULL, '2026-01-24 08:13:23'),
+(3, 'Circle C', 'CIRC003', 2, NULL, '2026-01-24 08:13:23'),
+(4, 'Circle D', 'CIRC004', 3, NULL, '2026-01-24 08:13:23');
+
 -- --------------------------------------------------------
 
 --
@@ -106,6 +131,13 @@ CREATE TABLE `ci_sessions` (
   `timestamp` int(10) UNSIGNED NOT NULL DEFAULT 0,
   `data` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ci_sessions`
+--
+
+INSERT INTO `ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
+('vepr483q1kpns74bjlcvdge0vis9tg00', '127.0.0.1', 4294967295, 0x5f5f63695f6c6173745f726567656e65726174657c693a313736383831383239303b667461646d696e5f6c6f67696e5f63737266746f6b656e7c733a33323a226335343333336431303530376431633038393464323131613939363732313036223b5f63695f70726576696f75735f75726c7c733a33323a22687474703a2f2f656d692e6c6f632f652d6d616e646174652d7061636b616765223b757365725f69647c733a313a2231223b73657373696f6e5f746f6b656e7c733a33323a226630623366613538643039666534373935663564383763306536633939393564223b);
 
 -- --------------------------------------------------------
 
@@ -161,6 +193,7 @@ CREATE TABLE `inspections` (
   `inspection_id` int(11) NOT NULL,
   `allocation_id` int(11) NOT NULL,
   `asset_id` int(11) NOT NULL,
+  `shift_id` int(11) NOT NULL,
   `swachhagrahi_id` int(11) NOT NULL,
   `inspection_date` date NOT NULL,
   `total_questions` int(11) DEFAULT NULL,
@@ -228,6 +261,16 @@ CREATE TABLE `questions` (
   `is_active` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `questions`
+--
+
+INSERT INTO `questions` (`question_id`, `question_text`, `question_type`, `options`, `expected_answer`, `condition_type`, `condition_value`, `severity`, `is_mandatory`, `is_photo_mandatory`, `sequence`, `is_active`) VALUES
+(1, 'Is the toilet floor clean?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'MEDIUM', 1, 0, 1, 1),
+(2, 'Are the toilet seats clean?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'MEDIUM', 1, 0, 2, 1),
+(3, 'Is water available in the toilet?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'HIGH', 1, 0, 1, 1),
+(4, 'Rate the overall condition of the toilet infrastructure (1-5)', 'RATING', '[1,2,3,4,5]', '4', 'LESS_THAN', '3', 'MEDIUM', 1, 0, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -286,6 +329,15 @@ CREATE TABLE `sectors` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `sectors`
+--
+
+INSERT INTO `sectors` (`sector_id`, `sector_name`, `sector_code`, `boundary_coordinates`, `created_at`) VALUES
+(1, 'Central Zone', 'SECT001', NULL, '2026-01-24 08:13:23'),
+(2, 'East Zone', 'SECT002', NULL, '2026-01-24 08:13:23'),
+(3, 'West Zone', 'SECT003', NULL, '2026-01-24 08:13:23');
+
 -- --------------------------------------------------------
 
 --
@@ -301,6 +353,13 @@ CREATE TABLE `session` (
   `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `session`
+--
+
+INSERT INTO `session` (`session_id`, `user_id`, `session_token`, `logged_in`, `logged_out`, `status`) VALUES
+(19, 1, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSIsImlhdCI6MTc2OTY2ODA1MCwiZXhwIjoxNzY5NjcxNjUwfQ.YO6FKJFKG4IqwrrVsllGjuJLVhrIkn6dkOTpfjx54e8', '2026-01-29 11:57:30', NULL, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -314,6 +373,15 @@ CREATE TABLE `shifts` (
   `end_time` time NOT NULL,
   `is_active` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `shifts`
+--
+
+INSERT INTO `shifts` (`shift_id`, `shift_name`, `start_time`, `end_time`, `is_active`) VALUES
+(1, 'Morning Shift', '08:00:00', '16:00:00', 1),
+(2, 'Evening Shift', '16:00:00', '00:00:00', 1),
+(3, 'Night Shift', '00:00:00', '08:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -332,6 +400,17 @@ CREATE TABLE `system_config` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `system_config`
+--
+
+INSERT INTO `system_config` (`config_id`, `config_key`, `config_value`, `description`, `config_type`, `is_active`, `updated_by`, `updated_at`) VALUES
+(1, 'INCIDENT_DUE_HOURS', '24', 'Hours within which incident should be resolved', 'NUMBER', 1, NULL, '2026-01-24 08:13:23'),
+(2, 'ATTENDANCE_GEO_FENCE_RADIUS', '100', 'Radius in meters for attendance geo-fencing', 'NUMBER', 1, NULL, '2026-01-24 08:13:23'),
+(3, 'COMPLIANCE_THRESHOLD', '80', 'Minimum compliance percentage for assets', 'NUMBER', 1, NULL, '2026-01-24 08:13:23'),
+(4, 'NOTIFICATION_ENABLED', 'true', 'Enable/disable notifications', 'BOOLEAN', 1, NULL, '2026-01-24 08:13:23'),
+(5, 'SYNC_INTERVAL_MINUTES', '15', 'Mobile sync interval in minutes', 'NUMBER', 1, NULL, '2026-01-24 08:13:23');
+
 -- --------------------------------------------------------
 
 --
@@ -340,7 +419,7 @@ CREATE TABLE `system_config` (
 
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
+  `code` varchar(50) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
   `phone` varchar(15) DEFAULT NULL,
@@ -348,9 +427,19 @@ CREATE TABLE `users` (
   `user_type_id` int(11) NOT NULL DEFAULT 0,
   `vendor_id` int(11) DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT 1,
+  `otp` varchar(6) NOT NULL DEFAULT '0',
+  `otp_expiry` datetime DEFAULT NULL,
+  `otp_attempts` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `code`, `password_hash`, `email`, `phone`, `full_name`, `user_type_id`, `vendor_id`, `is_active`, `otp`, `otp_expiry`, `otp_attempts`, `created_at`, `updated_at`) VALUES
+(1, 'KSH2026012822035279600002', '$2y$10$YRhN3leJLjukd/jbjafuBu/qyPPC6fER5DF/NMN0dHjGF5PYtAS9K', 'admin@example.com', '911234567890', 'Admin User', 1, 0, 1, '0', NULL, 0, '2026-01-24 11:03:49', '2026-01-29 06:22:12');
 
 -- --------------------------------------------------------
 
@@ -365,6 +454,26 @@ CREATE TABLE `user_types` (
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `user_types`
+--
+
+INSERT INTO `user_types` (`user_type_id`, `user_type`, `index_no`, `status`) VALUES
+(1, 'Super Admin', 1, 1),
+(2, 'Admin', 2, 1),
+(3, 'Mela Adhikari', 3, 1),
+(4, 'Additional Mela Adhikari', 4, 1),
+(5, 'Incharge Sanitation', 5, 1),
+(6, 'Sector Medical Officer (SMO)', 6, 1),
+(7, 'Sub Divisional  Magistrate (SDM)', 7, 1),
+(8, 'Nayab Tahsildar / Sector Magistrate', 8, 1),
+(9, 'Circle Inspector', 9, 1),
+(10, 'Gram Panchayat/Vikas Adhikari', 10, 0),
+(11, 'Vendor', 11, 1),
+(12, 'Vendor Supervisor', 12, 1),
+(13, 'Monitoring Agent (GSD)', 13, 1),
+(14, 'Supervisor Monitoring Agent (Swachhagrahis)', 14, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -374,13 +483,21 @@ CREATE TABLE `user_types` (
 CREATE TABLE `user_type_permissions` (
   `permission_id` int(11) NOT NULL,
   `user_type_id` int(11) NOT NULL,
-  `permission` enum('SECTOR','CIRCLE') NOT NULL,
+  `permission` enum('users','user-permissions','shift','circle','sector','question','asset-type') NOT NULL,
   `can_create` tinyint(1) DEFAULT 0,
-  `can_read` tinyint(1) DEFAULT 0,
-  `can_update` tinyint(1) DEFAULT 0,
+  `can_view` tinyint(1) DEFAULT 0,
+  `can_edit` tinyint(1) DEFAULT 0,
   `can_delete` tinyint(1) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_type_permissions`
+--
+
+INSERT INTO `user_type_permissions` (`permission_id`, `user_type_id`, `permission`, `can_create`, `can_view`, `can_edit`, `can_delete`, `created_at`) VALUES
+(1, 1, 'user-permissions', 1, 1, 1, 1, '2026-01-29 06:28:34'),
+(2, 1, 'users', 1, 1, 1, 1, '2026-01-29 06:28:34');
 
 -- --------------------------------------------------------
 
@@ -549,7 +666,7 @@ ALTER TABLE `system_config`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `username` (`code`),
   ADD UNIQUE KEY `email` (`email`),
   ADD KEY `idx_users_user_type` (`user_type_id`),
   ADD KEY `idx_users_vendor_id` (`vendor_id`);
@@ -588,7 +705,7 @@ ALTER TABLE `asset_location_history`
 -- AUTO_INCREMENT for table `asset_types`
 --
 ALTER TABLE `asset_types`
-  MODIFY `asset_type_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `asset_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `attendance`
@@ -600,7 +717,7 @@ ALTER TABLE `attendance`
 -- AUTO_INCREMENT for table `circles`
 --
 ALTER TABLE `circles`
-  MODIFY `circle_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `circle_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `incidents`
@@ -636,7 +753,7 @@ ALTER TABLE `notification_logs`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `sanitation_assets`
@@ -654,49 +771,49 @@ ALTER TABLE `sanitation_asset_allocations`
 -- AUTO_INCREMENT for table `sectors`
 --
 ALTER TABLE `sectors`
-  MODIFY `sector_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `sector_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `session`
 --
 ALTER TABLE `session`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `shifts`
 --
 ALTER TABLE `shifts`
-  MODIFY `shift_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `shift_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `system_config`
 --
 ALTER TABLE `system_config`
-  MODIFY `config_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `config_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_types`
 --
 ALTER TABLE `user_types`
-  MODIFY `user_type_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
 
 --
 -- AUTO_INCREMENT for table `user_type_permissions`
 --
 ALTER TABLE `user_type_permissions`
-  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `vendor_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `vendor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
