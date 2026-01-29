@@ -28,6 +28,9 @@
 		public $maxOtpAttempts = 5; // maximum OTP attempts
 		public $otpExpiry = 10; // OTP expiry in minutes
 
+		/* User Type Permissions */
+		public $checkUserTypePermissions = true; // true or false
+
 		public $imageSizes = array(
         'large' => array(800, 600),
         'thumb' => array(340, 255),

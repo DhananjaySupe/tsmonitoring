@@ -16,6 +16,7 @@
 	use CodeIgniter\API\ResponseTrait;
 	use App\Models\SessionsModel;
 	use App\Models\UsersModel;
+	use App\Models\UserTypePermissionsModel;
 
 	use App\Libraries\JwtLib;
 
@@ -115,21 +116,53 @@
 			return null;
 		}
 
+
+		public function CheckUserTypePermissions($permission)
+		{
+			if ($this->AppConfig->checkUserTypePermissions) {
+
+				$userTypePermissionsModel = new UserTypePermissionsModel();
+
+				$permission = explode(':', $permission);
+				$resource = $permission[0];
+				$action = $permission[1];
+
+				// Map logical action names to column suffixes
+				$fieldAction = $action === 'read' ? 'view' : $action;
+
+				$userTypePermission = $userTypePermissionsModel
+					->select('permission_id')
+					->where('user_type_id', $this->_member['user_type_id'])
+					->where('permission', $resource)
+					->where('can_' . $fieldAction, 1)
+					->first();
+
+				if (! $userTypePermission) {
+					$this->setError('Access denied. You are not authorized to access this resource.', 403);
+					return false;
+				}
+			}
+			return true;
+		}
+
 		public function sessionData($member)
 		{
-			if (!is_array($member) && $member > 0) {
-				$userPublicModel = new UserPublicModel();
-				$member = $userPublicModel->findByID($member);
+			if (! is_array($member) && (int) $member > 0) {
+				$usersModel = new UsersModel();
+				$member = $usersModel->find($member);
 			}
-			$data = array(
+			if (! is_array($member)) {
+				return [];
+			}
+			$data = [
 				'id' => $member['user_id'],
-				'code' => $member['code'],
-				'email' => $member['email'],
-				'phone' => $member['phone'],
+				'code' => $member['code'] ?? null,
+				'email' => $member['email'] ?? null,
+				'phone' => $member['phone'] ?? null,
 				'full_name' => $member['full_name'],
 				'user_type_id' => $member['user_type_id'],
-				'is_active' => $member['is_active']
-			);
+				'is_active' => $member['is_active'] ?? 1,
+			];
 			return $data;
 		}
 		public function setSuccess($message = "")

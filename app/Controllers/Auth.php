@@ -9,11 +9,6 @@ use Config\AppConfig;
 
 class Auth extends BaseController
 {
-    /**
-     * POST /api/auth/login
-     * Body: username (or email), password
-     * Headers: X-API-KEY
-     */
     public function login()
     {
         if (! $this->isPost()) {
@@ -50,7 +45,6 @@ class Auth extends BaseController
         $sessionsModel = new SessionsModel();
         $jwt        = new JwtLib();
 
-        // Single-login: remove existing sessions for this user
         if (! empty($this->AppConfig->single_login)) {
             $sessionsModel->where('user_id', $user['user_id'])->delete();
         }
@@ -70,7 +64,6 @@ class Auth extends BaseController
 
         $twoFactorRequired = false;
         if (! empty($this->AppConfig->twoFactorAuth['enabled'])) {
-            // Send OTP using helper
             if (function_exists('sendOtp')) {
                 sendOtp($user['user_id']);
                 $twoFactorRequired = true;
@@ -95,10 +88,6 @@ class Auth extends BaseController
         return $this->response();
     }
 
-    /**
-     * POST /api/auth/logout
-     * Headers: X-API-KEY, X-ACCESS-TOKEN
-     */
     public function logout()
     {
         if (! $this->isPost()) {
@@ -132,13 +121,6 @@ class Auth extends BaseController
         return $this->response();
     }
 
-    /**
-     * POST /api/auth/forgot-password
-     * Body: phone
-     * Headers: X-API-KEY
-     *
-     * This will send an OTP using the helper if 2FA is enabled.
-     */
     public function forgotPassword()
     {
         if (! $this->isPost()) {
@@ -162,7 +144,6 @@ class Auth extends BaseController
 
         $user = $usersModel->where('phone', $identifier)->where('is_active', 1)->first();
 
-        // Return generic success even if user not found to avoid information leakage
         if ($user) {
             if (! empty($this->AppConfig->twoFactorAuth['enabled']) && function_exists('sendOtp')) {
                 sendOtp($user['user_id']);
@@ -175,13 +156,6 @@ class Auth extends BaseController
         return $this->response();
     }
 
-    /**
-     * POST /api/auth/register
-     * Body: phone, password, full_name, [email], [vendor_id], [user_type_id]
-     * Headers: X-API-KEY
-     *
-     * Registers a new user. If two-factor auth is enabled, an OTP is sent.
-     */
     public function register()
     {
         if (! $this->isPost()) {
@@ -213,7 +187,6 @@ class Auth extends BaseController
 
         $usersModel = new UsersModel();
 
-        // Ensure phone is unique
         $existing = $usersModel->where('phone', $phone)->first();
         if ($existing) {
             $this->setError('An account with this phone already exists.', 409);
@@ -223,7 +196,7 @@ class Auth extends BaseController
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
         $data = [
-            'username'     => $phone,
+            'code'         => $this->AppConfig->userCodePrefix . rand(100000, 999999),
             'password_hash'=> $passwordHash,
             'email'        => $email,
             'phone'        => $phone,
@@ -265,13 +238,6 @@ class Auth extends BaseController
         return $this->response();
     }
 
-    /**
-     * POST /api/auth/verify-otp
-     * Body: phone, otp
-     * Headers: X-API-KEY
-     *
-     * Verifies the OTP and, on success, returns an access token.
-     */
     public function verifyOtp()
     {
         if (! $this->isPost()) {
@@ -319,7 +285,6 @@ class Auth extends BaseController
             return $this->response();
         }
 
-        // OTP is valid: clear OTP fields and reset attempts
         $usersModel->update($user['user_id'], [
             'otp'          => null,
             'otp_expiry'   => null,
@@ -329,7 +294,6 @@ class Auth extends BaseController
         $sessionsModel = new SessionsModel();
         $jwt        = new JwtLib();
 
-        // Try to reuse the latest active session if it exists
         $sessionRow = $sessionsModel
             ->where('user_id', $user['user_id'])
             ->where('status', 1)
@@ -339,7 +303,6 @@ class Auth extends BaseController
         if ($sessionRow) {
             $accessToken = $sessionRow['session_token'];
         } else {
-            // Fallback: create a new session and token
             if (! empty($this->AppConfig->single_login)) {
                 $sessionsModel->where('user_id', $user['user_id'])->delete();
             }
