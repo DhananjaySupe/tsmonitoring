@@ -1804,7 +1804,7 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/GetAllocation?page=1&per_page=25&status=&allocation_date_from=&allocation_date_to=",
+              "raw": "{{base_url}}/api/get-allocations?page=1&per_page=25&status=&allocation_date_from=&allocation_date_to=",
               "host": [
                 "{{base_url}}"
               ],
@@ -1852,7 +1852,7 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/sanitation-asset-allocations/details/1",
+              "raw": "{{base_url}}/api/get-allocation-details/1",
               "host": [
                 "{{base_url}}"
               ],

@@ -31,7 +31,7 @@
 			* @var array
 		*/
 		protected $helpers = ['app','text','imagick'];
-		protected $_member = array();
+		protected $_userData = array();
 		protected $_session = array();
 		protected $_output = array('success' => false);
 		protected $_status = 200;
@@ -85,7 +85,7 @@
 							$jwt = new JwtLib();
 							$validated = $jwt->validateToken($_SERVER['HTTP_X_ACCESS_TOKEN']);
 							if($validated){
-								$this->_member = $this->sessionData($member);
+								$this->_userData = $this->sessionData($member);
 								return true;
 							} else {
 								return false;
@@ -132,7 +132,7 @@
 
 				$userTypePermission = $userTypePermissionsModel
 					->select('permission_id')
-					->where('user_type_id', $this->_member['user_type_id'])
+					->where('user_type_id', $this->_userData['user_type_id'])
 					->where('permission', $resource)
 					->where('can_' . $fieldAction, 1)
 					->first();
@@ -155,7 +155,7 @@
 				return [];
 			}
 			$data = [
-				'id' => $member['user_id'],
+				'user_id' => $member['user_id'],
 				'code' => $member['code'] ?? null,
 				'email' => $member['email'] ?? null,
 				'phone' => $member['phone'] ?? null,

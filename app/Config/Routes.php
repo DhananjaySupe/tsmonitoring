@@ -87,5 +87,5 @@ $routes->group('api', ['namespace' => 'App\Controllers'], static function (Route
     $routes->post('sanitation-asset-allocations/delete/(:num)', 'SanitationAssetAllocations::delete/$1');
 
     $routes->get('get-allocations', 'SanitationAssetAllocations::getallocations');
-    $routes->get('allocation-details/(:num)', 'SanitationAssetAllocations::allocationDetails/$1');
+    $routes->get('get-allocation-details/(:num)', 'SanitationAssetAllocations::allocationDetails/$1');
 });

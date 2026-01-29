@@ -264,7 +264,7 @@ class SanitationAssetAllocations extends BaseController
         return $this->response();
     }
 
-    public function getallocations($swachhagrahiId)
+    public function getallocations()
     {
         if (! $this->isGet()) {
             $this->setError($this->methodNotAllowed, 405);
@@ -282,7 +282,7 @@ class SanitationAssetAllocations extends BaseController
             return $this->response();
         }
 
-        $swachhagrahiId = (int) $this->member['user_id'];
+        $swachhagrahiId = (int) $this->_userData['user_id'];
         if ($swachhagrahiId < 1) {
             $this->setError('Invalid swachhagrahi id.', 400);
             return $this->response();
