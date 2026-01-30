@@ -80,6 +80,12 @@ $routes->group('api', ['namespace' => 'App\Controllers'], static function (Route
     $routes->post('vendors/edit/(:num)', 'Vendors::edit/$1');
     $routes->post('vendors/delete/(:num)', 'Vendors::delete/$1');
 
+    $routes->get('vehicles', 'Vehicles::index');
+    $routes->get('vehicles/view/(:num)', 'Vehicles::view/$1');
+    $routes->post('vehicles/new', 'Vehicles::create');
+    $routes->post('vehicles/edit/(:num)', 'Vehicles::edit/$1');
+    $routes->post('vehicles/delete/(:num)', 'Vehicles::delete/$1');
+
     $routes->get('sanitation-asset-allocations', 'SanitationAssetAllocations::index');
     $routes->get('sanitation-asset-allocations/view/(:num)', 'SanitationAssetAllocations::view/$1');
     $routes->post('sanitation-asset-allocations/new', 'SanitationAssetAllocations::create');

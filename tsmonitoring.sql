@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 29, 2026 at 10:16 AM
+-- Generation Time: Jan 30, 2026 at 01:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -193,7 +193,7 @@ CREATE TABLE `inspections` (
   `inspection_id` int(11) NOT NULL,
   `allocation_id` int(11) NOT NULL,
   `asset_id` int(11) NOT NULL,
-  `shift_id` int(11) NOT NULL,
+  `shift_id` int(11) NOT NULL DEFAULT 0,
   `swachhagrahi_id` int(11) NOT NULL,
   `inspection_date` date NOT NULL,
   `total_questions` int(11) DEFAULT NULL,
@@ -202,8 +202,8 @@ CREATE TABLE `inspections` (
   `compliance_score` decimal(5,2) DEFAULT NULL,
   `overall_status` enum('COMPLIANT','NON_COMPLIANT','PARTIAL') NOT NULL,
   `notes` text DEFAULT NULL,
-  `latitude` decimal(10,8) DEFAULT NULL,
-  `longitude` decimal(11,8) DEFAULT NULL,
+  `latitude` varchar(30) NOT NULL DEFAULT '0',
+  `longitude` varchar(30) DEFAULT '0',
   `submitted_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -316,6 +316,13 @@ CREATE TABLE `sanitation_asset_allocations` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `sanitation_asset_allocations`
+--
+
+INSERT INTO `sanitation_asset_allocations` (`allocation_id`, `asset_id`, `swachhagrahi_id`, `shift_id`, `allocated_by`, `allocation_date`, `status`, `created_at`) VALUES
+(1, 1, 1, 1, 1, '2025-01-28', 'ACTIVE', '2026-01-30 10:08:10');
+
 -- --------------------------------------------------------
 
 --
@@ -359,7 +366,7 @@ CREATE TABLE `session` (
 --
 
 INSERT INTO `session` (`session_id`, `user_id`, `session_token`, `logged_in`, `logged_out`, `status`) VALUES
-(19, 1, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSIsImlhdCI6MTc2OTY2ODA1MCwiZXhwIjoxNzY5NjcxNjUwfQ.YO6FKJFKG4IqwrrVsllGjuJLVhrIkn6dkOTpfjx54e8', '2026-01-29 11:57:30', NULL, 1);
+(24, 1, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSIsImlhdCI6MTc2OTc2NzI1NCwiZXhwIjoxNzY5NzcwODU0fQ.VCUsIzZVuZS_DM5ntDCfRGG57K9olYBFIC35eEMaKTw', '2026-01-30 15:30:55', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -440,7 +447,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `code`, `password_hash`, `email`, `phone`, `full_name`, `user_type_id`, `vendor_id`, `is_active`, `otp`, `otp_expiry`, `otp_attempts`, `created_at`, `updated_at`) VALUES
-(1, 'KSH2026012822035279600002', '$2y$10$YRhN3leJLjukd/jbjafuBu/qyPPC6fER5DF/NMN0dHjGF5PYtAS9K', 'admin@example.com', '911234567890', 'Admin User', 1, 0, 1, '0', NULL, 0, '2026-01-24 11:03:49', '2026-01-29 06:22:12');
+(1, 'KSH2026012822035279600002', '$2y$10$YRhN3leJLjukd/jbjafuBu/qyPPC6fER5DF/NMN0dHjGF5PYtAS9K', 'admin@example.com', '911234567890', 'Admin User', 1, 0, 1, '380610', '2026-01-30 15:06:50', 0, '2026-01-24 11:03:49', '2026-01-29 06:22:12');
 
 -- --------------------------------------------------------
 
@@ -484,7 +491,7 @@ INSERT INTO `user_types` (`user_type_id`, `user_type`, `index_no`, `status`) VAL
 CREATE TABLE `user_type_permissions` (
   `permission_id` int(11) NOT NULL,
   `user_type_id` int(11) NOT NULL,
-  `permission` enum('users','user-permissions','shift','circle','sector','question','asset-type') NOT NULL,
+  `permission` enum('users','user-permissions','shift','circle','sector','question','asset-type','asset','vendor','allocation','inspection') NOT NULL,
   `can_create` tinyint(1) DEFAULT 0,
   `can_view` tinyint(1) DEFAULT 0,
   `can_edit` tinyint(1) DEFAULT 0,
@@ -498,7 +505,204 @@ CREATE TABLE `user_type_permissions` (
 
 INSERT INTO `user_type_permissions` (`permission_id`, `user_type_id`, `permission`, `can_create`, `can_view`, `can_edit`, `can_delete`, `created_at`) VALUES
 (1, 1, 'user-permissions', 1, 1, 1, 1, '2026-01-29 06:28:34'),
-(2, 1, 'users', 1, 1, 1, 1, '2026-01-29 06:28:34');
+(2, 1, 'users', 1, 1, 1, 1, '2026-01-29 06:28:34'),
+(4, 1, 'shift', 1, 1, 1, 1, '2026-01-29 06:28:34'),
+(5, 1, 'circle', 1, 1, 1, 1, '2026-01-29 06:28:34'),
+(6, 1, 'sector', 1, 1, 1, 1, '2026-01-29 06:28:34'),
+(7, 1, 'question', 1, 1, 1, 1, '2026-01-29 06:28:34'),
+(8, 1, 'asset-type', 1, 1, 1, 1, '2026-01-29 06:28:34'),
+(9, 1, 'asset', 1, 1, 1, 1, '2026-01-29 06:28:34'),
+(10, 1, 'vendor', 1, 1, 1, 1, '2026-01-29 06:28:34'),
+(11, 1, 'allocation', 1, 1, 1, 1, '2026-01-29 06:28:34'),
+(12, 1, 'inspection', 1, 1, 1, 1, '2026-01-29 06:28:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicles`
+--
+
+CREATE TABLE `vehicles` (
+  `vehicle_id` bigint(20) UNSIGNED NOT NULL,
+  `vehicle_name` varchar(100) NOT NULL,
+  `vehicle_type` varchar(50) NOT NULL CHECK (`vehicle_type` in ('Compactor','Dumper','Loader','Mini-truck','Tipper')),
+  `vehicle_number` varchar(20) NOT NULL,
+  `rc_number` varchar(30) NOT NULL,
+  `vendor_id` int(11) NOT NULL,
+  `imei_number` varchar(15) NOT NULL,
+  `chassis_number` varchar(30) NOT NULL,
+  `gps_device_id` varchar(50) DEFAULT NULL,
+  `registration_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(20) DEFAULT 'Active' CHECK (`status` in ('Active','Inactive','Maintenance','Retired')),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicle_collection_points`
+--
+
+CREATE TABLE `vehicle_collection_points` (
+  `point_id` bigint(20) UNSIGNED NOT NULL,
+  `point_code` varchar(20) NOT NULL,
+  `point_name` varchar(100) NOT NULL,
+  `latitude` decimal(10,8) NOT NULL,
+  `longitude` decimal(11,8) NOT NULL,
+  `address` text DEFAULT NULL,
+  `ward_number` varchar(10) DEFAULT NULL,
+  `zone` varchar(50) DEFAULT NULL,
+  `point_type` varchar(30) DEFAULT NULL CHECK (`point_type` in ('Residential','Commercial','Public','Institutional')),
+  `expected_collection_time` time DEFAULT NULL,
+  `collection_frequency` varchar(20) DEFAULT 'Daily',
+  `status` varchar(20) DEFAULT 'Active'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicle_daily_trip_summaries`
+--
+
+CREATE TABLE `vehicle_daily_trip_summaries` (
+  `summary_id` int(11) NOT NULL,
+  `assignment_id` int(11) NOT NULL,
+  `vehicle_id` int(11) NOT NULL,
+  `route_id` int(11) NOT NULL,
+  `trip_date` date NOT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `total_distance` decimal(8,2) DEFAULT 0.00,
+  `total_points_assigned` int(11) DEFAULT 0,
+  `total_points_visited` int(11) DEFAULT 0,
+  `total_points_missed` int(11) DEFAULT 0,
+  `total_garbage_collected` decimal(10,2) DEFAULT 0.00,
+  `avg_speed` decimal(5,2) DEFAULT NULL,
+  `max_speed` decimal(5,2) DEFAULT NULL,
+  `idle_time` varchar(25) DEFAULT NULL,
+  `moving_time` varchar(25) DEFAULT NULL,
+  `completion_percentage` decimal(5,2) DEFAULT NULL,
+  `trip_status` varchar(20) DEFAULT 'Completed'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicle_geofences`
+--
+
+CREATE TABLE `vehicle_geofences` (
+  `geofence_id` bigint(20) UNSIGNED NOT NULL,
+  `point_id` int(11) NOT NULL,
+  `radius_meters` decimal(5,2) DEFAULT 50.00,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicle_gps_tracking`
+--
+
+CREATE TABLE `vehicle_gps_tracking` (
+  `tracking_id` int(11) NOT NULL,
+  `vehicle_id` int(11) NOT NULL,
+  `assignment_id` int(11) NOT NULL,
+  `latitude` decimal(10,8) NOT NULL,
+  `longitude` decimal(11,8) NOT NULL,
+  `speed` decimal(5,2) DEFAULT NULL,
+  `direction` decimal(5,2) DEFAULT NULL,
+  `ignition_status` tinyint(1) DEFAULT NULL,
+  `fuel_level` decimal(5,2) DEFAULT NULL,
+  `odometer_reading` decimal(10,2) DEFAULT NULL,
+  `accuracy` decimal(5,2) DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicle_maintenance_logs`
+--
+
+CREATE TABLE `vehicle_maintenance_logs` (
+  `maintenance_id` bigint(20) UNSIGNED NOT NULL,
+  `vehicle_id` int(11) NOT NULL,
+  `maintenance_date` date NOT NULL,
+  `maintenance_type` varchar(50) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `cost` decimal(10,2) DEFAULT NULL,
+  `next_maintenance_date` date DEFAULT NULL,
+  `vendor_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicle_performance_metrics`
+--
+
+CREATE TABLE `vehicle_performance_metrics` (
+  `metric_id` bigint(20) UNSIGNED NOT NULL,
+  `vehicle_id` int(11) DEFAULT NULL,
+  `route_id` int(11) DEFAULT NULL,
+  `metric_date` date NOT NULL,
+  `metric_type` varchar(50) NOT NULL,
+  `metric_value` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicle_routes`
+--
+
+CREATE TABLE `vehicle_routes` (
+  `route_id` bigint(20) UNSIGNED NOT NULL,
+  `route_code` varchar(20) NOT NULL,
+  `route_name` varchar(100) NOT NULL,
+  `zone` varchar(50) DEFAULT NULL,
+  `total_points` int(11) DEFAULT 0,
+  `estimated_distance` decimal(8,2) DEFAULT NULL,
+  `estimated_duration` decimal(8,2) DEFAULT NULL,
+  `status` varchar(20) DEFAULT 'Active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicle_route_assignments`
+--
+
+CREATE TABLE `vehicle_route_assignments` (
+  `assignment_id` bigint(20) UNSIGNED NOT NULL,
+  `vehicle_id` int(11) NOT NULL,
+  `route_id` int(11) NOT NULL,
+  `assignment_date` date NOT NULL,
+  `driver_id` int(11) DEFAULT NULL,
+  `shift` varchar(20) DEFAULT NULL CHECK (`shift` in ('Morning','Evening','Night','Full-day')),
+  `planned_start_time` time DEFAULT NULL,
+  `planned_end_time` time DEFAULT NULL,
+  `assignment_status` varchar(20) DEFAULT 'Scheduled' CHECK (`assignment_status` in ('Scheduled','In-progress','Completed','Cancelled'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicle_route_points`
+--
+
+CREATE TABLE `vehicle_route_points` (
+  `route_point_id` bigint(20) UNSIGNED NOT NULL,
+  `route_id` int(11) NOT NULL,
+  `point_id` int(11) NOT NULL,
+  `sequence_number` int(11) NOT NULL,
+  `estimated_arrival_time` time DEFAULT NULL,
+  `expected_stay_duration` varchar(25) DEFAULT '5 minutes'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -587,6 +791,7 @@ ALTER TABLE `incident_history`
 --
 ALTER TABLE `inspections`
   ADD PRIMARY KEY (`inspection_id`),
+  ADD UNIQUE KEY `uniq_asset_shift_date` (`asset_id`,`shift_id`,`inspection_date`),
   ADD KEY `idx_inspections_asset_date` (`asset_id`,`inspection_date`),
   ADD KEY `idx_inspections_swachhagrahi` (`swachhagrahi_id`),
   ADD KEY `idx_inspections_allocation` (`allocation_id`),
@@ -686,6 +891,75 @@ ALTER TABLE `user_type_permissions`
   ADD UNIQUE KEY `unique_permission` (`user_type_id`,`permission`);
 
 --
+-- Indexes for table `vehicles`
+--
+ALTER TABLE `vehicles`
+  ADD PRIMARY KEY (`vehicle_id`),
+  ADD UNIQUE KEY `vehicle_number` (`vehicle_number`),
+  ADD UNIQUE KEY `rc_number` (`rc_number`),
+  ADD UNIQUE KEY `imei_number` (`imei_number`),
+  ADD UNIQUE KEY `chassis_number` (`chassis_number`);
+
+--
+-- Indexes for table `vehicle_collection_points`
+--
+ALTER TABLE `vehicle_collection_points`
+  ADD PRIMARY KEY (`point_id`),
+  ADD UNIQUE KEY `point_code` (`point_code`);
+
+--
+-- Indexes for table `vehicle_daily_trip_summaries`
+--
+ALTER TABLE `vehicle_daily_trip_summaries`
+  ADD PRIMARY KEY (`summary_id`),
+  ADD UNIQUE KEY `assignment_id` (`assignment_id`);
+
+--
+-- Indexes for table `vehicle_geofences`
+--
+ALTER TABLE `vehicle_geofences`
+  ADD PRIMARY KEY (`geofence_id`);
+
+--
+-- Indexes for table `vehicle_gps_tracking`
+--
+ALTER TABLE `vehicle_gps_tracking`
+  ADD PRIMARY KEY (`tracking_id`);
+
+--
+-- Indexes for table `vehicle_maintenance_logs`
+--
+ALTER TABLE `vehicle_maintenance_logs`
+  ADD PRIMARY KEY (`maintenance_id`);
+
+--
+-- Indexes for table `vehicle_performance_metrics`
+--
+ALTER TABLE `vehicle_performance_metrics`
+  ADD PRIMARY KEY (`metric_id`);
+
+--
+-- Indexes for table `vehicle_routes`
+--
+ALTER TABLE `vehicle_routes`
+  ADD PRIMARY KEY (`route_id`),
+  ADD UNIQUE KEY `route_code` (`route_code`);
+
+--
+-- Indexes for table `vehicle_route_assignments`
+--
+ALTER TABLE `vehicle_route_assignments`
+  ADD PRIMARY KEY (`assignment_id`),
+  ADD UNIQUE KEY `vehicle_id` (`vehicle_id`,`assignment_date`,`shift`);
+
+--
+-- Indexes for table `vehicle_route_points`
+--
+ALTER TABLE `vehicle_route_points`
+  ADD PRIMARY KEY (`route_point_id`),
+  ADD UNIQUE KEY `route_id` (`route_id`,`sequence_number`);
+
+--
 -- Indexes for table `vendors`
 --
 ALTER TABLE `vendors`
@@ -766,7 +1040,7 @@ ALTER TABLE `sanitation_assets`
 -- AUTO_INCREMENT for table `sanitation_asset_allocations`
 --
 ALTER TABLE `sanitation_asset_allocations`
-  MODIFY `allocation_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `allocation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `sectors`
@@ -778,7 +1052,7 @@ ALTER TABLE `sectors`
 -- AUTO_INCREMENT for table `session`
 --
 ALTER TABLE `session`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `shifts`
@@ -808,7 +1082,55 @@ ALTER TABLE `user_types`
 -- AUTO_INCREMENT for table `user_type_permissions`
 --
 ALTER TABLE `user_type_permissions`
-  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `vehicles`
+--
+ALTER TABLE `vehicles`
+  MODIFY `vehicle_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vehicle_collection_points`
+--
+ALTER TABLE `vehicle_collection_points`
+  MODIFY `point_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vehicle_geofences`
+--
+ALTER TABLE `vehicle_geofences`
+  MODIFY `geofence_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vehicle_maintenance_logs`
+--
+ALTER TABLE `vehicle_maintenance_logs`
+  MODIFY `maintenance_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vehicle_performance_metrics`
+--
+ALTER TABLE `vehicle_performance_metrics`
+  MODIFY `metric_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vehicle_routes`
+--
+ALTER TABLE `vehicle_routes`
+  MODIFY `route_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vehicle_route_assignments`
+--
+ALTER TABLE `vehicle_route_assignments`
+  MODIFY `assignment_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vehicle_route_points`
+--
+ALTER TABLE `vehicle_route_points`
+  MODIFY `route_point_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `vendors`

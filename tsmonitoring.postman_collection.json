@@ -1931,6 +1931,206 @@
       ]
     },
     {
+      "name": "Vehicles",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/vehicles?page=1&per_page=25&keywords=&vendor_id=&status=&vehicle_type=&order_by_col=vehicle_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "vehicle_type",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "vehicle_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/vehicles/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_name\": \"Vehicle 1\",\n  \"vehicle_type\": \"Compactor\",\n  \"vehicle_number\": \"MH01AB1234\",\n  \"rc_number\": \"RC123456789\",\n  \"vendor_id\": 1,\n  \"imei_number\": \"123456789012345\",\n  \"chassis_number\": \"CH123456789\",\n  \"gps_device_id\": \"\",\n  \"registration_date\": \"\",\n  \"status\": \"Active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vehicles/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_name\": \"Vehicle 1 Updated\",\n  \"vehicle_type\": \"Compactor\",\n  \"vehicle_number\": \"MH01AB1234\",\n  \"rc_number\": \"RC123456789\",\n  \"vendor_id\": 1,\n  \"imei_number\": \"123456789012345\",\n  \"chassis_number\": \"CH123456789\",\n  \"gps_device_id\": \"\",\n  \"registration_date\": \"\",\n  \"status\": \"Active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vehicles/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vehicles/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehicles",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Sanitation Asset Allocations",
       "item": [
         {
