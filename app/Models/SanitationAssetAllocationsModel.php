@@ -33,7 +33,7 @@ class SanitationAssetAllocationsModel extends Model
             ->select(
                 'a.allocation_id, a.asset_id, a.swachhagrahi_id, a.shift_id, a.allocated_by, a.allocation_date, a.status AS allocation_status, a.created_at AS allocation_created_at, ' .
                 'sa.sanitation_asset_id, sa.asset_type_id, sa.qr_code, sa.asset_name, sa.short_url, sa.description, sa.gender, sa.vendor_id, sa.vendor_asset_code, ' .
-                'sa.status AS asset_status, sa.sector_id, sa.circle_id, sa.latitude, sa.longitude, sa.current_photo_url, ' .
+                'sa.status AS asset_status, sa.sector_id, sa.circle_id, sa.latitude, sa.longitude, sa.photo, ' .
                 'at.asset_type_id AS type_asset_type_id, at.name AS type_name, at.description AS type_description'
             )
             ->join('sanitation_assets sa', 'a.asset_id = sa.sanitation_asset_id')
@@ -58,7 +58,7 @@ class SanitationAssetAllocationsModel extends Model
             ->select(
                 'a.allocation_id, a.asset_id, a.swachhagrahi_id, a.shift_id, a.allocated_by, a.allocation_date, a.status AS allocation_status, a.created_at AS allocation_created_at, ' .
                 'sa.sanitation_asset_id, sa.asset_type_id, sa.qr_code, sa.asset_name, sa.short_url, sa.description, sa.gender, sa.vendor_id, sa.vendor_asset_code, ' .
-                'sa.status AS asset_status, sa.sector_id, sa.circle_id, sa.latitude, sa.longitude, sa.current_photo_url, ' .
+                'sa.status AS asset_status, sa.sector_id, sa.circle_id, sa.latitude, sa.longitude, sa.photo, ' .
                 'at.asset_type_id AS type_asset_type_id, at.name AS type_name, at.description AS type_description'
             )
             ->join('sanitation_assets sa', 'a.asset_id = sa.sanitation_asset_id')
@@ -110,7 +110,7 @@ class SanitationAssetAllocationsModel extends Model
                     'circle_id'             => (int) $row['circle_id'],
                     'latitude'              => $row['latitude'],
                     'longitude'             => $row['longitude'],
-                    'current_photo_url'     => $row['current_photo_url'],
+                    'photo'     => $row['photo'],
                 ],
                 'asset_type' => [
                     'asset_type_id' => (int) $row['type_asset_type_id'],
@@ -131,7 +131,7 @@ class SanitationAssetAllocationsModel extends Model
             ->select(
                 'a.allocation_id, a.asset_id, a.swachhagrahi_id, a.shift_id, a.allocated_by, a.allocation_date, a.status AS allocation_status, a.created_at AS allocation_created_at, ' .
                 'sa.sanitation_asset_id, sa.asset_type_id, sa.qr_code, sa.asset_name, sa.short_url, sa.description, sa.gender, sa.vendor_id, sa.vendor_asset_code, ' .
-                'sa.status AS asset_status, sa.sector_id, sa.circle_id, sa.latitude, sa.longitude, sa.current_photo_url, ' .
+                'sa.status AS asset_status, sa.sector_id, sa.circle_id, sa.latitude, sa.longitude, sa.photo, ' .
                 'at.asset_type_id AS type_asset_type_id, at.name AS type_name, at.description AS type_description, at.questions AS type_questions'
             )
             ->join('sanitation_assets sa', 'a.asset_id = sa.sanitation_asset_id')
@@ -194,7 +194,7 @@ class SanitationAssetAllocationsModel extends Model
                 'circle_id'            => (int) $row['circle_id'],
                 'latitude'             => $row['latitude'],
                 'longitude'            => $row['longitude'],
-                'current_photo_url'    => $row['current_photo_url'],
+                'photo'    => $row['photo'],
             ],
             'asset_type' => [
                 'asset_type_id' => (int) $row['type_asset_type_id'],

@@ -293,7 +293,7 @@ CREATE TABLE `sanitation_assets` (
   `circle_id` int(11) NOT NULL,
   `latitude` decimal(10,8) NOT NULL,
   `longitude` decimal(11,8) NOT NULL,
-  `current_photo_url` varchar(500) DEFAULT NULL,
+  `photo` varchar(500) DEFAULT NULL,
   `created_by` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()

@@ -23,7 +23,7 @@ class SanitationAssetsModel extends Model
         'circle_id',
         'latitude',
         'longitude',
-        'current_photo_url',
+        'photo',
         'created_by',
         'created_at',
         'updated_at',

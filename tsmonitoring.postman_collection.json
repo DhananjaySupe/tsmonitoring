@@ -1331,6 +1331,218 @@
       ]
     },
     {
+      "name": "Sanitation Assets",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-assets?page=1&per_page=25&keywords=&asset_type_id=&status=&vendor_id=&sector_id=&circle_id=&gender=&order_by_col=sanitation_asset_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-assets"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "sector_id",
+                  "value": ""
+                },
+                {
+                  "key": "circle_id",
+                  "value": ""
+                },
+                {
+                  "key": "gender",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sanitation_asset_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-assets/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-assets",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_type_id\": 1,\n  \"qr_code\": \"QR001\",\n  \"asset_name\": \"Asset Name\",\n  \"short_url\": \"\",\n  \"description\": \"\",\n  \"gender\": \"MALE\",\n  \"vendor_id\": 1,\n  \"vendor_asset_code\": \"\",\n  \"status\": \"ACTIVE\",\n  \"sector_id\": 1,\n  \"circle_id\": 1,\n  \"latitude\": \"28.6139\",\n  \"longitude\": \"77.2090\",\n  \"photo\": null,\n  \"created_by\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-assets/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-assets",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_type_id\": 1,\n  \"qr_code\": \"QR001\",\n  \"asset_name\": \"Asset Name Updated\",\n  \"short_url\": \"\",\n  \"description\": \"\",\n  \"gender\": \"MALE\",\n  \"vendor_id\": 1,\n  \"vendor_asset_code\": \"\",\n  \"status\": \"ACTIVE\",\n  \"sector_id\": 1,\n  \"circle_id\": 1,\n  \"latitude\": \"28.6139\",\n  \"longitude\": \"77.2090\",\n  \"photo\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-assets/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-assets",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-assets/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-assets",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Asset Types",
       "item": [
         {

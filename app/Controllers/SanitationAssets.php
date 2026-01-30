@@ -147,7 +147,7 @@ class SanitationAssets extends BaseController
         $circleId    = $this->getPost('circle_id', '');
         $latitude    = $this->getPost('latitude', '');
         $longitude   = $this->getPost('longitude', '');
-        $photoUrl    = $this->getPost('current_photo_url', null);
+        $photoUrl    = $this->getPost('photo', null);
         $createdBy   = $this->getPost('created_by', '');
 
         if ($assetTypeId === '' || $qrCode === '' || $assetName === '' || $gender === '' || $vendorId === '' || $sectorId === '' || $circleId === '' || $latitude === '' || $longitude === '' || $createdBy === '') {
@@ -180,7 +180,7 @@ class SanitationAssets extends BaseController
             'circle_id'          => (int) $circleId,
             'latitude'           => $latitude,
             'longitude'          => $longitude,
-            'current_photo_url'  => $photoUrl,
+            'photo'  => $photoUrl,
             'created_by'         => (int) $createdBy,
         ];
 
@@ -240,7 +240,7 @@ class SanitationAssets extends BaseController
         $circleId    = $this->getPost('circle_id', $row['circle_id'] ?? '');
         $latitude    = $this->getPost('latitude', $row['latitude'] ?? '');
         $longitude   = $this->getPost('longitude', $row['longitude'] ?? '');
-        $photoUrl    = $this->getPost('current_photo_url', $row['current_photo_url'] ?? null);
+        $photoUrl    = $this->getPost('photo', $row['photo'] ?? null);
 
         if ($assetTypeId === '' || $qrCode === '' || $assetName === '' || $gender === '' || $vendorId === '' || $sectorId === '' || $circleId === '' || $latitude === '' || $longitude === '') {
             $this->setError('asset_type_id, qr_code, asset_name, gender, vendor_id, sector_id, circle_id, latitude, longitude are required.', 400);
@@ -270,7 +270,7 @@ class SanitationAssets extends BaseController
             'circle_id'          => (int) $circleId,
             'latitude'           => $latitude,
             'longitude'          => $longitude,
-            'current_photo_url'  => $photoUrl,
+            'photo'  => $photoUrl,
         ];
 
         $model->update($assetId, $data);
