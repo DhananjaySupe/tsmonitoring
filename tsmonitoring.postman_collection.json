@@ -25,7 +25,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"phone\": \"911234567890\",\n  \"password\": \"password_here\",\n  \"full_name\": \"Demo User\",\n  \"email\": \"demo@example.com\",\n  \"user_type_id\": 0,\n  \"vendor_id\": null\n}"
+              "raw": "{\n  \"phone\": \"9876543210\",\n  \"password\": \"password_here\",\n  \"full_name\": \"Demo User\",\n  \"email\": \"demo@example.com\",\n  \"user_type_id\": 0,\n  \"vendor_id\": null\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/register",
@@ -56,7 +56,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"phone\": \"911234567890\",\n  \"password\": \"password_here\"\n}"
+              "raw": "{\n  \"phone\": \"9876543210\",\n  \"password\": \"password_here\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/login",
@@ -138,7 +138,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"phone\": \"911234567890\"\n}"
+              "raw": "{\n  \"phone\": \"9876543210\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/forgot-password",
@@ -169,7 +169,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"phone\": \"911234567890\",\n  \"otp\": \"123456\"\n}"
+              "raw": "{\n  \"phone\": \"9876543210\",\n  \"otp\": \"123456\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/verify-otp",
@@ -285,7 +285,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"phone\": \"911234567890\",\n  \"password\": \"password_here\",\n  \"full_name\": \"New User\",\n  \"email\": \"new@example.com\",\n  \"user_type_id\": 0,\n  \"vendor_id\": null,\n  \"is_active\": 1\n}"
+              "raw": "{\n  \"phone\": \"9876543210\",\n  \"password\": \"password_here\",\n  \"full_name\": \"New User\",\n  \"email\": \"new@example.com\",\n  \"user_type_id\": 0,\n  \"vendor_id\": null,\n  \"is_active\": 1\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/users/new",
@@ -320,7 +320,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"phone\": \"911234567890\",\n  \"full_name\": \"Updated User\",\n  \"email\": \"updated@example.com\",\n  \"user_type_id\": 0,\n  \"vendor_id\": null,\n  \"is_active\": 1\n}"
+              "raw": "{\n  \"phone\": \"9876543210\",\n  \"full_name\": \"Updated User\",\n  \"email\": \"updated@example.com\",\n  \"user_type_id\": 0,\n  \"vendor_id\": null,\n  \"is_active\": 1\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/users/edit/1",
@@ -1841,7 +1841,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"vendor_name\": \"ABC Supplies\",\n  \"vendor_code\": \"V001\",\n  \"contact_person\": \"John Doe\",\n  \"contact_email\": \"john@abc.com\",\n  \"contact_phone\": \"911234567890\",\n  \"address\": \"123 Main St\",\n  \"status\": \"ACTIVE\",\n  \"user_id\": 0\n}"
+              "raw": "{\n  \"vendor_name\": \"ABC Supplies\",\n  \"vendor_code\": \"V001\",\n  \"contact_person\": \"John Doe\",\n  \"contact_email\": \"john@abc.com\",\n  \"contact_phone\": \"9876543210\",\n  \"address\": \"123 Main St\",\n  \"status\": \"ACTIVE\",\n  \"user_id\": 0\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/vendors/new",
@@ -2415,7 +2415,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"asset_id\": 1,\n  \"swachhagrahi_id\": 1,\n  \"shift_id\": 1,\n  \"allocated_by\": 1,\n  \"allocation_date\": \"2025-01-28\",\n  \"status\": \"ACTIVE\"\n}"
+              "raw": "{\n  \"asset_id\": 1,\n  \"swachhagrahi_id\": 1,\n  \"shift_id\": 1,\n  \"allocation_date\": \"2025-01-28\",\n  \"status\": \"ACTIVE\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/sanitation-asset-allocations/new",
@@ -2450,7 +2450,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"asset_id\": 1,\n  \"swachhagrahi_id\": 1,\n  \"shift_id\": 1,\n  \"allocated_by\": 1,\n  \"allocation_date\": \"2025-01-28\",\n  \"status\": \"COMPLETED\"\n}"
+              "raw": "{\n  \"asset_id\": 1,\n  \"swachhagrahi_id\": 1,\n  \"shift_id\": 1,\n  \"allocation_date\": \"2025-01-28\",\n  \"status\": \"COMPLETED\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/sanitation-asset-allocations/edit/1",
@@ -2530,14 +2530,53 @@
               "raw": "{\n  \"allocation_id\": 1,\n  \"asset_id\": 1,\n  \"shift_id\": 1,\n  \"questions_answers_data\": [\n    { \"que\": 1, \"ans\": \"YES\", \"photo\": \"https://example.com/photo1.jpg\" },\n    { \"que\": 2, \"ans\": \"YES\", \"photo\": \"https://example.com/photo2.jpg\" },\n    { \"que\": 3, \"ans\": \"NO\", \"photo\": \"https://example.com/photo3.jpg\" }\n  ],\n  \"overall_status\": \"COMPLIANT\",\n  \"compliance_score\": 85.5,\n  \"notes\": \"All areas checked.\",\n  \"latitude\": 28.6139,\n  \"longitude\": 77.2090\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/inspections/new",
+              "raw": "{{base_url}}/api/sanitation-inspections/new",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "api",
-                "inspections",
+                "sanitation-inspections",
                 "new"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sanitation Asset Tagging",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_type_id\": 1,\n  \"qr_code\": \"QR123456\",\n  \"asset_name\": \"FRP Toilet Unit 1\",\n  \"short_url\": \"\",\n  \"description\": \"Temporary sanitation unit near gate\",\n  \"gender\": \"UNISEX\",\n  \"vendor_id\": 1,\n  \"vendor_asset_code\": \"VEND-ASSET-001\",\n  \"status\": \"ACTIVE\",\n  \"sector_id\": 1,\n  \"circle_id\": 1,\n  \"latitude\": 28.6139,\n  \"longitude\": 77.2090,\n  \"photo\": \"https://example.com/photo1.jpg\",\n  \"created_by\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-asset-tagging",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-asset-tagging"
               ]
             }
           }

@@ -142,10 +142,10 @@ INSERT INTO `ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `incidents`
+-- Table structure for table `sanitation_incidents`
 --
 
-CREATE TABLE `incidents` (
+CREATE TABLE `sanitation_incidents` (
   `incident_id` int(11) NOT NULL,
   `incident_code` varchar(50) NOT NULL,
   `inspection_id` int(11) NOT NULL,
@@ -168,10 +168,10 @@ CREATE TABLE `incidents` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `incident_history`
+-- Table structure for table `sanitation_incident_history`
 --
 
-CREATE TABLE `incident_history` (
+CREATE TABLE `sanitation_incident_history` (
   `history_id` int(11) NOT NULL,
   `incident_id` int(11) NOT NULL,
   `old_status` varchar(50) DEFAULT NULL,
@@ -186,10 +186,10 @@ CREATE TABLE `incident_history` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `inspections`
+-- Table structure for table `sanitation_inspections`
 --
 
-CREATE TABLE `inspections` (
+CREATE TABLE `sanitation_inspections` (
   `inspection_id` int(11) NOT NULL,
   `allocation_id` int(11) NOT NULL,
   `asset_id` int(11) NOT NULL,
@@ -447,7 +447,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `code`, `password_hash`, `email`, `phone`, `full_name`, `user_type_id`, `vendor_id`, `is_active`, `otp`, `otp_expiry`, `otp_attempts`, `created_at`, `updated_at`) VALUES
-(1, 'KSH2026012822035279600002', '$2y$10$YRhN3leJLjukd/jbjafuBu/qyPPC6fER5DF/NMN0dHjGF5PYtAS9K', 'admin@example.com', '911234567890', 'Admin User', 1, 0, 1, '380610', '2026-01-30 15:06:50', 0, '2026-01-24 11:03:49', '2026-01-29 06:22:12');
+(1, 'KSH2026012822035279600002', '$2y$10$YRhN3leJLjukd/jbjafuBu/qyPPC6fER5DF/NMN0dHjGF5PYtAS9K', 'admin@example.com', '9876543210', 'Admin User', 1, 0, 1, '380610', '2026-01-30 15:06:50', 0, '2026-01-24 11:03:49', '2026-01-29 06:22:12');
 
 -- --------------------------------------------------------
 
@@ -491,7 +491,7 @@ INSERT INTO `user_types` (`user_type_id`, `user_type`, `index_no`, `status`) VAL
 CREATE TABLE `user_type_permissions` (
   `permission_id` int(11) NOT NULL,
   `user_type_id` int(11) NOT NULL,
-  `permission` enum('users','user-permissions','shift','circle','sector','question','asset-type','asset','vendor','allocation','inspection') NOT NULL,
+  `permission` enum('users','user-permissions','shift','circle','sector','question','asset-type','asset','vendor','allocation','inspection','asset-tagging') NOT NULL,
   `can_create` tinyint(1) DEFAULT 0,
   `can_view` tinyint(1) DEFAULT 0,
   `can_edit` tinyint(1) DEFAULT 0,
@@ -765,9 +765,9 @@ ALTER TABLE `ci_sessions`
   ADD KEY `ci_sessions_timestamp` (`timestamp`);
 
 --
--- Indexes for table `incidents`
+-- Indexes for table `sanitation_incidents`
 --
-ALTER TABLE `incidents`
+ALTER TABLE `sanitation_incidents`
   ADD PRIMARY KEY (`incident_id`),
   ADD UNIQUE KEY `incident_code` (`incident_code`),
   ADD KEY `idx_incidents_status` (`incident_status`),
@@ -779,17 +779,17 @@ ALTER TABLE `incidents`
   ADD KEY `idx_incidents_created_date` (`created_at`);
 
 --
--- Indexes for table `incident_history`
+-- Indexes for table `sanitation_incident_history`
 --
-ALTER TABLE `incident_history`
+ALTER TABLE `sanitation_incident_history`
   ADD PRIMARY KEY (`history_id`),
   ADD KEY `idx_incident_history_incident` (`incident_id`),
   ADD KEY `idx_incident_history_date` (`changed_at`);
 
 --
--- Indexes for table `inspections`
+-- Indexes for table `sanitation_inspections`
 --
-ALTER TABLE `inspections`
+ALTER TABLE `sanitation_inspections`
   ADD PRIMARY KEY (`inspection_id`),
   ADD UNIQUE KEY `uniq_asset_shift_date` (`asset_id`,`shift_id`,`inspection_date`),
   ADD KEY `idx_inspections_asset_date` (`asset_id`,`inspection_date`),
@@ -995,21 +995,21 @@ ALTER TABLE `circles`
   MODIFY `circle_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `incidents`
+-- AUTO_INCREMENT for table `sanitation_incidents`
 --
-ALTER TABLE `incidents`
+ALTER TABLE `sanitation_incidents`
   MODIFY `incident_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `incident_history`
+-- AUTO_INCREMENT for table `sanitation_incident_history`
 --
-ALTER TABLE `incident_history`
+ALTER TABLE `sanitation_incident_history`
   MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `inspections`
+-- AUTO_INCREMENT for table `sanitation_inspections`
 --
-ALTER TABLE `inspections`
+ALTER TABLE `sanitation_inspections`
   MODIFY `inspection_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

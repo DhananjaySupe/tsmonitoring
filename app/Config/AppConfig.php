@@ -37,6 +37,12 @@
 		/* Maintenance mode for APIs (handled by MaintenanceMode filter) */
 		public $maintenanceMode = false;
 		public $maintenanceMessage = 'Service is under maintenance. Please try again later.';
+		/* cache */
+		public $cache = array(
+			'enabled' => true,
+			'prefix' => 'monitoring_',
+			'expiration' => 60 * 60 * 24, //in seconds
+		);
 		/* AWS S3 */
 		public $S3 = array(
 			'enabled' => false,

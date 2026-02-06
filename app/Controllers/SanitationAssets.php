@@ -163,7 +163,7 @@ class SanitationAssets extends BaseController
         }
 
         if ($shortUrl === '') {
-            $shortUrl = $this->generateShortUrl();
+            $shortUrl = generateShortUrl($qrCode);
         }
 
         $data = [
@@ -247,13 +247,13 @@ class SanitationAssets extends BaseController
             return $this->response();
         }
 
-        if ($model->where('qr_code', $qrCode)->where('sanitation_asset_id !=', $assetId)->first()) {
+        if ($model->select('sanitation_asset_id')->where('qr_code', $qrCode)->where('sanitation_asset_id !=', $assetId)->first()) {
             $this->setError('qr_code already exists.', 409);
             return $this->response();
         }
 
         if ($shortUrl === '') {
-            $shortUrl = $row['short_url'] ?? $this->generateShortUrl();
+            $shortUrl = generateShortUrl($qrCode);
         }
 
         $data = [
@@ -315,18 +315,6 @@ class SanitationAssets extends BaseController
         $this->setSuccess('Sanitation asset deleted successfully.');
         $this->setOutput([]);
         return $this->response();
-    }
-
-    private function generateShortUrl(): string
-    {
-        $model = new SanitationAssetsModel();
-
-        do {
-            $code = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
-            $exists = $model->where('short_url', $code)->first();
-        } while ($exists);
-
-        return $code;
     }
 }
 

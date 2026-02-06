@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Models\InspectionsModel;
+use App\Models\SanitationInspectionsModel;
 
-class Inspections extends BaseController
+class SanitationInspections extends BaseController
 {
     /** for mobile app */
     public function create()
@@ -102,14 +102,22 @@ class Inspections extends BaseController
             'longitude'             => $longitude,
         ];
 
-        $model = new InspectionsModel();
+        $model = new SanitationInspectionsModel();
         $id = $model->insert($data, true);
         if (! $id) {
             $this->setError('Failed to create inspection.', 500);
             return $this->response();
         }
 
-        /* send notification to vendor */
+        // Validate questions against configured conditions and send grouped notifications if needed
+        if (function_exists('inspectQuestionsAndNotify')) {
+            try {
+                inspectQuestionsAndNotify($normalized, (int) $id, $assetId, $swachhagrahiId);
+            } catch (\Throwable $e) {
+                // Notification failures must not break the API response
+            }
+        }
+
         $this->setSuccess('Inspection created successfully.');
         $this->setOutput($id);
         return $this->response();

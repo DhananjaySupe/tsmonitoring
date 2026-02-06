@@ -2,9 +2,9 @@
 
 use CodeIgniter\Model;
 
-class InspectionsModel extends Model
+class SanitationInspectionsModel extends Model
 {
-    protected $table      = 'inspections';
+    protected $table      = 'sanitation_inspections';
     protected $primaryKey = 'inspection_id';
     protected $returnType = 'array';
 

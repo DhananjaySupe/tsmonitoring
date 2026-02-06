@@ -137,6 +137,7 @@ class Users extends BaseController
         }
 
         $data = [
+            'code'         => generateUserCode(),
             'phone'        => $phone,
             'password_hash' => password_hash($password, PASSWORD_BCRYPT),
             'full_name'    => $fullName,
