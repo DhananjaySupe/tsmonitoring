@@ -47,6 +47,8 @@
 		protected $session;
 		protected $AppConfig;
 		protected $jsonBody = null;
+		protected $_isRequestFromMobileApp = false;
+		protected $_isRequestFromWebApp = false;
 		/**
 			* Constructor.
 		*/
@@ -65,7 +67,11 @@
 		public function AuthenticateApikey()
 		{
 			if(isset($_SERVER['HTTP_X_API_KEY'])&&!empty($_SERVER['HTTP_X_API_KEY'])) {
-				if($this->AppConfig->apiKey===$_SERVER['HTTP_X_API_KEY']){
+				if($this->AppConfig->apiKeyWebApp == $_SERVER['HTTP_X_API_KEY']){
+					$this->_isRequestFromWebApp = true;
+					return true;
+				} else if($this->AppConfig->apiKeyMobile == $_SERVER['HTTP_X_API_KEY']){
+					$this->_isRequestFromMobileApp = true;
 					return true;
 				}
 			}
@@ -200,7 +206,7 @@
 		public function response($value = null)
 		{
 			$this->_output['version'] = array(
-				'version' => $this->AppConfig->AppCurrentVersion,
+				'version' => $this->AppConfig->appCurrentVersion,
 				'force_update' => $this->AppConfig->appForceUpdate,
 				'app_download_url' => $this->AppConfig->appDownloadUrl,
 				'app_download_qr' => $this->AppConfig->appDownloadQr

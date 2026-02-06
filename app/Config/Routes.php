@@ -86,6 +86,60 @@ $routes->group('api', ['namespace' => 'App\Controllers'], static function (Route
     $routes->post('vehicles/edit/(:num)', 'Vehicles::edit/$1');
     $routes->post('vehicles/delete/(:num)', 'Vehicles::delete/$1');
 
+    $routes->get('vehicle-geofences', 'VehicleGeofences::index');
+    $routes->get('vehicle-geofences/view/(:num)', 'VehicleGeofences::view/$1');
+    $routes->post('vehicle-geofences/new', 'VehicleGeofences::create');
+    $routes->post('vehicle-geofences/edit/(:num)', 'VehicleGeofences::edit/$1');
+    $routes->post('vehicle-geofences/delete/(:num)', 'VehicleGeofences::delete/$1');
+
+    $routes->get('vehicle-collection-points', 'VehicleCollectionPoints::index');
+    $routes->get('vehicle-collection-points/view/(:num)', 'VehicleCollectionPoints::view/$1');
+    $routes->post('vehicle-collection-points/new', 'VehicleCollectionPoints::create');
+    $routes->post('vehicle-collection-points/edit/(:num)', 'VehicleCollectionPoints::edit/$1');
+    $routes->post('vehicle-collection-points/delete/(:num)', 'VehicleCollectionPoints::delete/$1');
+
+    $routes->get('vehicle-daily-trip-summaries', 'VehicleDailyTripSummaries::index');
+    $routes->get('vehicle-daily-trip-summaries/view/(:num)', 'VehicleDailyTripSummaries::view/$1');
+    $routes->post('vehicle-daily-trip-summaries/new', 'VehicleDailyTripSummaries::create');
+    $routes->post('vehicle-daily-trip-summaries/edit/(:num)', 'VehicleDailyTripSummaries::edit/$1');
+    $routes->post('vehicle-daily-trip-summaries/delete/(:num)', 'VehicleDailyTripSummaries::delete/$1');
+
+    $routes->get('vehicle-gps-tracking', 'VehicleGpsTracking::index');
+    $routes->get('vehicle-gps-tracking/view/(:num)', 'VehicleGpsTracking::view/$1');
+    $routes->post('vehicle-gps-tracking/new', 'VehicleGpsTracking::create');
+    $routes->post('vehicle-gps-tracking/edit/(:num)', 'VehicleGpsTracking::edit/$1');
+    $routes->post('vehicle-gps-tracking/delete/(:num)', 'VehicleGpsTracking::delete/$1');
+
+    $routes->get('vehicle-maintenance-logs', 'VehicleMaintenanceLogs::index');
+    $routes->get('vehicle-maintenance-logs/view/(:num)', 'VehicleMaintenanceLogs::view/$1');
+    $routes->post('vehicle-maintenance-logs/new', 'VehicleMaintenanceLogs::create');
+    $routes->post('vehicle-maintenance-logs/edit/(:num)', 'VehicleMaintenanceLogs::edit/$1');
+    $routes->post('vehicle-maintenance-logs/delete/(:num)', 'VehicleMaintenanceLogs::delete/$1');
+
+    $routes->get('vehicle-performance-metrics', 'VehiclePerformanceMetrics::index');
+    $routes->get('vehicle-performance-metrics/view/(:num)', 'VehiclePerformanceMetrics::view/$1');
+    $routes->post('vehicle-performance-metrics/new', 'VehiclePerformanceMetrics::create');
+    $routes->post('vehicle-performance-metrics/edit/(:num)', 'VehiclePerformanceMetrics::edit/$1');
+    $routes->post('vehicle-performance-metrics/delete/(:num)', 'VehiclePerformanceMetrics::delete/$1');
+
+    $routes->get('vehicle-routes', 'VehicleRoutes::index');
+    $routes->get('vehicle-routes/view/(:num)', 'VehicleRoutes::view/$1');
+    $routes->post('vehicle-routes/new', 'VehicleRoutes::create');
+    $routes->post('vehicle-routes/edit/(:num)', 'VehicleRoutes::edit/$1');
+    $routes->post('vehicle-routes/delete/(:num)', 'VehicleRoutes::delete/$1');
+
+    $routes->get('vehicle-route-assignments', 'VehicleRouteAssignments::index');
+    $routes->get('vehicle-route-assignments/view/(:num)', 'VehicleRouteAssignments::view/$1');
+    $routes->post('vehicle-route-assignments/new', 'VehicleRouteAssignments::create');
+    $routes->post('vehicle-route-assignments/edit/(:num)', 'VehicleRouteAssignments::edit/$1');
+    $routes->post('vehicle-route-assignments/delete/(:num)', 'VehicleRouteAssignments::delete/$1');
+
+    $routes->get('vehicle-route-points', 'VehicleRoutePoints::index');
+    $routes->get('vehicle-route-points/view/(:num)', 'VehicleRoutePoints::view/$1');
+    $routes->post('vehicle-route-points/new', 'VehicleRoutePoints::create');
+    $routes->post('vehicle-route-points/edit/(:num)', 'VehicleRoutePoints::edit/$1');
+    $routes->post('vehicle-route-points/delete/(:num)', 'VehicleRoutePoints::delete/$1');
+
     $routes->get('sanitation-asset-allocations', 'SanitationAssetAllocations::index');
     $routes->get('sanitation-asset-allocations/view/(:num)', 'SanitationAssetAllocations::view/$1');
     $routes->post('sanitation-asset-allocations/new', 'SanitationAssetAllocations::create');

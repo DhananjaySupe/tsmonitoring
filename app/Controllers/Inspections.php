@@ -6,13 +6,7 @@ use App\Models\InspectionsModel;
 
 class Inspections extends BaseController
 {
-    /**
-     * Create inspection.
-     * POST api/inspections/new
-     * Body: allocation_id, asset_id, shift_id, swachhagrahi_id, inspection_date,
-     *       questions_answers_data (array of { que, ans, photo } - photo mandatory),
-     *       overall_status, compliance_score, notes, latitude, longitude
-     */
+    /** for mobile app */
     public function create()
     {
         if (! $this->isPost()) {
@@ -115,6 +109,7 @@ class Inspections extends BaseController
             return $this->response();
         }
 
+        /* send notification to vendor */
         $this->setSuccess('Inspection created successfully.');
         $this->setOutput($id);
         return $this->response();

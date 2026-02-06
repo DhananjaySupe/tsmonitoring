@@ -264,6 +264,7 @@ class SanitationAssetAllocations extends BaseController
         return $this->response();
     }
 
+    /** for mobile app */
     public function getallocations()
     {
         if (! $this->isGet()) {
@@ -318,10 +319,7 @@ class SanitationAssetAllocations extends BaseController
         return $this->response();
     }
 
-    /**
-     * Get single allocation details with asset, asset type, and inspection questions.
-     * GET api/sanitation-asset-allocations/details/(:num)
-     */
+    /** for mobile app */
     public function allocationDetails($id)
     {
         if (! $this->isGet()) {
