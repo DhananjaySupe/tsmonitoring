@@ -21,11 +21,12 @@
 		/* App Download QR */
 		public $appDownloadQr = 'assets/images/appqrcode/appurl.webp';
 		/* JWT */
-		public $jwt_secret = 'VNyLbLP7aGg9YKZXlshZqkRFahRLgf1L';
+		public $jwtSecret = 'VNyLbLP7aGg9YKZXlshZqkRFahRLgf1L';
 		/* JWT Expiry in seconds */
-		public $jwt_expiry = 36000;
+		public $jwtExpiryWebApp = 36000; // in seconds
+		public $jwtExpiryMobile = 3600; // in seconds
 		/* Single Login */
-		public $single_login = true;
+		public $singleLogin = true;
 		/* User Code Prefix */
 		public $userCodePrefix = 'KSH';
 		/* Maximum OTP Attempts */

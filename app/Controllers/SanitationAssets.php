@@ -148,10 +148,9 @@ class SanitationAssets extends BaseController
         $latitude    = $this->getPost('latitude', '');
         $longitude   = $this->getPost('longitude', '');
         $photoUrl    = $this->getPost('photo', null);
-        $createdBy   = $this->getPost('created_by', '');
 
-        if ($assetTypeId === '' || $qrCode === '' || $assetName === '' || $gender === '' || $vendorId === '' || $sectorId === '' || $circleId === '' || $latitude === '' || $longitude === '' || $createdBy === '') {
-            $this->setError('asset_type_id, qr_code, asset_name, gender, vendor_id, sector_id, circle_id, latitude, longitude, created_by are required.', 400);
+        if ($assetTypeId === '' || $qrCode === '' || $assetName === '' || $gender === '' || $vendorId === '' || $sectorId === '' || $circleId === '' || $latitude === '' || $longitude === '') {
+            $this->setError('asset_type_id, qr_code, asset_name, gender, vendor_id, sector_id, circle_id, latitude, longitude are required.', 400);
             return $this->response();
         }
 
@@ -181,7 +180,7 @@ class SanitationAssets extends BaseController
             'latitude'           => $latitude,
             'longitude'          => $longitude,
             'photo'  => $photoUrl,
-            'created_by'         => (int) $createdBy,
+            'created_by'         => (int) $this->_userData['user_id'],
         ];
 
         $id = $model->insert($data, true);

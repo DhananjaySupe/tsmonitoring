@@ -43,6 +43,9 @@ class SanitationAssetAllocationsModel extends Model
         if (! empty($options['status'])) {
             $builder->where('a.status', $options['status']);
         }
+        if (! empty($options['shift_id'])) {
+            $builder->where('a.shift_id', $options['shift_id']);
+        }
         if (! empty($options['allocation_date_from'])) {
             $builder->where('a.allocation_date >=', $options['allocation_date_from']);
         }
@@ -66,6 +69,9 @@ class SanitationAssetAllocationsModel extends Model
             ->where('a.swachhagrahi_id', $swachhagrahiId);
         if (! empty($options['status'])) {
             $dataBuilder->where('a.status', $options['status']);
+        }
+        if (! empty($options['shift_id'])) {
+            $dataBuilder->where('a.shift_id', $options['shift_id']);
         }
         if (! empty($options['allocation_date_from'])) {
             $dataBuilder->where('a.allocation_date >=', $options['allocation_date_from']);

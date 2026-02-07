@@ -48,7 +48,6 @@
 		protected $AppConfig;
 		protected $jsonBody = null;
 		protected $_isRequestFromMobileApp = false;
-		protected $_isRequestFromWebApp = false;
 		/**
 			* Constructor.
 		*/
@@ -68,7 +67,6 @@
 		{
 			if(isset($_SERVER['HTTP_X_API_KEY'])&&!empty($_SERVER['HTTP_X_API_KEY'])) {
 				if($this->AppConfig->apiKeyWebApp == $_SERVER['HTTP_X_API_KEY']){
-					$this->_isRequestFromWebApp = true;
 					return true;
 				} else if($this->AppConfig->apiKeyMobile == $_SERVER['HTTP_X_API_KEY']){
 					$this->_isRequestFromMobileApp = true;
@@ -81,11 +79,11 @@
 		{
 			if(isset($_SERVER['HTTP_X_ACCESS_TOKEN'])&&!empty($_SERVER['HTTP_X_ACCESS_TOKEN'])) {
 				$SessionsModel = new SessionsModel();
-				$session = $SessionsModel->where('session_token', $_SERVER['HTTP_X_ACCESS_TOKEN'])->first();
+				$session = $SessionsModel->select('session_id, user_id, status')->where('session_token', $_SERVER['HTTP_X_ACCESS_TOKEN'])->first();
 				if($session){
 					$this->_session = $session;
 					$usersModel = new UsersModel();
-					$member = $usersModel->find($session['user_id']);
+					$member = $usersModel->select('user_id, code, full_name, email, phone, is_active, user_type_id')->where('user_id', $session['user_id'])->first();
 					if ($member) {
 						if($member['is_active'] == 1){
 							$jwt = new JwtLib();
@@ -155,7 +153,7 @@
 		{
 			if (! is_array($member) && (int) $member > 0) {
 				$usersModel = new UsersModel();
-				$member = $usersModel->find($member);
+				$member = $usersModel->select('user_id, code, full_name, email, phone, is_active, user_type_id')->where('user_id', $member['user_id'])->first();
 			}
 			if (! is_array($member)) {
 				return [];
@@ -165,7 +163,7 @@
 				'code' => $member['code'] ?? null,
 				'email' => $member['email'] ?? null,
 				'phone' => $member['phone'] ?? null,
-				'full_name' => $member['full_name'],
+				'full_name' => $member['full_name'] ?? null,
 				'user_type_id' => $member['user_type_id'],
 				'is_active' => $member['is_active'] ?? 1,
 			];

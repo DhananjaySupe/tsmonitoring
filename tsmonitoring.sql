@@ -153,7 +153,7 @@ CREATE TABLE `sanitation_incidents` (
   `asset_id` int(11) NOT NULL,
   `question_id` int(11) NOT NULL,
   `reported_by` int(11) NOT NULL,
-  `assigned_to` int(11) DEFAULT NULL,
+  `resolved_by` int(11) DEFAULT NULL,
   `vendor_id` int(11) NOT NULL,
   `severity` enum('LOW','MEDIUM','HIGH','CRITICAL') NOT NULL,
   `description` text DEFAULT NULL,
@@ -243,9 +243,6 @@ CREATE TABLE `notification_logs` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `questions`
---
 
 CREATE TABLE `questions` (
   `question_id` int(11) NOT NULL,
@@ -256,6 +253,7 @@ CREATE TABLE `questions` (
   `condition_type` enum('EQUALS','NOT_EQUALS','GREATER_THAN','LESS_THAN','CONTAINS') DEFAULT NULL,
   `condition_value` varchar(500) DEFAULT NULL,
   `severity` enum('LOW','MEDIUM','HIGH','CRITICAL') DEFAULT 'MEDIUM',
+  `sla` int(11) NOT NULL COMMENT 'in minutes',
   `is_mandatory` tinyint(1) DEFAULT 1,
   `is_photo_mandatory` tinyint(4) NOT NULL DEFAULT 0,
   `sequence` int(11) DEFAULT 0,
@@ -266,11 +264,11 @@ CREATE TABLE `questions` (
 -- Dumping data for table `questions`
 --
 
-INSERT INTO `questions` (`question_id`, `question_text`, `question_type`, `options`, `expected_answer`, `condition_type`, `condition_value`, `severity`, `is_mandatory`, `is_photo_mandatory`, `sequence`, `is_active`) VALUES
-(1, 'Is the toilet floor clean?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'MEDIUM', 1, 0, 1, 1),
-(2, 'Are the toilet seats clean?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'MEDIUM', 1, 0, 2, 1),
-(3, 'Is water available in the toilet?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'HIGH', 1, 0, 1, 1),
-(4, 'Rate the overall condition of the toilet infrastructure (1-5)', 'RATING', '[1,2,3,4,5]', '4', 'LESS_THAN', '3', 'MEDIUM', 1, 0, 1, 1);
+INSERT INTO `questions` (`question_id`, `question_text`, `question_type`, `options`, `expected_answer`, `condition_type`, `condition_value`, `severity`, `sla`, `is_mandatory`, `is_photo_mandatory`, `sequence`, `is_active`) VALUES
+(1, 'Is the toilet floor clean?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'MEDIUM', 0, 1, 0, 1, 1),
+(2, 'Are the toilet seats clean?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'MEDIUM', 0, 1, 0, 2, 1),
+(3, 'Is water available in the toilet?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'HIGH', 0, 1, 0, 1, 1),
+(4, 'Rate the overall condition of the toilet infrastructure (1-5)', 'RATING', '[1,2,3,4,5]', '4', 'LESS_THAN', '3', 'MEDIUM', 0, 1, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -491,7 +489,7 @@ INSERT INTO `user_types` (`user_type_id`, `user_type`, `index_no`, `status`) VAL
 CREATE TABLE `user_type_permissions` (
   `permission_id` int(11) NOT NULL,
   `user_type_id` int(11) NOT NULL,
-  `permission` enum('users','user-permissions','shift','circle','sector','question','asset-type','asset','vendor','allocation','inspection','asset-tagging') NOT NULL,
+  `permission` enum('users','user-permissions','shift','circle','sector','question','asset-type','asset','vendor','allocation','inspection','asset-tagging','incident') NOT NULL,
   `can_create` tinyint(1) DEFAULT 0,
   `can_view` tinyint(1) DEFAULT 0,
   `can_edit` tinyint(1) DEFAULT 0,
@@ -773,7 +771,7 @@ ALTER TABLE `sanitation_incidents`
   ADD KEY `idx_incidents_status` (`incident_status`),
   ADD KEY `idx_incidents_vendor` (`vendor_id`),
   ADD KEY `idx_incidents_reported_by` (`reported_by`),
-  ADD KEY `idx_incidents_assigned_to` (`assigned_to`),
+  ADD KEY `idx_incidents_resolved_by` (`resolved_by`),
   ADD KEY `idx_incidents_asset` (`asset_id`),
   ADD KEY `idx_incidents_severity` (`severity`),
   ADD KEY `idx_incidents_created_date` (`created_at`);

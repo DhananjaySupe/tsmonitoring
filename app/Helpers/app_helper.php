@@ -240,7 +240,7 @@
 	}
 
 	if (!function_exists('inspectQuestionsAndNotify')) {
-		function inspectQuestionsAndNotify(array $questionsData, int $inspectionId, int $assetId, int $swachhagrahiId): void
+		function inspectQuestionsAndNotify(array $questionsData, int $inspectionId, int $assetId, int $swachhagrahiId, string $swachhagrahiName): void
 		{
 			if (empty($questionsData)) {
 				return;
@@ -281,7 +281,7 @@
 
 			if (empty($questions)) {
 				$questionsModel = new \App\Models\QuestionsModel();
-				foreach ($questionsModel->whereIn('question_id', $questionIds)->where('is_active', 1)->findAll() as $row) {
+				foreach ($questionsModel->select('question_id, question_text, severity, sla, is_mandatory, condition_type, condition_value')->whereIn('question_id', $questionIds)->where('is_active', 1)->findAll() as $row) {
 					$questions[(int) $row['question_id']] = $row;
 				}
 
@@ -310,6 +310,7 @@
 						'question_id'   => $questionId,
 						'question_text' => $qRow['question_text'] ?? '',
 						'severity'      => $qRow['severity'] ?? 'MEDIUM',
+						'sla'           => $qRow['sla'] ?? 60,
 						'given_answer'  => $answer,
 						'reason'        => 'Mandatory question not answered.',
 					];
@@ -369,8 +370,9 @@
 						'question_id'   => $questionId,
 						'question_text' => $qRow['question_text'] ?? '',
 						'severity'      => $qRow['severity'] ?? 'MEDIUM',
+						'sla'           => $qRow['sla'] ?? 60,
 						'given_answer'  => $answer,
-						'reason'        => $reason,
+						'reason'        => $qRow['question_text'] . ' - ' . $reason
 					];
 				}
 			}
@@ -380,40 +382,26 @@
 			}
 
 			// Derive related asset/vendor details
-			$assetName          = '';
 			$vendorName         = '';
 			$vendorEmail        = '';
 			$vendorPhone        = '';
-			$vendorId           = 0;
-			$notificationUserId = 1; // fallback to first admin if nothing else is available
-
+			$vendorId           = 1;
+			$qrCode          = '';
 			try {
 				$assetsModel    = new \App\Models\SanitationAssetsModel();
-				$vendorsModel   = new \App\Models\VendorsModel();
 				$usersModel     = new \App\Models\UsersModel();
 				$incidentsModel = new \App\Models\SanitationIncidentsModel();
 
-				$assetRow = $assetsModel->select('asset_name, vendor_id')->where('asset_id', $assetId)->first();
+				$assetRow = $assetsModel->select('vendor_id, qr_code')->where('sanitation_asset_id', $assetId)->first();
 				if (is_array($assetRow)) {
-					$assetName = $assetRow['asset_name'] ?? '';
+					$qrCode = $assetRow['qr_code'] ?? '';
 					if (!empty($assetRow['vendor_id'])) {
 						$vendorId = (int) $assetRow['vendor_id'];
-					}
-					if (!empty($assetRow['vendor_id'])) {
-						$vendorRow = $vendorsModel->select('vendor_name, contact_email, contact_phone')->where('vendor_id', $assetRow['vendor_id'])->first();
-						if (is_array($vendorRow)) {
-							$vendorName  = $vendorRow['vendor_name'] ?? '';
-							$vendorEmail = $vendorRow['contact_email'] ?? '';
-							$vendorPhone = $vendorRow['contact_phone'] ?? '';
-							if (!empty($vendorRow['user_id'])) {
-								$notificationUserId = (int) $vendorRow['user_id'];
-							}
-						}
 					}
 				}
 
 				// If we still do not have a reasonable recipient for phone/email, try user #1 as admin
-				$userRow = $usersModel->select('email, phone')->where('user_id', $notificationUserId)->first();
+				$userRow = $usersModel->select('email, phone')->where('user_id', $vendorId)->first();
 				if (is_array($userRow)) {
 					$vendorEmail = $userRow['email'] ?? '';
 					$vendorPhone = $userRow['phone'] ?? '';
@@ -430,7 +418,8 @@
 						'asset_id'       => $assetId,
 						'question_id'    => $f['question_id'],
 						'reported_by'    => $swachhagrahiId,
-						'assigned_to'    => null,
+						'resolved_by'    => null,
+						'due_date'       => date('Y-m-d H:i:s', strtotime('+' . ($f['sla'] ?? 60) . ' minutes')),
 						'vendor_id'      => $vendorId,
 						'severity'       => $f['severity'] ?? 'MEDIUM',
 						'description'    => $f['reason'] ?? '',
@@ -444,15 +433,11 @@
 			// Build grouped message
 			$lines = [];
 			$lines[] = 'Inspection #' . $inspectionId . ' has validation failures.';
-			if ($assetName !== '') {
-				$lines[] = 'Asset: ' . $assetName . ' (ID: ' . $assetId . ')';
-			} else {
-				$lines[] = 'Asset ID: ' . $assetId;
-			}
+			$lines[] = 'Asset QR Code: ' . $qrCode;
 			if ($vendorName !== '') {
 				$lines[] = 'Vendor: ' . $vendorName;
 			}
-			$lines[] = 'Performed by user ID: ' . $swachhagrahiId;
+			$lines[] = 'Performed by Swachhagrahi: ' . $swachhagrahiName;
 			$lines[] = '';
 			$lines[] = 'Failed questions:';
 
@@ -488,7 +473,7 @@
 				$notificationsModel = new \App\Models\NotificationsModel();
 
 				$notificationId = $notificationsModel->insert([
-					'user_id'            => $notificationUserId,
+					'user_id'            => $vendorId,
 					'notification_type'  => 'INCIDENT_ASSIGNED',
 					'title'              => $title,
 					'message'            => $message,
@@ -510,22 +495,8 @@
 					}
 
 					// Email notification
-					$emailRecipients = [];
-					if (!empty($vendorEmail)) {
-						$emailRecipients[] = $vendorEmail;
-					}
-					if (!empty($AppConfig->appEmails) && is_array($AppConfig->appEmails)) {
-						foreach ($AppConfig->appEmails as $email) {
-							if (!empty($email) && !in_array($email, $emailRecipients, true)) {
-								$emailRecipients[] = $email;
-							}
-						}
-					}
-
-					if (!empty($AppConfig->email['enabled']) && $AppConfig->email['enabled'] && !empty($emailRecipients)) {
-						foreach ($emailRecipients as $recipientEmail) {
-							sendEmailNotification($recipientEmail, $title, $message, $AppConfig);
-						}
+					if (!empty($AppConfig->email['enabled']) && $AppConfig->email['enabled'] && !empty($vendorEmail)) {
+						sendEmailNotification($vendorEmail, $title, $message, $AppConfig);
 					}
 				}
 			} catch (\Throwable $e) {

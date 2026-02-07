@@ -16,7 +16,7 @@ class SanitationIncidentsModel extends Model
         'asset_id',
         'question_id',
         'reported_by',
-        'assigned_to',
+        'resolved_by',
         'vendor_id',
         'severity',
         'description',

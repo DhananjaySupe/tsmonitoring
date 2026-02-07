@@ -148,6 +148,7 @@ class SanitationAssetAllocations extends BaseController
             'allocated_by'     => $this->_userData['user_id'],
             'allocation_date'  => $allocationDate,
             'status'           => $status,
+            'created_at'       => date('Y-m-d H:i:s'),
         ];
 
         $assetRow = $model->select('allocation_id')->where('asset_id', $assetId)->first();
@@ -300,10 +301,14 @@ class SanitationAssetAllocations extends BaseController
             'per_page' => $length,
         ];
         $status   = $this->getParam('status', '');
+        $shiftId = $this->getParam('shift_id', '');
         $dateFrom = $this->getParam('allocation_date_from', '');
         $dateTo   = $this->getParam('allocation_date_to', '');
         if ($status !== '') {
             $options['status'] = $status;
+        }
+        if ($shiftId !== '') {
+            $options['shift_id'] = $shiftId;
         }
         if ($dateFrom !== '') {
             $options['allocation_date_from'] = $dateFrom;

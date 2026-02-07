@@ -128,6 +128,7 @@ class Questions extends BaseController
         $conditionType   = $this->getPost('condition_type', null);
         $conditionValue  = $this->getPost('condition_value', null);
         $severity        = $this->getPost('severity', 'MEDIUM');
+        $sla             = (int) $this->getPost('sla', 60);
         $isMandatory     = (int) $this->getPost('is_mandatory', 1);
         $isPhotoMandatory= (int) $this->getPost('is_photo_mandatory', 0);
         $sequence        = (int) $this->getPost('sequence', 0);
@@ -159,6 +160,7 @@ class Questions extends BaseController
             'condition_type'      => $conditionType,
             'condition_value'     => $conditionValue,
             'severity'            => $severity,
+            'sla'                 => $sla,
             'is_mandatory'        => $isMandatory,
             'is_photo_mandatory'  => $isPhotoMandatory,
             'sequence'            => $sequence,
@@ -215,6 +217,7 @@ class Questions extends BaseController
         $conditionType   = $this->getPost('condition_type', $row['condition_type'] ?? null);
         $conditionValue  = $this->getPost('condition_value', $row['condition_value'] ?? null);
         $severity        = $this->getPost('severity', $row['severity'] ?? 'MEDIUM');
+        $sla             = (int) $this->getPost('sla', $row['sla'] ?? 60);
         $isMandatory     = (int) $this->getPost('is_mandatory', $row['is_mandatory'] ?? 1);
         $isPhotoMandatory= (int) $this->getPost('is_photo_mandatory', $row['is_photo_mandatory'] ?? 0);
         $sequence        = (int) $this->getPost('sequence', $row['sequence'] ?? 0);
@@ -245,6 +248,7 @@ class Questions extends BaseController
             'condition_type'      => $conditionType,
             'condition_value'     => $conditionValue,
             'severity'            => $severity,
+            'sla'                 => $sla,
             'is_mandatory'        => $isMandatory,
             'is_photo_mandatory'  => $isPhotoMandatory,
             'sequence'            => $sequence,

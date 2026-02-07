@@ -149,7 +149,17 @@ $routes->group('api', ['namespace' => 'App\Controllers'], static function (Route
     $routes->get('get-allocations', 'SanitationAssetAllocations::getallocations');
     $routes->get('get-allocation-details/(:num)', 'SanitationAssetAllocations::allocationDetails/$1');
 
+    $routes->get('sanitation-inspections', 'SanitationInspections::index');
+    $routes->get('sanitation-inspections/view/(:num)', 'SanitationInspections::view/$1');
     $routes->post('sanitation-inspections/new', 'SanitationInspections::create');
+    $routes->post('sanitation-inspections/edit/(:num)', 'SanitationInspections::edit/$1');
+
+    $routes->get('sanitation-incidents', 'SanitationIncidents::index');
+    $routes->get('sanitation-incidents/view/(:num)', 'SanitationIncidents::view/$1');
+    $routes->post('sanitation-incidents/new', 'SanitationIncidents::create');
+    $routes->post('sanitation-incidents/edit/(:num)', 'SanitationIncidents::edit/$1');
+    $routes->post('sanitation-incidents/close/(:num)', 'SanitationIncidents::close/$1');
+
     $routes->post('sanitation-asset-tagging', 'AssetTagging::sanitationAssetTagging');
 
     $routes->post('upload/image', 'Upload::image');
