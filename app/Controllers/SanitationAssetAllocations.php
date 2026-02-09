@@ -284,9 +284,6 @@ class SanitationAssetAllocations extends BaseController
             $this->setError($this->invalidToken, 401);
             return $this->response();
         }
-        if (! $this->CheckUserTypePermissions('allocation:view')) {
-            return $this->response();
-        }
 
         $swachhagrahiId = (int) $this->_userData['user_id'];
         if ($swachhagrahiId < 1) {
@@ -343,9 +340,6 @@ class SanitationAssetAllocations extends BaseController
             $this->setError($this->invalidToken, 401);
             return $this->response();
         }
-        if (! $this->CheckUserTypePermissions('allocation:view')) {
-            return $this->response();
-        }
 
         $allocationId = (int) $id;
         if ($allocationId < 1) {
@@ -355,6 +349,7 @@ class SanitationAssetAllocations extends BaseController
 
         $model = new SanitationAssetAllocationsModel();
         $details = $model->getAllocationDetails($allocationId);
+
         if ($details === null) {
             $this->setError('Sanitation asset allocation not found.', 404);
             return $this->response();

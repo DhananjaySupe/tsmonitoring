@@ -146,8 +146,8 @@ $routes->group('api', ['namespace' => 'App\Controllers'], static function (Route
     $routes->post('sanitation-asset-allocations/edit/(:num)', 'SanitationAssetAllocations::edit/$1');
     $routes->post('sanitation-asset-allocations/delete/(:num)', 'SanitationAssetAllocations::delete/$1');
 
-    $routes->get('get-allocations', 'SanitationAssetAllocations::getallocations');
-    $routes->get('get-allocation-details/(:num)', 'SanitationAssetAllocations::allocationDetails/$1');
+    $routes->get('get-sanitation-allocations', 'SanitationAssetAllocations::getallocations');
+    $routes->get('get-sanitation-allocation-details/(:num)', 'SanitationAssetAllocations::allocationDetails/$1');
 
     $routes->get('sanitation-inspections', 'SanitationInspections::index');
     $routes->get('sanitation-inspections/view/(:num)', 'SanitationInspections::view/$1');
@@ -163,4 +163,23 @@ $routes->group('api', ['namespace' => 'App\Controllers'], static function (Route
     $routes->post('sanitation-asset-tagging', 'AssetTagging::sanitationAssetTagging');
 
     $routes->post('upload/image', 'Upload::image');
+
+    // Mobile common master-data APIs (no user-type permission checks, token required)
+    $routes->get('mobile/vendors', 'MobileCommon::vendors');
+    $routes->get('mobile/vendors/(:num)', 'MobileCommon::vendors/$1');
+
+    $routes->get('mobile/sectors', 'MobileCommon::sectors');
+    $routes->get('mobile/sectors/(:num)', 'MobileCommon::sectors/$1');
+
+    $routes->get('mobile/circles', 'MobileCommon::circles');
+    $routes->get('mobile/circles/(:num)', 'MobileCommon::circles/$1');
+
+    $routes->get('mobile/questions', 'MobileCommon::questions');
+    $routes->get('mobile/questions/(:num)', 'MobileCommon::questions/$1');
+
+    $routes->get('mobile/shifts', 'MobileCommon::shifts');
+    $routes->get('mobile/shifts/(:num)', 'MobileCommon::shifts/$1');
+
+    $routes->get('mobile/asset-types', 'MobileCommon::assetTypes');
+    $routes->get('mobile/asset-types/(:num)', 'MobileCommon::assetTypes/$1');
 });

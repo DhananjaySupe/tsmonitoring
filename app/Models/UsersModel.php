@@ -18,6 +18,7 @@ class UsersModel extends Model
         'user_type_id' => 'required|integer|greater_than_equal_to[0]',
         'vendor_id'    => 'permit_empty|integer|greater_than_equal_to[0]',
         'is_active'   => 'permit_empty|in_list[0,1]',
+        'lang'        => 'permit_empty|in_list[en,hi,mr]',
     ];
 
     /** @var array<string, array<string, string>> Validation messages */
@@ -67,6 +68,7 @@ class UsersModel extends Model
         'user_type_id',
         'vendor_id',
         'is_active',
+        'lang',
         'otp',
         'otp_expiry',
         'otp_attempts',

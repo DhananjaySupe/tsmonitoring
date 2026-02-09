@@ -40,7 +40,7 @@
 		public $maintenanceMessage = 'Service is under maintenance. Please try again later.';
 		/* cache */
 		public $cache = array(
-			'enabled' => true,
+			'enabled' => false,
 			'prefix' => 'monitoring_',
 			'expiration' => 60 * 60 * 24, //in seconds
 		);
@@ -96,6 +96,12 @@
 			'SMTPPass' => '',
 			'SMTPPort' => 25
 		);
+		/* Bhashini API configuration */
+		public $bhashiniConfig = [
+		'asrEndpoint' => 'https://asr.bhashini.ai/api/v1/recognize',
+		'translationEndpoint' => 'https://ntranslate.bhashini.ai/api/v1/translate',
+		'apiKey' => 'MmvuwPD6BLHn-UxoTXsE9KLJtuIz5OEWZ4tFvQW8pMgGtQypRNVKC_xb5DN8tWPO'
+		];
 
 		public function __construct()
 		{

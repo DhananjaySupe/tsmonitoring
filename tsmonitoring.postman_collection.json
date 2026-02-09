@@ -2306,7 +2306,7 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/get-allocations?page=1&per_page=25&status=&allocation_date_from=&allocation_date_to=",
+              "raw": "{{base_url}}/api/get-sanitation-allocations?page=1&per_page=25&status=&allocation_date_from=&allocation_date_to=",
               "host": [
                 "{{base_url}}"
               ],
@@ -2358,7 +2358,7 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/get-allocation-details/1",
+              "raw": "{{base_url}}/api/get-sanitation-allocation-details/1",
               "host": [
                 "{{base_url}}"
               ],
@@ -2894,6 +2894,337 @@
               "path": [
                 "api",
                 "sanitation-asset-tagging"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mobile Common",
+      "item": [
+        {
+          "name": "Vendors (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mobile/vendors?page=1&per_page=25&keywords=&status=&order_by_col=vendor_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mobile",
+                "vendors"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "vendor_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sectors (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mobile/sectors?page=1&per_page=25&keywords=&order_by_col=sector_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mobile",
+                "sectors"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sector_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Circles (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mobile/circles?page=1&per_page=25&keywords=&sector_id=&order_by_col=circle_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mobile",
+                "circles"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "sector_id",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "circle_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Questions (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mobile/questions?page=1&per_page=25&keywords=&question_type=&severity=&is_active=&order_by_col=question_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mobile",
+                "questions"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "question_type",
+                  "value": ""
+                },
+                {
+                  "key": "severity",
+                  "value": ""
+                },
+                {
+                  "key": "is_active",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "question_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Shifts (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mobile/shifts?page=1&per_page=25&keywords=&is_active=&order_by_col=shift_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mobile",
+                "shifts"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "is_active",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "shift_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Asset Types (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mobile/asset-types?page=1&per_page=25&keywords=&type=&status=&order_by_col=asset_type_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mobile",
+                "asset-types"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "type",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "asset_type_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
               ]
             }
           }

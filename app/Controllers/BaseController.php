@@ -83,7 +83,7 @@
 				if($session){
 					$this->_session = $session;
 					$usersModel = new UsersModel();
-					$member = $usersModel->select('user_id, code, full_name, email, phone, is_active, user_type_id')->where('user_id', $session['user_id'])->first();
+					$member = $usersModel->select('user_id, code, full_name, email, phone, is_active, lang, user_type_id')->where('user_id', $session['user_id'])->first();
 					if ($member) {
 						if($member['is_active'] == 1){
 							$jwt = new JwtLib();
@@ -153,7 +153,7 @@
 		{
 			if (! is_array($member) && (int) $member > 0) {
 				$usersModel = new UsersModel();
-				$member = $usersModel->select('user_id, code, full_name, email, phone, is_active, user_type_id')->where('user_id', $member['user_id'])->first();
+				$member = $usersModel->select('user_id, code, full_name, email, phone, is_active, lang, user_type_id')->where('user_id', $member['user_id'])->first();
 			}
 			if (! is_array($member)) {
 				return [];
@@ -166,6 +166,7 @@
 				'full_name' => $member['full_name'] ?? null,
 				'user_type_id' => $member['user_type_id'],
 				'is_active' => $member['is_active'] ?? 1,
+				'lang' => $member['lang'],
 			];
 			return $data;
 		}

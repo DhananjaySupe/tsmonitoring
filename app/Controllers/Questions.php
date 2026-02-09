@@ -169,6 +169,10 @@ class Questions extends BaseController
 
         $id = $model->insert($data, true);
         if (! $id) {
+
+            //bhashiniTranslateText('en', 'hi', $text);
+            //bhashiniTranslateText('en', 'mr', $text);
+
             $this->setError('Failed to create question.', 500);
             return $this->response();
         }

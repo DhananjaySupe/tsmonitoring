@@ -599,3 +599,120 @@
 		}
 	}
 
+	if (!function_exists('translateText')) {
+		function translateText(string $text, string $lang): string
+		{
+			$lang = $lang ?: 'en';
+
+			static $translations = [];
+			if (empty($translations)) {
+				$file = FCPATH . 'assets/configuration/language/'.$lang.'.json';
+				if (is_file($file)) {
+					$json    = file_get_contents($file);
+					$decoded = json_decode($json, true);
+					if (is_array($decoded)) {
+						$translations = $decoded;
+					}
+				}
+			}
+			if (isset($translations[$text])) {
+				return $translations[$text];
+			}
+			return $text;
+		}
+	}
+
+	if (!function_exists('bhashiniTranslateText')) {
+		function bhashiniTranslateText($sourceLanguageCode, $targetLanguageCode, $text) {
+
+			$bhashiniConfiguration = file_get_contents(base_url('assets/json/bhashini_configuration.json'));
+			$bhashiniConfiguration = json_decode($bhashiniConfiguration, true);
+			$serviceId = '';
+			foreach ($bhashiniConfiguration['pipelineResponseConfig'] as $key => $value) {
+				if($value['taskType'] == 'translation') {
+					foreach($value['config'] as $key => $config){
+						if($config['language']['sourceLanguage'] == $sourceLanguageCode && $config['language']['targetLanguage'] == $targetLanguageCode) {
+							$serviceId = $config['serviceId'];
+							break;
+						}
+					}
+				}
+			}
+
+			if($serviceId == ''){
+				return '-';
+			}
+
+			$curl = curl_init();
+			curl_setopt_array($curl, array(
+			CURLOPT_URL => 'https://dhruva-api.bhashini.gov.in/services/inference/pipeline',
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => '',
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 0,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_POSTFIELDS =>'{
+				"pipelineTasks": [
+					{
+						"taskType": "translation",
+						"config": {
+							"language": {
+								"sourceLanguage": "'.trim($sourceLanguageCode).'",
+								"targetLanguage": "'.trim($targetLanguageCode).'"
+							},
+							"serviceId": "'.trim($serviceId).'"
+						}
+					}
+				],
+				"inputData": {
+					"input": [
+						{
+							"source": "'.trim($text).'"
+						}
+					]
+				}
+			}',
+			CURLOPT_HTTPHEADER => array(
+				'Accept:  */*',
+				'User-Agent:  Thunder Client (https://www.thunderclient.com)',
+				'Authorization: gbes7KiCpI3uqHoYH5OY_TPgPVZ67lsDXT65ZTUFKJ752fvm_xROvoac9yuUdw2V',
+				'Content-Type: application/json'
+			),
+			));
+
+			$response = curl_exec($curl);
+			curl_close($curl);
+
+			$data = json_decode($response, true);
+			return isset($data['pipelineResponse'][0]['output'][0]['target']) ? $data['pipelineResponse'][0]['output'][0]['target'] : '-';
+		}
+	}
+
+	if (!function_exists('getBhashiniLanguage')) {
+		function getBhashiniLanguage($value, $type = 'code') {
+			$bhashiniLanguages = file_get_contents(base_url('assets/json/bhashini_languages.json'));
+			$bhashiniLanguages = json_decode($bhashiniLanguages, true);
+
+			foreach ($bhashiniLanguages as $k => $language) {
+				if($type == 'code'){
+					if($language['code'] == $value){
+						return $language;
+					}
+				}
+				else if($type == 'language_en'){
+					if($language['language_en'] == $value){
+						return $language;
+					}
+				}
+				else if($type == 'language_local'){
+					if($language['language_local'] == $value){
+						return $language;
+					}
+				}
+			}
+			return null;
+		}
+	}
+
