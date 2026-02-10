@@ -625,6 +625,7 @@
 	if (!function_exists('bhashiniTranslateText')) {
 		function bhashiniTranslateText($sourceLanguageCode, $targetLanguageCode, $text) {
 
+			$AppConfig = new \Config\AppConfig();
 			$bhashiniConfiguration = file_get_contents(base_url('assets/json/bhashini_configuration.json'));
 			$bhashiniConfiguration = json_decode($bhashiniConfiguration, true);
 			$serviceId = '';
@@ -645,7 +646,7 @@
 
 			$curl = curl_init();
 			curl_setopt_array($curl, array(
-			CURLOPT_URL => 'https://dhruva-api.bhashini.gov.in/services/inference/pipeline',
+			CURLOPT_URL => $AppConfig->bhashiniConfig['apiEndpoint'],
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_ENCODING => '',
 			CURLOPT_MAXREDIRS => 10,
@@ -676,8 +677,7 @@
 			}',
 			CURLOPT_HTTPHEADER => array(
 				'Accept:  */*',
-				'User-Agent:  Thunder Client (https://www.thunderclient.com)',
-				'Authorization: gbes7KiCpI3uqHoYH5OY_TPgPVZ67lsDXT65ZTUFKJ752fvm_xROvoac9yuUdw2V',
+				'Authorization: '.$AppConfig->bhashiniConfig['apiKey'],
 				'Content-Type: application/json'
 			),
 			));
@@ -689,30 +689,3 @@
 			return isset($data['pipelineResponse'][0]['output'][0]['target']) ? $data['pipelineResponse'][0]['output'][0]['target'] : '-';
 		}
 	}
-
-	if (!function_exists('getBhashiniLanguage')) {
-		function getBhashiniLanguage($value, $type = 'code') {
-			$bhashiniLanguages = file_get_contents(base_url('assets/json/bhashini_languages.json'));
-			$bhashiniLanguages = json_decode($bhashiniLanguages, true);
-
-			foreach ($bhashiniLanguages as $k => $language) {
-				if($type == 'code'){
-					if($language['code'] == $value){
-						return $language;
-					}
-				}
-				else if($type == 'language_en'){
-					if($language['language_en'] == $value){
-						return $language;
-					}
-				}
-				else if($type == 'language_local'){
-					if($language['language_local'] == $value){
-						return $language;
-					}
-				}
-			}
-			return null;
-		}
-	}
-

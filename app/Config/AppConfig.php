@@ -98,9 +98,8 @@
 		);
 		/* Bhashini API configuration */
 		public $bhashiniConfig = [
-		'asrEndpoint' => 'https://asr.bhashini.ai/api/v1/recognize',
-		'translationEndpoint' => 'https://ntranslate.bhashini.ai/api/v1/translate',
-		'apiKey' => 'MmvuwPD6BLHn-UxoTXsE9KLJtuIz5OEWZ4tFvQW8pMgGtQypRNVKC_xb5DN8tWPO'
+		'apiEndpoint' => 'https://dhruva-api.bhashini.gov.in/services/inference/pipeline',
+		'apiKey' => 'gbes7KiCpI3uqHoYH5OY_TPgPVZ67lsDXT65ZTUFKJ752fvm_xROvoac9yuUdw2V'
 		];
 
 		public function __construct()

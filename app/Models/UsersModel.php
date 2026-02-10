@@ -9,7 +9,7 @@ class UsersModel extends Model
     protected $returnType = 'array';
 
     /** @var array<string, string> Validation rules for insert and update */
-    protected $validationRules = [
+  /*  protected $validationRules = [
         'code'         => 'permit_empty|max_length[50]|is_unique[users.code,user_id,{user_id}]',
         'password_hash'=> 'permit_empty|min_length[60]|max_length[255]',
         'full_name'    => 'required|max_length[100]',
@@ -21,7 +21,6 @@ class UsersModel extends Model
         'lang'        => 'permit_empty|in_list[en,hi,mr]',
     ];
 
-    /** @var array<string, array<string, string>> Validation messages */
     protected $validationMessages = [
         'code' => [
             'max_length' => 'User code must not exceed 50 characters.',
@@ -56,7 +55,7 @@ class UsersModel extends Model
         'is_active' => [
             'in_list' => 'Active status must be 0 or 1.',
         ],
-    ];
+    ];*/
 
     protected $allowedFields = [
         'user_id',
