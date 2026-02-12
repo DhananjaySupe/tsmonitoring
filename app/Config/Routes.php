@@ -183,3 +183,7 @@ $routes->group('api', ['namespace' => 'App\Controllers'], static function (Route
     $routes->get('mobile/asset-types', 'MobileCommon::assetTypes');
     $routes->get('mobile/asset-types/(:num)', 'MobileCommon::assetTypes/$1');
 });
+
+$routes->options('(:any)', function() {
+    return response()->setStatusCode(200);
+});

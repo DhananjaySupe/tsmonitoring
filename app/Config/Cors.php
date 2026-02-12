@@ -34,9 +34,15 @@ class Cors extends BaseConfig
          *   - ['http://localhost:8080']
          *   - ['https://www.example.com']
          */
-        // Allow all origins.
+        // Allow all origins (very permissive; use with care).
         // NOTE: When using "*", supportsCredentials MUST be false.
-        'allowedOrigins' => ['*'],
+        'allowedOrigins' => [
+            'https://tsmonitoring.kashitsolution.com',
+            'http://tsmonitoring.loc',
+            'http://localhost:3000',
+            'http://localhost',
+            'https://example.com',
+        ],
 
         /**
          * Origin regex patterns for the `Access-Control-Allow-Origin` header.
@@ -71,18 +77,8 @@ class Cors extends BaseConfig
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
          */
-        // Common headers plus Authorization and custom API headers
-        'allowedHeaders' => [
-            'Content-Type',
-            'Accept',
-            'Authorization',
-            'X-Requested-With',
-            'X-API-KEY',
-            'X-ACCESS-TOKEN',
-            'X-LANGUAGE',
-            'X-API-VERSION',
-            'X-PLATFORM',
-        ],
+        // Allow all headers requested by the client
+        'allowedHeaders' => ['*'],
 
         /**
          * Set headers to expose.
