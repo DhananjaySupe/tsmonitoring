@@ -250,7 +250,7 @@ class Users extends BaseController
             $this->setError($this->invalidToken, 401);
             return $this->response();
         }
-        if (! $this->requireAdminOrSuperAdmin()) {
+        if (! $this->checkUserTypePermissions('users:delete')) {
             return $this->response();
         }
 
