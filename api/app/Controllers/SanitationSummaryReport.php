@@ -260,7 +260,7 @@ class SanitationSummaryReport extends BaseController
                     $row['vendor_code'] = $vendors[(int) $row['vendor_id']]['vendor_code'];
                 }
                 $row['total_asset_reg_till_date'] = $row['total_asset_reg_till_date'];
-                $row['existing_registration_count'] = (string)$regCounts[$typeId] ?? 0;
+                $row['existing_registration_count'] = (string)($regCounts[$typeId] ?? 0);
                 $merged[] = $row;
             }
             $result['paging'] = paging($page, count($merged), $length);
@@ -269,10 +269,10 @@ class SanitationSummaryReport extends BaseController
         } else {
             foreach ($result['rows'] as &$row) {
                 if ($groupByNorm === 'date') {
-                    $row['existing_registration_count'] = (string)$regCounts[$row['inspection_date'] ?? ''] ?? 0;
+                    $row['existing_registration_count'] = (string)($regCounts[$row['inspection_date'] ?? ''] ?? 0);
                 } else {
                     $key = (int) ($row['asset_type_id'] ?? 0) . '|' . (int) ($row['sector_id'] ?? 0) . '|' . (int) ($row['vendor_id'] ?? 0);
-                    $row['existing_registration_count'] = (string)$regCounts[$key] ?? 0;
+                    $row['existing_registration_count'] = (string)($regCounts[$key] ?? 0);
                 }
                 $row['total_asset_reg_till_date'] = $row['total_asset_reg_till_date'];
                 $row['asset_type_name'] = '';
