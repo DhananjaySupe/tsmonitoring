@@ -3232,6 +3232,545 @@
       ]
     },
     {
+      "name": "Sanitation Registration Reports",
+      "item": [
+        {
+          "name": "GSD-wise Registrations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-report/gsd-registrations?page=1&per_page=25&gsd_id=&registration_date_from=&registration_date_to=&asset_type_id=&status=&gender=&order_by_col=sanitation_asset_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-report",
+                "gsd-registrations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "gsd_id",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_to",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "gender",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sanitation_asset_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Vendor-wise Registrations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-report/vendor-registrations?page=1&per_page=25&vendor_id=&registration_date_from=&registration_date_to=&asset_type_id=&status=&gender=&order_by_col=sanitation_asset_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-report",
+                "vendor-registrations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_to",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "gender",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sanitation_asset_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sector-wise Registrations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-report/sector-registrations?page=1&per_page=25&sector_id=&registration_date_from=&registration_date_to=&asset_type_id=&status=&gender=&order_by_col=sanitation_asset_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-report",
+                "sector-registrations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "sector_id",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_to",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "gender",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sanitation_asset_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Circle-wise Registrations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-report/circle-registrations?page=1&per_page=25&circle_id=&registration_date_from=&registration_date_to=&asset_type_id=&status=&gender=&order_by_col=sanitation_asset_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-report",
+                "circle-registrations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "circle_id",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_to",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "gender",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sanitation_asset_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sanitation Dashboard",
+      "item": [
+        {
+          "name": "Dashboard counts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-dashboard?date=2024-12-08&vendor_id=&sector_id=&asset_type_id=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-dashboard"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2024-12-08",
+                  "description": "Required. Y-m-d (inspection date for under/off monitoring)"
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "sector_id",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": "",
+                  "description": "Toilet/asset type"
+                }
+              ]
+            },
+            "description": "Returns total_toilets, registered_toilets, under_monitoring (at least one inspection on date), off_monitoring (no inspection on date). Cached when AppConfig cache enabled."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sanitation Inspection Report",
+      "item": [
+        {
+          "name": "Index (filters)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-inspection-report?page=1&per_page=25&asset_types=&date_from=&date_to=&vendor=&asset=&gsd=&shift=&order_by_col=si.inspection_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-inspection-report"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "asset_types",
+                  "value": ""
+                },
+                {
+                  "key": "date_from",
+                  "value": ""
+                },
+                {
+                  "key": "date_to",
+                  "value": ""
+                },
+                {
+                  "key": "vendor",
+                  "value": ""
+                },
+                {
+                  "key": "asset",
+                  "value": ""
+                },
+                {
+                  "key": "gsd",
+                  "value": ""
+                },
+                {
+                  "key": "shift",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "si.inspection_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            },
+            "description": "Inspection report with filters: asset_types, date_from, date_to, vendor, asset, gsd (swachhagrahi), shift. Cached when AppConfig cache enabled."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inspection Summary Report",
+      "item": [
+        {
+          "name": "Index (filters + group_by)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sanitation-inspection-summary-report?page=1&per_page=25&asset_type_id=&vendor_id=&sector_id=&date_from=&date_to=&group_by=&order_by_col=s.summary_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sanitation-inspection-summary-report"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "sector_id",
+                  "value": ""
+                },
+                {
+                  "key": "date_from",
+                  "value": ""
+                },
+                {
+                  "key": "date_to",
+                  "value": ""
+                },
+                {
+                  "key": "group_by",
+                  "value": "",
+                  "description": "asset_type | sector | vendor | date (empty = raw rows)"
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "s.summary_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            },
+            "description": "Summary report with filters. group_by: asset_type (asset type wise), sector (sector wise), vendor (vendor wise), date (date wise). Cached when AppConfig cache enabled."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cron",
+      "item": [
+        {
+          "name": "Archive Inspections",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/cron/archive-inspections",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cron",
+                "archive-inspections"
+              ]
+            },
+            "description": "Move inspections from sanitation_inspections to sanitation_inspections_archive where submitted_at is yesterday (day-1). Logged to cron_log."
+          }
+        },
+        {
+          "name": "Build Inspection Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/cron/build-inspection-summary",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cron",
+                "build-inspection-summary"
+              ]
+            },
+            "description": "Build sanitation_inspection_summary for yesterday (inspection_date day-1). Logged to cron_log."
+          }
+        }
+      ]
+    },
+    {
       "name": "Upload",
       "item": [
         {

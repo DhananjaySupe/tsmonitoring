@@ -12,6 +12,10 @@ class SanitationInspectionsModel extends Model
         'inspection_id',
         'allocation_id',
         'asset_id',
+        'asset_type_id',
+        'vendor_id',
+        'sector_id',
+        'circle_id',
         'shift_id',
         'swachhagrahi_id',
         'inspection_date',
@@ -25,5 +29,22 @@ class SanitationInspectionsModel extends Model
         'longitude',
         'submitted_at',
     ];
+
+    /**
+     * Delete inspections by inspection_id list (e.g. after archiving).
+     *
+     * @param list<int> $inspectionIds
+     * @return int Number of rows deleted
+     */
+    public function deleteByIds(array $inspectionIds): int
+    {
+        if (empty($inspectionIds)) {
+            return 0;
+        }
+        $builder = $this->builder();
+        $builder->whereIn('inspection_id', $inspectionIds);
+        $builder->delete();
+        return $this->db->affectedRows();
+    }
 }
 

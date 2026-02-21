@@ -689,3 +689,124 @@
 			return isset($data['pipelineResponse'][0]['output'][0]['target']) ? $data['pipelineResponse'][0]['output'][0]['target'] : '-';
 		}
 	}
+
+	if (! function_exists('getVendorsList')) {
+		/**
+		 * Get all vendors as id => [vendor_name, vendor_code] for lookup. Cached when AppConfig->cache enabled.
+		 *
+		 * @return array<int, array{vendor_name: string, vendor_code: string}>
+		 */
+		function getVendorsList(): array
+		{
+			$AppConfig    = new \Config\AppConfig();
+			$cacheEnabled = ! empty($AppConfig->cache['enabled']);
+			$cache        = null;
+			$cacheKey     = $AppConfig->cache['prefix'] . 'list_vendors';
+
+			if ($cacheEnabled) {
+				$cache  = \Config\Services::cache();
+				$cached = $cache->get($cacheKey);
+				if (is_array($cached) && ! empty($cached)) {
+					return $cached;
+				}
+			}
+
+			$model = new \App\Models\VendorsModel();
+			$rows  = $model->select('vendor_id, vendor_name, vendor_code')->findAll();
+			$list  = [];
+			foreach ($rows as $row) {
+				$list[(int) $row['vendor_id']] = [
+					'vendor_name' => $row['vendor_name'] ?? '',
+					'vendor_code' => $row['vendor_code'] ?? '',
+				];
+			}
+
+			if ($cacheEnabled && $cache && $cacheKey) {
+				$cache->save($cacheKey, $list, (int) $AppConfig->cache['expiration']);
+			}
+
+			return $list;
+		}
+	}
+
+	if (! function_exists('getSectorsList')) {
+		/**
+		 * Get all sectors as id => [sector_name, sector_code] for lookup. Cached when AppConfig->cache enabled.
+		 *
+		 * @return array<int, array{sector_name: string, sector_code: string}>
+		 */
+		function getSectorsList(): array
+		{
+			$AppConfig    = new \Config\AppConfig();
+			$cacheEnabled = ! empty($AppConfig->cache['enabled']);
+			$cache        = null;
+			$cacheKey     = $AppConfig->cache['prefix'] . 'list_sectors';
+
+			if ($cacheEnabled) {
+				$cache  = \Config\Services::cache();
+				$cached = $cache->get($cacheKey);
+				if (is_array($cached) && ! empty($cached)) {
+					return $cached;
+				}
+			}
+
+			$model = new \App\Models\SectorsModel();
+			$rows  = $model->select('sector_id, sector_name, sector_code')->findAll();
+			$list  = [];
+			foreach ($rows as $row) {
+				$list[(int) $row['sector_id']] = [
+					'sector_name' => $row['sector_name'] ?? '',
+					'sector_code' => $row['sector_code'] ?? '',
+				];
+			}
+
+			if ($cacheEnabled && $cache && $cacheKey) {
+				$cache->save($cacheKey, $list, (int) $AppConfig->cache['expiration']);
+			}
+
+			return $list;
+		}
+	}
+
+	if (! function_exists('getAssetTypesList')) {
+		/**
+		 * Get asset types as id => [name, description] for lookup. Optional filter by type (e.g. SANITATION). Cached when AppConfig->cache enabled.
+		 *
+		 * @param string $type Filter by type column (e.g. 'SANITATION'); empty = all
+		 * @return array<int, array{name: string, description: string}>
+		 */
+		function getAssetTypesList(string $type = ''): array
+		{
+			$AppConfig    = new \Config\AppConfig();
+			$cacheEnabled = ! empty($AppConfig->cache['enabled']);
+			$cache        = $cacheEnabled ? \Config\Services::cache() : null;
+			$cacheKey     = $AppConfig->cache['prefix'] . 'list_asset_types_' . ($type !== '' ? $type : 'all');
+
+			if ($cacheEnabled && $cache) {
+				$cached = $cache->get($cacheKey);
+				if (is_array($cached) && ! empty($cached)) {
+					return $cached;
+				}
+			}
+
+			$model = new \App\Models\AssetTypesModel();
+			$model->select('asset_type_id, name, description');
+			if ($type !== '') {
+				$model->where('type', $type);
+			}
+			$rows = $model->findAll();
+			$list = [];
+			foreach ($rows as $row) {
+				$list[(int) $row['asset_type_id']] = [
+					'name'        => $row['name'] ?? '',
+					'description' => $row['description'] ?? '',
+				];
+			}
+
+			if ($cacheEnabled && $cache && $cacheKey) {
+				$cache->save($cacheKey, $list, (int) $AppConfig->cache['expiration']);
+			}
+
+			return $list;
+		}
+	}

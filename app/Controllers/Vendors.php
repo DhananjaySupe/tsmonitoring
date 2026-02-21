@@ -140,6 +140,7 @@ class Vendors extends BaseController
         }
 
         $data = [
+            'vendor_id'      => (int) $userId,
             'user_id'        => (int) $userId,
             'vendor_name'    => $vendorName,
             'vendor_code'    => $vendorCode,

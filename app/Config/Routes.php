@@ -154,6 +154,17 @@ $routes->group('api', ['namespace' => 'App\Controllers'], static function (Route
     $routes->post('sanitation-inspections/new', 'SanitationInspections::create');
     $routes->post('sanitation-inspections/edit/(:num)', 'SanitationInspections::edit/$1');
 
+    $routes->get('sanitation-inspection-report', 'SanitationInspectionReport::index');
+    $routes->get('sanitation-inspection-summary-report', 'SanitationSummaryReport::index');
+
+    $routes->get('sanitation-dashboard', 'SanitationDashboard::index');
+
+    // Sanitation registration reports
+    $routes->get('sanitation-report/gsd-registrations', 'SanitationRegistrationReport::gsdRegistrations');
+    $routes->get('sanitation-report/vendor-registrations', 'SanitationRegistrationReport::vendorRegistrations');
+    $routes->get('sanitation-report/sector-registrations', 'SanitationRegistrationReport::sectorRegistrations');
+    $routes->get('sanitation-report/circle-registrations', 'SanitationRegistrationReport::circleRegistrations');
+
     $routes->get('sanitation-incidents', 'SanitationIncidents::index');
     $routes->get('sanitation-incidents/view/(:num)', 'SanitationIncidents::view/$1');
     $routes->post('sanitation-incidents/new', 'SanitationIncidents::create');
@@ -182,6 +193,12 @@ $routes->group('api', ['namespace' => 'App\Controllers'], static function (Route
 
     $routes->get('mobile/asset-types', 'MobileCommon::assetTypes');
     $routes->get('mobile/asset-types/(:num)', 'MobileCommon::assetTypes/$1');
+
+    // Cron (X-API-KEY required; call e.g. daily for day-1)
+    $routes->get('cron/archive-inspections', 'Cron::archiveInspections');
+    $routes->get('cron/build-inspection-summary', 'Cron::buildInspectionSummary');
+
+    $routes->get('dev/generate-dummy-data', 'ZeroDev::generateDummyData');
 });
 
 $routes->options('(:any)', function() {

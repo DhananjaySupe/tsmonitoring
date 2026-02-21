@@ -131,6 +131,10 @@ class SanitationInspections extends BaseController
 
         $allocationId    = (int) $this->getPost('allocation_id', 0);
         $assetId         = (int) $this->getPost('asset_id', 0);
+        $assetTypeId     = (int) $this->getPost('asset_type_id', 0);
+        $vendorId        = (int) $this->getPost('vendor_id', 0);
+        $sectorId        = (int) $this->getPost('sector_id', 0);
+        $circleId        = (int) $this->getPost('circle_id', 0);
         $shiftId         = (int) $this->getPost('shift_id', 0);
         $swachhagrahiId  = (int) $this->_userData['user_id'];
         $swachhagrahiName = $this->_userData['full_name'];
@@ -143,7 +147,12 @@ class SanitationInspections extends BaseController
         $longitude       = $this->getPost('longitude', null);
 
         if ($allocationId < 1 || $assetId < 1 || $shiftId < 1) {
-            $this->setError('allocation_id, asset_id, shift_id are required.', 400);
+            $this->setError('allocation id, asset id and shift id are required.', 400);
+            return $this->response();
+        }
+
+        if ($assetTypeId < 1 || $vendorId < 1 || $sectorId < 1 || $circleId < 1) {
+            $this->setError('asset type id, vendor id, sector id and circle id are required.', 400);
             return $this->response();
         }
 
@@ -153,12 +162,12 @@ class SanitationInspections extends BaseController
         }
 
         if ($complianceScore === null || $complianceScore < 0 || $complianceScore > 100) {
-            $this->setError('compliance_score must be between 0 and 100.', 400);
+            $this->setError('compliance score must be between 0 and 100.', 400);
             return $this->response();
         }
 
         if (! is_array($questionsData) || empty($questionsData)) {
-            $this->setError('questions_answers_data is required and must be a non-empty array of { que, ans, photo }.', 400);
+            $this->setError('questions answers data is required and must be a non-empty array of { que, ans, photo }.', 400);
             return $this->response();
         }
 
@@ -194,6 +203,10 @@ class SanitationInspections extends BaseController
         $data = [
             'allocation_id'         => $allocationId,
             'asset_id'              => $assetId,
+            'asset_type_id'         => $assetTypeId,
+            'vendor_id'             => $vendorId,
+            'sector_id'             => $sectorId,
+            'circle_id'             => $circleId,
             'shift_id'              => $shiftId,
             'swachhagrahi_id'       => $swachhagrahiId,
             'inspection_date'       => $inspectionDate,
