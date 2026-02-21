@@ -1,0 +1,3868 @@
+{
+  "info": {
+    "name": "TS Monitoring API",
+    "_postman_id": "tsmonitoring-api-collection",
+    "description": "TS Monitoring API collection. Base path: v1. If project is in api folder use base_url like http://domain.com/api. Set {{base_url}} and {{api_key}} in your environment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9876543210\",\n  \"password\": \"password_here\",\n  \"full_name\": \"Demo User\",\n  \"email\": \"demo@example.com\",\n  \"user_type_id\": 0,\n  \"vendor_id\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9876543210\",\n  \"password\": \"password_here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.access_token) {",
+                  "        pm.environment.set(\"access_token\", jsonData.data.access_token);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "auth",
+                "logout"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/auth/forgot-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "auth",
+                "forgot-password"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9876543210\",\n  \"otp\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/auth/verify-otp",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "auth",
+                "verify-otp"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/users?page=1&per_page=25&keywords=&order_by_col=user_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "user_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/users/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9876543210\",\n  \"password\": \"password_here\",\n  \"full_name\": \"New User\",\n  \"email\": \"new@example.com\",\n  \"user_type_id\": 0,\n  \"vendor_id\": null,\n  \"is_active\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/users/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9876543210\",\n  \"full_name\": \"Updated User\",\n  \"email\": \"updated@example.com\",\n  \"user_type_id\": 0,\n  \"vendor_id\": null,\n  \"is_active\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/users/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/users/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Permissions",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/user-permissions?page=1&per_page=25&user_type_id=&permission=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "user-permissions"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "user_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "permission",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/user-permissions/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "user-permissions",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_type_id\": 1,\n  \"permission\": \"SECTOR\",\n  \"can_create\": 1,\n  \"can_view\": 1,\n  \"can_edit\": 1,\n  \"can_delete\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/user-permissions/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "user-permissions",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"can_create\": 1,\n  \"can_view\": 1,\n  \"can_edit\": 1,\n  \"can_delete\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/user-permissions/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "user-permissions",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/user-permissions/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "user-permissions",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Circles",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/circles?page=1&per_page=25&keywords=&sector_id=&order_by_col=circle_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "circles"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "sector_id",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "circle_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/circles/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "circles",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"circle_name\": \"Circle 1\",\n  \"circle_code\": \"C001\",\n  \"sector_id\": 1,\n  \"boundary_coordinates\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/circles/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "circles",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"circle_name\": \"Circle 1 Updated\",\n  \"circle_code\": \"C001\",\n  \"sector_id\": 1,\n  \"boundary_coordinates\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/circles/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "circles",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/circles/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "circles",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sectors",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sectors?page=1&per_page=25&keywords=&order_by_col=sector_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sectors"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sector_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sectors/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sectors",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sector_name\": \"Sector 1\",\n  \"sector_code\": \"S001\",\n  \"boundary_coordinates\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sectors/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sectors",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sector_name\": \"Sector 1 Updated\",\n  \"sector_code\": \"S001\",\n  \"boundary_coordinates\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sectors/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sectors",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sectors/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sectors",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Shifts",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/shifts?page=1&per_page=25&keywords=&is_active=&order_by_col=shift_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "shifts"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "is_active",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "shift_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/shifts/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "shifts",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shift_name\": \"Morning\",\n  \"start_time\": \"06:00:00\",\n  \"end_time\": \"14:00:00\",\n  \"is_active\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/shifts/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "shifts",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shift_name\": \"Morning Updated\",\n  \"start_time\": \"06:00:00\",\n  \"end_time\": \"14:30:00\",\n  \"is_active\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/shifts/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "shifts",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/shifts/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "shifts",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Questions",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/questions?page=1&per_page=25&keywords=&question_type=&severity=&is_active=&order_by_col=question_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "questions"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "question_type",
+                  "value": ""
+                },
+                {
+                  "key": "severity",
+                  "value": ""
+                },
+                {
+                  "key": "is_active",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "question_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/questions/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "questions",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question_text\": \"Is the toilet clean?\",\n  \"question_type\": \"YES_NO\",\n  \"options\": null,\n  \"expected_answer\": \"YES\",\n  \"condition_type\": null,\n  \"condition_value\": null,\n  \"severity\": \"MEDIUM\",\n  \"sla\": 6,\n  \"is_mandatory\": 1,\n  \"is_photo_mandatory\": 0,\n  \"sequence\": 1,\n  \"is_active\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/questions/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "questions",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question_text\": \"Is the toilet clean (updated)?\",\n  \"question_type\": \"YES_NO\",\n  \"options\": null,\n  \"expected_answer\": \"YES\",\n  \"condition_type\": null,\n  \"condition_value\": null,\n  \"severity\": \"MEDIUM\",\n  \"sla\": 6,\n  \"is_mandatory\": 1,\n  \"is_photo_mandatory\": 0,\n  \"sequence\": 1,\n  \"is_active\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/questions/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "questions",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/questions/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "questions",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sanitation Assets",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-assets?page=1&per_page=25&keywords=&asset_type_id=&status=&vendor_id=&sector_id=&circle_id=&gender=&order_by_col=sanitation_asset_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-assets"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "sector_id",
+                  "value": ""
+                },
+                {
+                  "key": "circle_id",
+                  "value": ""
+                },
+                {
+                  "key": "gender",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sanitation_asset_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-assets/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-assets",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_type_id\": 1,\n  \"qr_code\": \"QR001\",\n  \"asset_name\": \"Asset Name\",\n  \"short_url\": \"\",\n  \"description\": \"\",\n  \"gender\": \"MALE\",\n  \"vendor_id\": 1,\n  \"vendor_asset_code\": \"\",\n  \"status\": \"ACTIVE\",\n  \"sector_id\": 1,\n  \"circle_id\": 1,\n  \"latitude\": \"28.6139\",\n  \"longitude\": \"77.2090\",\n  \"photo\": null,\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-assets/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-assets",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_type_id\": 1,\n  \"qr_code\": \"QR001\",\n  \"asset_name\": \"Asset Name Updated\",\n  \"short_url\": \"\",\n  \"description\": \"\",\n  \"gender\": \"MALE\",\n  \"vendor_id\": 1,\n  \"vendor_asset_code\": \"\",\n  \"status\": \"ACTIVE\",\n  \"sector_id\": 1,\n  \"circle_id\": 1,\n  \"latitude\": \"28.6139\",\n  \"longitude\": \"77.2090\",\n  \"photo\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-assets/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-assets",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-assets/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-assets",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Asset Types",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/asset-types?page=1&per_page=25&keywords=&type=&status=&order_by_col=asset_type_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "asset-types"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "type",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "asset_type_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/asset-types/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "asset-types",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"SANITATION\",\n  \"name\": \"Toilet Block\",\n  \"description\": \"Public toilet block\",\n  \"questions\": \"Q1,Q2,Q3\",\n  \"status\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/asset-types/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "asset-types",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"SANITATION\",\n  \"name\": \"Toilet Block Updated\",\n  \"description\": \"Public toilet block updated\",\n  \"questions\": \"Q1,Q2,Q3\",\n  \"status\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/asset-types/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "asset-types",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/asset-types/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "asset-types",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vendors",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/vendors?page=1&per_page=25&keywords=&status=&order_by_col=vendor_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "vendors"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "vendor_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/vendors/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "vendors",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vendor_name\": \"ABC Supplies\",\n  \"vendor_code\": \"V001\",\n  \"contact_person\": \"John Doe\",\n  \"contact_email\": \"john@abc.com\",\n  \"contact_phone\": \"9876543210\",\n  \"address\": \"123 Main St\",\n  \"status\": \"ACTIVE\",\n  \"user_id\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/vendors/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "vendors",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vendor_name\": \"ABC Supplies Updated\",\n  \"vendor_code\": \"V001\",\n  \"contact_person\": \"Jane Doe\",\n  \"contact_email\": \"jane@abc.com\",\n  \"contact_phone\": \"919876543210\",\n  \"address\": \"456 Oak Ave\",\n  \"status\": \"ACTIVE\",\n  \"user_id\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/vendors/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "vendors",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/vendors/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "vendors",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vehicles",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/vehicles?page=1&per_page=25&keywords=&vendor_id=&status=&vehicle_type=&order_by_col=vehicle_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "vehicles"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "vehicle_type",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "vehicle_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/vehicles/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "vehicles",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_name\": \"Vehicle 1\",\n  \"vehicle_type\": \"Compactor\",\n  \"vehicle_number\": \"MH01AB1234\",\n  \"rc_number\": \"RC123456789\",\n  \"vendor_id\": 1,\n  \"imei_number\": \"123456789012345\",\n  \"chassis_number\": \"CH123456789\",\n  \"gps_device_id\": \"\",\n  \"registration_date\": \"\",\n  \"status\": \"Active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/vehicles/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "vehicles",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_name\": \"Vehicle 1 Updated\",\n  \"vehicle_type\": \"Compactor\",\n  \"vehicle_number\": \"MH01AB1234\",\n  \"rc_number\": \"RC123456789\",\n  \"vendor_id\": 1,\n  \"imei_number\": \"123456789012345\",\n  \"chassis_number\": \"CH123456789\",\n  \"gps_device_id\": \"\",\n  \"registration_date\": \"\",\n  \"status\": \"Active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/vehicles/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "vehicles",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/vehicles/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "vehicles",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vehicle Geofences",
+      "item": [
+        {"name": "List", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-geofences?page=1&per_page=25&keywords=&point_id=&is_active=&order_by_col=geofence_id&order_by=DESC", "host": ["{{base_url}}"], "path": ["v1", "vehicle-geofences"], "query": [{"key": "page", "value": "1"}, {"key": "per_page", "value": "25"}, {"key": "keywords", "value": ""}, {"key": "point_id", "value": ""}, {"key": "is_active", "value": ""}, {"key": "order_by_col", "value": "geofence_id"}, {"key": "order_by", "value": "DESC"}]}}},
+        {"name": "View", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-geofences/view/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-geofences", "view", "1"]}}},
+        {"name": "Create", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"point_id\": 1, \"radius_meters\": 100, \"is_active\": 1}"}, "url": {"raw": "{{base_url}}/v1/vehicle-geofences/new", "host": ["{{base_url}}"], "path": ["v1", "vehicle-geofences", "new"]}}},
+        {"name": "Edit", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"point_id\": 1, \"radius_meters\": 150, \"is_active\": 1}"}, "url": {"raw": "{{base_url}}/v1/vehicle-geofences/edit/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-geofences", "edit", "1"]}}},
+        {"name": "Delete", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{}"}, "url": {"raw": "{{base_url}}/v1/vehicle-geofences/delete/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-geofences", "delete", "1"]}}}
+      ]
+    },
+    {
+      "name": "Vehicle Collection Points",
+      "item": [
+        {"name": "List", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-collection-points?page=1&per_page=25&keywords=&status=&order_by_col=point_id&order_by=DESC", "host": ["{{base_url}}"], "path": ["v1", "vehicle-collection-points"], "query": [{"key": "page", "value": "1"}, {"key": "per_page", "value": "25"}, {"key": "keywords", "value": ""}, {"key": "status", "value": ""}, {"key": "order_by_col", "value": "point_id"}, {"key": "order_by", "value": "DESC"}]}}},
+        {"name": "View", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-collection-points/view/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-collection-points", "view", "1"]}}},
+        {"name": "Create", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"point_code\": \"CP001\", \"point_name\": \"Collection Point 1\", \"latitude\": \"28.6139\", \"longitude\": \"77.2090\", \"address\": \"\", \"ward_number\": \"\", \"zone\": \"\", \"point_type\": \"PRIMARY\", \"expected_collection_time\": \"08:00:00\", \"collection_frequency\": \"DAILY\", \"status\": \"ACTIVE\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-collection-points/new", "host": ["{{base_url}}"], "path": ["v1", "vehicle-collection-points", "new"]}}},
+        {"name": "Edit", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"point_code\": \"CP001\", \"point_name\": \"Collection Point 1 Updated\", \"latitude\": \"28.6139\", \"longitude\": \"77.2090\", \"address\": \"\", \"ward_number\": \"\", \"zone\": \"\", \"point_type\": \"PRIMARY\", \"expected_collection_time\": \"08:00:00\", \"collection_frequency\": \"DAILY\", \"status\": \"ACTIVE\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-collection-points/edit/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-collection-points", "edit", "1"]}}},
+        {"name": "Delete", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{}"}, "url": {"raw": "{{base_url}}/v1/vehicle-collection-points/delete/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-collection-points", "delete", "1"]}}}
+      ]
+    },
+    {
+      "name": "Vehicle Daily Trip Summaries",
+      "item": [
+        {"name": "List", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-daily-trip-summaries?page=1&per_page=25&vehicle_id=&route_id=&trip_date=&trip_status=&order_by_col=summary_id&order_by=DESC", "host": ["{{base_url}}"], "path": ["v1", "vehicle-daily-trip-summaries"], "query": [{"key": "page", "value": "1"}, {"key": "per_page", "value": "25"}, {"key": "vehicle_id", "value": ""}, {"key": "route_id", "value": ""}, {"key": "trip_date", "value": ""}, {"key": "trip_status", "value": ""}, {"key": "order_by_col", "value": "summary_id"}, {"key": "order_by", "value": "DESC"}]}}},
+        {"name": "View", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-daily-trip-summaries/view/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-daily-trip-summaries", "view", "1"]}}},
+        {"name": "Create", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"assignment_id\": 1, \"vehicle_id\": 1, \"route_id\": 1, \"trip_date\": \"2026-01-31\", \"start_time\": \"08:00:00\", \"end_time\": \"10:00:00\", \"total_distance\": 25.5, \"total_points_assigned\": 10, \"total_points_visited\": 9, \"total_points_missed\": 1, \"total_garbage_collected\": 3.5, \"avg_speed\": 20.5, \"max_speed\": 40.0, \"idle_time\": \"00:10:00\", \"moving_time\": \"01:50:00\", \"completion_percentage\": 90.0, \"trip_status\": \"COMPLETED\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-daily-trip-summaries/new", "host": ["{{base_url}}"], "path": ["v1", "vehicle-daily-trip-summaries", "new"]}}},
+        {"name": "Edit", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"assignment_id\": 1, \"vehicle_id\": 1, \"route_id\": 1, \"trip_date\": \"2026-01-31\", \"start_time\": \"08:00:00\", \"end_time\": \"10:00:00\", \"total_distance\": 25.5, \"total_points_assigned\": 10, \"total_points_visited\": 9, \"total_points_missed\": 1, \"total_garbage_collected\": 3.5, \"avg_speed\": 20.5, \"max_speed\": 40.0, \"idle_time\": \"00:10:00\", \"moving_time\": \"01:50:00\", \"completion_percentage\": 90.0, \"trip_status\": \"COMPLETED\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-daily-trip-summaries/edit/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-daily-trip-summaries", "edit", "1"]}}},
+        {"name": "Delete", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{}"}, "url": {"raw": "{{base_url}}/v1/vehicle-daily-trip-summaries/delete/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-daily-trip-summaries", "delete", "1"]}}}
+      ]
+    },
+    {
+      "name": "Vehicle GPS Tracking",
+      "item": [
+        {"name": "List", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-gps-tracking?page=1&per_page=25&vehicle_id=&assignment_id=&order_by_col=tracking_id&order_by=DESC", "host": ["{{base_url}}"], "path": ["v1", "vehicle-gps-tracking"], "query": [{"key": "page", "value": "1"}, {"key": "per_page", "value": "25"}, {"key": "vehicle_id", "value": ""}, {"key": "assignment_id", "value": ""}, {"key": "order_by_col", "value": "tracking_id"}, {"key": "order_by", "value": "DESC"}]}}},
+        {"name": "View", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-gps-tracking/view/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-gps-tracking", "view", "1"]}}},
+        {"name": "Create", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"vehicle_id\": 1, \"assignment_id\": 1, \"latitude\": 28.6139, \"longitude\": 77.2090, \"speed\": 30.5, \"direction\": 90, \"ignition_status\": \"ON\", \"fuel_level\": 60.5, \"odometer_reading\": 12345.6, \"accuracy\": 5.0, \"timestamp\": \"2026-01-31 10:00:00\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-gps-tracking/new", "host": ["{{base_url}}"], "path": ["v1", "vehicle-gps-tracking", "new"]}}},
+        {"name": "Edit", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"vehicle_id\": 1, \"assignment_id\": 1, \"latitude\": 28.6140, \"longitude\": 77.2091, \"speed\": 32.0, \"direction\": 95, \"ignition_status\": \"ON\", \"fuel_level\": 55.0, \"odometer_reading\": 12350.0, \"accuracy\": 4.5, \"timestamp\": \"2026-01-31 10:05:00\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-gps-tracking/edit/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-gps-tracking", "edit", "1"]}}},
+        {"name": "Delete", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{}"}, "url": {"raw": "{{base_url}}/v1/vehicle-gps-tracking/delete/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-gps-tracking", "delete", "1"]}}}
+      ]
+    },
+    {
+      "name": "Vehicle Maintenance Logs",
+      "item": [
+        {"name": "List", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-maintenance-logs?page=1&per_page=25&vehicle_id=&vendor_id=&maintenance_type=&order_by_col=maintenance_id&order_by=DESC", "host": ["{{base_url}}"], "path": ["v1", "vehicle-maintenance-logs"], "query": [{"key": "page", "value": "1"}, {"key": "per_page", "value": "25"}, {"key": "vehicle_id", "value": ""}, {"key": "vendor_id", "value": ""}, {"key": "maintenance_type", "value": ""}, {"key": "order_by_col", "value": "maintenance_id"}, {"key": "order_by", "value": "DESC"}]}}},
+        {"name": "View", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-maintenance-logs/view/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-maintenance-logs", "view", "1"]}}},
+        {"name": "Create", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"vehicle_id\": 1, \"maintenance_date\": \"2026-01-31\", \"maintenance_type\": \"OIL_CHANGE\", \"description\": \"Regular service\", \"cost\": 1500.0, \"next_maintenance_date\": \"2026-03-01\", \"vendor_id\": 1}"}, "url": {"raw": "{{base_url}}/v1/vehicle-maintenance-logs/new", "host": ["{{base_url}}"], "path": ["v1", "vehicle-maintenance-logs", "new"]}}},
+        {"name": "Edit", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"vehicle_id\": 1, \"maintenance_date\": \"2026-01-31\", \"maintenance_type\": \"OIL_CHANGE\", \"description\": \"Updated\", \"cost\": 1600.0, \"next_maintenance_date\": \"2026-03-15\", \"vendor_id\": 1}"}, "url": {"raw": "{{base_url}}/v1/vehicle-maintenance-logs/edit/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-maintenance-logs", "edit", "1"]}}},
+        {"name": "Delete", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{}"}, "url": {"raw": "{{base_url}}/v1/vehicle-maintenance-logs/delete/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-maintenance-logs", "delete", "1"]}}}
+      ]
+    },
+    {
+      "name": "Vehicle Performance Metrics",
+      "item": [
+        {"name": "List", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-performance-metrics?page=1&per_page=25&vehicle_id=&route_id=&metric_type=&metric_date=&order_by_col=metric_id&order_by=DESC", "host": ["{{base_url}}"], "path": ["v1", "vehicle-performance-metrics"], "query": [{"key": "page", "value": "1"}, {"key": "per_page", "value": "25"}, {"key": "vehicle_id", "value": ""}, {"key": "route_id", "value": ""}, {"key": "metric_type", "value": ""}, {"key": "metric_date", "value": ""}, {"key": "order_by_col", "value": "metric_id"}, {"key": "order_by", "value": "DESC"}]}}},
+        {"name": "View", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-performance-metrics/view/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-performance-metrics", "view", "1"]}}},
+        {"name": "Create", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"vehicle_id\": 1, \"route_id\": 1, \"metric_date\": \"2026-01-31\", \"metric_type\": \"DISTANCE\", \"metric_value\": \"50.5\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-performance-metrics/new", "host": ["{{base_url}}"], "path": ["v1", "vehicle-performance-metrics", "new"]}}},
+        {"name": "Edit", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"vehicle_id\": 1, \"route_id\": 1, \"metric_date\": \"2026-01-31\", \"metric_type\": \"DISTANCE\", \"metric_value\": \"55.0\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-performance-metrics/edit/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-performance-metrics", "edit", "1"]}}},
+        {"name": "Delete", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{}"}, "url": {"raw": "{{base_url}}/v1/vehicle-performance-metrics/delete/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-performance-metrics", "delete", "1"]}}}
+      ]
+    },
+    {
+      "name": "Vehicle Routes",
+      "item": [
+        {"name": "List", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-routes?page=1&per_page=25&keywords=&status=&zone=&order_by_col=route_id&order_by=DESC", "host": ["{{base_url}}"], "path": ["v1", "vehicle-routes"], "query": [{"key": "page", "value": "1"}, {"key": "per_page", "value": "25"}, {"key": "keywords", "value": ""}, {"key": "status", "value": ""}, {"key": "zone", "value": ""}, {"key": "order_by_col", "value": "route_id"}, {"key": "order_by", "value": "DESC"}]}}},
+        {"name": "View", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-routes/view/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-routes", "view", "1"]}}},
+        {"name": "Create", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"route_code\": \"R001\", \"route_name\": \"Route 1\", \"zone\": \"North\", \"status\": \"ACTIVE\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-routes/new", "host": ["{{base_url}}"], "path": ["v1", "vehicle-routes", "new"]}}},
+        {"name": "Edit", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"route_code\": \"R001\", \"route_name\": \"Route 1 Updated\", \"status\": \"ACTIVE\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-routes/edit/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-routes", "edit", "1"]}}},
+        {"name": "Delete", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{}"}, "url": {"raw": "{{base_url}}/v1/vehicle-routes/delete/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-routes", "delete", "1"]}}}
+      ]
+    },
+    {
+      "name": "Vehicle Route Assignments",
+      "item": [
+        {"name": "List", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-route-assignments?page=1&per_page=25&vehicle_id=&route_id=&assignment_date=&assignment_status=&order_by_col=assignment_id&order_by=DESC", "host": ["{{base_url}}"], "path": ["v1", "vehicle-route-assignments"], "query": [{"key": "page", "value": "1"}, {"key": "per_page", "value": "25"}, {"key": "vehicle_id", "value": ""}, {"key": "route_id", "value": ""}, {"key": "assignment_date", "value": ""}, {"key": "assignment_status", "value": ""}, {"key": "order_by_col", "value": "assignment_id"}, {"key": "order_by", "value": "DESC"}]}}},
+        {"name": "View", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-route-assignments/view/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-route-assignments", "view", "1"]}}},
+        {"name": "Create", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"vehicle_id\": 1, \"route_id\": 1, \"assignment_date\": \"2026-01-31\", \"driver_id\": 1, \"shift\": \"MORNING\", \"planned_start_time\": \"08:00:00\", \"planned_end_time\": \"10:00:00\", \"assignment_status\": \"SCHEDULED\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-route-assignments/new", "host": ["{{base_url}}"], "path": ["v1", "vehicle-route-assignments", "new"]}}},
+        {"name": "Edit", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"vehicle_id\": 1, \"route_id\": 1, \"assignment_date\": \"2026-01-31\", \"driver_id\": 1, \"shift\": \"MORNING\", \"planned_start_time\": \"08:00:00\", \"planned_end_time\": \"10:30:00\", \"assignment_status\": \"IN_PROGRESS\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-route-assignments/edit/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-route-assignments", "edit", "1"]}}},
+        {"name": "Delete", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{}"}, "url": {"raw": "{{base_url}}/v1/vehicle-route-assignments/delete/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-route-assignments", "delete", "1"]}}}
+      ]
+    },
+    {
+      "name": "Vehicle Route Points",
+      "item": [
+        {"name": "List", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-route-points?page=1&per_page=25&route_id=&point_id=&order_by_col=route_point_id&order_by=DESC", "host": ["{{base_url}}"], "path": ["v1", "vehicle-route-points"], "query": [{"key": "page", "value": "1"}, {"key": "per_page", "value": "25"}, {"key": "route_id", "value": ""}, {"key": "point_id", "value": ""}, {"key": "order_by_col", "value": "route_point_id"}, {"key": "order_by", "value": "DESC"}]}}},
+        {"name": "View", "request": {"method": "GET", "header": [{"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "url": {"raw": "{{base_url}}/v1/vehicle-route-points/view/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-route-points", "view", "1"]}}},
+        {"name": "Create", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"route_id\": 1, \"point_id\": 1, \"sequence_number\": 1, \"estimated_arrival_time\": \"08:15:00\", \"expected_stay_duration\": \"00:05:00\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-route-points/new", "host": ["{{base_url}}"], "path": ["v1", "vehicle-route-points", "new"]}}},
+        {"name": "Edit", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{\"route_id\": 1, \"point_id\": 1, \"sequence_number\": 2, \"estimated_arrival_time\": \"08:20:00\", \"expected_stay_duration\": \"00:05:00\"}"}, "url": {"raw": "{{base_url}}/v1/vehicle-route-points/edit/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-route-points", "edit", "1"]}}},
+        {"name": "Delete", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "X-API-KEY", "value": "{{api_key}}"}, {"key": "X-ACCESS-TOKEN", "value": "{{access_token}}"}], "body": {"mode": "raw", "raw": "{}"}, "url": {"raw": "{{base_url}}/v1/vehicle-route-points/delete/1", "host": ["{{base_url}}"], "path": ["v1", "vehicle-route-points", "delete", "1"]}}}
+      ]
+    },
+    {
+      "name": "Sanitation Asset Allocations",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-asset-allocations?page=1&per_page=25&asset_id=&swachhagrahi_id=&shift_id=&status=&allocation_date_from=&allocation_date_to=&order_by_col=allocation_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-asset-allocations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "asset_id",
+                  "value": ""
+                },
+                {
+                  "key": "swachhagrahi_id",
+                  "value": ""
+                },
+                {
+                  "key": "shift_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "allocation_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "allocation_date_to",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "allocation_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Allocations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/get-sanitation-allocations?page=1&per_page=25&status=&allocation_date_from=&allocation_date_to=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "GetAllocation"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "shift_id",
+                  "value": ""
+                },
+                {
+                  "key": "allocation_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "allocation_date_to",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/get-sanitation-allocation-details/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-asset-allocations",
+                "details",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-asset-allocations/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-asset-allocations",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_id\": 1,\n  \"swachhagrahi_id\": 1,\n  \"shift_id\": 1,\n  \"allocation_date\": \"2025-01-28\",\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-asset-allocations/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-asset-allocations",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_id\": 1,\n  \"swachhagrahi_id\": 1,\n  \"shift_id\": 1,\n  \"allocation_date\": \"2025-01-28\",\n  \"status\": \"COMPLETED\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-asset-allocations/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-asset-allocations",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-asset-allocations/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-asset-allocations",
+                "delete",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inspections",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-inspections?page=1&per_page=25&asset_id=&allocation_id=&shift_id=&swachhagrahi_id=&overall_status=&inspection_date_from=&inspection_date_to=&order_by_col=inspection_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-inspections"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "asset_id",
+                  "value": ""
+                },
+                {
+                  "key": "allocation_id",
+                  "value": ""
+                },
+                {
+                  "key": "shift_id",
+                  "value": ""
+                },
+                {
+                  "key": "swachhagrahi_id",
+                  "value": ""
+                },
+                {
+                  "key": "overall_status",
+                  "value": ""
+                },
+                {
+                  "key": "inspection_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "inspection_date_to",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "inspection_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-inspections/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-inspections",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"allocation_id\": 1,\n  \"asset_id\": 1,\n  \"shift_id\": 1,\n  \"questions_answers_data\": [\n    { \"que\": 1, \"ans\": \"YES\", \"photo\": \"https://example.com/photo1.jpg\" },\n    { \"que\": 2, \"ans\": \"YES\", \"photo\": \"https://example.com/photo2.jpg\" },\n    { \"que\": 3, \"ans\": \"NO\", \"photo\": \"https://example.com/photo3.jpg\" }\n  ],\n  \"overall_status\": \"COMPLIANT\",\n  \"compliance_score\": 85.5,\n  \"notes\": \"All areas checked.\",\n  \"latitude\": 28.6139,\n  \"longitude\": 77.2090\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-inspections/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-inspections",
+                "new"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Incidents",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-incidents?page=1&per_page=25&asset_id=&vendor_id=&inspection_id=&incident_status=&severity=&created_at_from=&created_at_to=&order_by_col=incident_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-incidents"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "asset_id",
+                  "value": ""
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "inspection_id",
+                  "value": ""
+                },
+                {
+                  "key": "incident_status",
+                  "value": ""
+                },
+                {
+                  "key": "severity",
+                  "value": ""
+                },
+                {
+                  "key": "created_at_from",
+                  "value": ""
+                },
+                {
+                  "key": "created_at_to",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "incident_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-incidents/view/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-incidents",
+                "view",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inspection_id\": 1,\n  \"asset_id\": 1,\n  \"question_id\": 1,\n  \"vendor_id\": 1,\n  \"severity\": \"MEDIUM\",\n  \"description\": \"Issue reported during inspection\",\n  \"response_id\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-incidents/new",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-incidents",
+                "new"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"severity\": \"HIGH\",\n  \"description\": \"Updated description.\",\n  \"incident_status\": \"IN_PROGRESS\",\n  \"due_date\": \"2025-02-15 18:00:00\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-incidents/edit/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-incidents",
+                "edit",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Close (Vendor / Vendor Supervisor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-incidents/close/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-incidents",
+                "close",
+                "1"
+              ]
+            },
+            "description": "Closes incident: sets resolved_by (current user), resolved_date, incident_status=CLOSED. Vendor/vendor supervisor can only close incidents for their vendor_id."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sanitation Asset Tagging",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_type_id\": 1,\n  \"qr_code\": \"QR123456\",\n  \"asset_name\": \"FRP Toilet Unit 1\",\n  \"short_url\": \"\",\n  \"description\": \"Temporary sanitation unit near gate\",\n  \"gender\": \"UNISEX\",\n  \"vendor_id\": 1,\n  \"vendor_asset_code\": \"VEND-ASSET-001\",\n  \"status\": \"ACTIVE\",\n  \"sector_id\": 1,\n  \"circle_id\": 1,\n  \"latitude\": 28.6139,\n  \"longitude\": 77.2090,\n  \"photo\": \"https://example.com/photo1.jpg\",\n  \"created_by\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-asset-tagging",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-asset-tagging"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mobile Common",
+      "item": [
+        {
+          "name": "Vendors (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/mobile/vendors?page=1&per_page=25&keywords=&status=&order_by_col=vendor_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "mobile",
+                "vendors"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "vendor_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sectors (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/mobile/sectors?page=1&per_page=25&keywords=&order_by_col=sector_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "mobile",
+                "sectors"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sector_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Circles (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/mobile/circles?page=1&per_page=25&keywords=&sector_id=&order_by_col=circle_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "mobile",
+                "circles"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "sector_id",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "circle_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Questions (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/mobile/questions?page=1&per_page=25&keywords=&question_type=&severity=&is_active=&order_by_col=question_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "mobile",
+                "questions"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "question_type",
+                  "value": ""
+                },
+                {
+                  "key": "severity",
+                  "value": ""
+                },
+                {
+                  "key": "is_active",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "question_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Shifts (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/mobile/shifts?page=1&per_page=25&keywords=&is_active=&order_by_col=shift_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "mobile",
+                "shifts"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "is_active",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "shift_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Asset Types (Mobile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/mobile/asset-types?page=1&per_page=25&keywords=&type=&status=&order_by_col=asset_type_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "mobile",
+                "asset-types"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "keywords",
+                  "value": ""
+                },
+                {
+                  "key": "type",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "asset_type_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sanitation Registration Reports",
+      "item": [
+        {
+          "name": "GSD-wise Registrations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-report/gsd-registrations?page=1&per_page=25&gsd_id=&registration_date_from=&registration_date_to=&asset_type_id=&status=&gender=&order_by_col=sanitation_asset_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-report",
+                "gsd-registrations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "gsd_id",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_to",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "gender",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sanitation_asset_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Vendor-wise Registrations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-report/vendor-registrations?page=1&per_page=25&vendor_id=&registration_date_from=&registration_date_to=&asset_type_id=&status=&gender=&order_by_col=sanitation_asset_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-report",
+                "vendor-registrations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_to",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "gender",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sanitation_asset_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sector-wise Registrations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-report/sector-registrations?page=1&per_page=25&sector_id=&registration_date_from=&registration_date_to=&asset_type_id=&status=&gender=&order_by_col=sanitation_asset_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-report",
+                "sector-registrations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "sector_id",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_to",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "gender",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sanitation_asset_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Circle-wise Registrations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-report/circle-registrations?page=1&per_page=25&circle_id=&registration_date_from=&registration_date_to=&asset_type_id=&status=&gender=&order_by_col=sanitation_asset_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-report",
+                "circle-registrations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "circle_id",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_from",
+                  "value": ""
+                },
+                {
+                  "key": "registration_date_to",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "gender",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "sanitation_asset_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sanitation Dashboard",
+      "item": [
+        {
+          "name": "Dashboard counts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-dashboard?date=2024-12-08&vendor_id=&sector_id=&asset_type_id=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-dashboard"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2024-12-08",
+                  "description": "Required. Y-m-d (inspection date for under/off monitoring)"
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "sector_id",
+                  "value": ""
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": "",
+                  "description": "Toilet/asset type"
+                }
+              ]
+            },
+            "description": "Returns total_toilets, registered_toilets, under_monitoring (at least one inspection on date), off_monitoring (no inspection on date). Cached when AppConfig cache enabled."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sanitation Inspection Report",
+      "item": [
+        {
+          "name": "Index (filters)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-inspection-report?page=1&per_page=25&asset_types=&date_from=&date_to=&vendor=&asset=&gsd=&shift=&order_by_col=si.inspection_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-inspection-report"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "asset_types",
+                  "value": ""
+                },
+                {
+                  "key": "date_from",
+                  "value": ""
+                },
+                {
+                  "key": "date_to",
+                  "value": ""
+                },
+                {
+                  "key": "vendor",
+                  "value": ""
+                },
+                {
+                  "key": "asset",
+                  "value": ""
+                },
+                {
+                  "key": "gsd",
+                  "value": ""
+                },
+                {
+                  "key": "shift",
+                  "value": ""
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "si.inspection_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            },
+            "description": "Inspection report with filters: asset_types, date_from, date_to, vendor, asset, gsd (swachhagrahi), shift. Cached when AppConfig cache enabled."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inspection Summary Report",
+      "item": [
+        {
+          "name": "Index (filters + group_by)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-inspection-summary-report?page=1&per_page=25&asset_type_id=&vendor_id=&sector_id=&date_from=&date_to=&group_by=&order_by_col=s.summary_id&order_by=DESC",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-inspection-summary-report"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "25"
+                },
+                {
+                  "key": "asset_type_id",
+                  "value": ""
+                },
+                {
+                  "key": "vendor_id",
+                  "value": ""
+                },
+                {
+                  "key": "sector_id",
+                  "value": ""
+                },
+                {
+                  "key": "date_from",
+                  "value": ""
+                },
+                {
+                  "key": "date_to",
+                  "value": ""
+                },
+                {
+                  "key": "group_by",
+                  "value": "",
+                  "description": "asset_type | sector | vendor | date (empty = raw rows)"
+                },
+                {
+                  "key": "order_by_col",
+                  "value": "s.summary_id"
+                },
+                {
+                  "key": "order_by",
+                  "value": "DESC"
+                }
+              ]
+            },
+            "description": "Summary report with filters. group_by: asset_type (asset type wise), sector (sector wise), vendor (vendor wise), date (date wise). Cached when AppConfig cache enabled."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cron",
+      "item": [
+        {
+          "name": "Archive Inspections",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/cron/archive-inspections",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "cron",
+                "archive-inspections"
+              ]
+            },
+            "description": "Move inspections from sanitation_inspections to sanitation_inspections_archive where submitted_at is yesterday (day-1). Logged to cron_log."
+          }
+        },
+        {
+          "name": "Build Inspection Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/cron/build-inspection-summary",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "cron",
+                "build-inspection-summary"
+              ]
+            },
+            "description": "Build sanitation_inspection_summary for yesterday (inspection_date day-1). Logged to cron_log."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Upload",
+      "item": [
+        {
+          "name": "Upload Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "description": "Image file (JPEG, PNG, GIF, WebP). Creates large + thumb; returns large path/URL.",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/upload/image",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "upload",
+                "image"
+              ]
+            },
+            "description": "Upload image via multipart. Resizes using config imageSizes; stores to S3 or assets/upload. Response returns only the large image path."
+          }
+        },
+        {
+          "name": "Upload Image (Base64)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"image\": \"<base64 string or data:image/jpeg;base64,...>\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/upload/image",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "upload",
+                "image"
+              ]
+            },
+            "description": "Upload image via JSON body. Send \"image\" or \"photo\" as base64 (optional data:image/...;base64, prefix). Returns large image path."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost/tsmonitoring/public"
+    },
+    {
+      "key": "api_key",
+      "value": "k9x4m2w7a8e0qf3n6t5y1ujsrhlvcpdobi5z7xawq9m3e2n8t4r6fyk0suvp1423"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    }
+  ]
+}
