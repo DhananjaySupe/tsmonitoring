@@ -86,7 +86,7 @@ class SanitationRegistrationReport extends BaseController
     }
 
     /**
-     * GSD-wise registrations: filter by GSD (created_by), date range, type, status, gender.
+     * GSD-wise registrations: assets list with gsd_name and registration_count (per GSD) on each row.
      */
     public function gsdRegistrations()
     {
@@ -145,22 +145,22 @@ class SanitationRegistrationReport extends BaseController
             $orderCol,
             $orderDir
         ) {
-            $builder = $this->baseAssetsBuilder($model);
+            $db = $model->db();
 
+            $builder = $db->table('sanitation_assets sa')
+                ->select('sa.created_by AS gsd_id, u.full_name AS gsd_name, COUNT(*) AS registration_count')
+                ->join('users u', 'sa.created_by = u.user_id', 'left')
+                ->groupBy('sa.created_by, u.full_name');
             if ($gsdId !== '') {
                 $builder->where('sa.created_by', (int) $gsdId);
             }
-
             $this->applyCommonFilters($builder, $dateFrom, $dateTo, $assetType, $status, $gender);
 
-            $totalRecords = $builder->countAllResults(false);
-
+            $allRows = $builder->orderBy('registration_count', $orderDir)->get()->getResultArray();
+            $totalRecords = count($allRows);
             $paging = paging($page, $totalRecords, $length);
-            $builder->orderBy($orderCol, $orderDir);
-            $builder->limit($paging['length'], $paging['offset']);
-
-            $rows = $builder->get()->getResultArray();
-            $paging['remainingrecords'] = $totalRecords - ($paging['offset'] + count($rows));
+            $rows = array_slice($allRows, $paging['offset'], $paging['length']);
+            $paging['remainingrecords'] = $totalRecords - $paging['offset'] - count($rows);
 
             return [
                 'paging' => $paging,
@@ -177,7 +177,7 @@ class SanitationRegistrationReport extends BaseController
     }
 
     /**
-     * Vendor-wise registrations: filter by vendor, date range, type, status, gender.
+     * Vendor-wise registrations: assets list with vendor name/code and registration_count (per vendor) on each row.
      */
     public function vendorRegistrations()
     {
@@ -236,22 +236,22 @@ class SanitationRegistrationReport extends BaseController
             $orderCol,
             $orderDir
         ) {
-            $builder = $this->baseAssetsBuilder($model);
+            $db = $model->db();
 
+            $builder = $db->table('sanitation_assets sa')
+                ->select('sa.vendor_id, v.vendor_name, v.vendor_code, COUNT(*) AS registration_count')
+                ->join('vendors v', 'sa.vendor_id = v.vendor_id', 'left')
+                ->groupBy('sa.vendor_id, v.vendor_name, v.vendor_code');
             if ($vendorId !== '') {
                 $builder->where('sa.vendor_id', (int) $vendorId);
             }
-
             $this->applyCommonFilters($builder, $dateFrom, $dateTo, $assetType, $status, $gender);
 
-            $totalRecords = $builder->countAllResults(false);
-
+            $allRows = $builder->orderBy('registration_count', $orderDir)->get()->getResultArray();
+            $totalRecords = count($allRows);
             $paging = paging($page, $totalRecords, $length);
-            $builder->orderBy($orderCol, $orderDir);
-            $builder->limit($paging['length'], $paging['offset']);
-
-            $rows = $builder->get()->getResultArray();
-            $paging['remainingrecords'] = $totalRecords - ($paging['offset'] + count($rows));
+            $rows = array_slice($allRows, $paging['offset'], $paging['length']);
+            $paging['remainingrecords'] = $totalRecords - $paging['offset'] - count($rows);
 
             return [
                 'paging' => $paging,
@@ -268,7 +268,7 @@ class SanitationRegistrationReport extends BaseController
     }
 
     /**
-     * Sector-wise registrations: filter by sector, date range, type, status, gender.
+     * Sector-wise registrations: assets list with sector_name and registration_count (per sector) on each row.
      */
     public function sectorRegistrations()
     {
@@ -327,22 +327,22 @@ class SanitationRegistrationReport extends BaseController
             $orderCol,
             $orderDir
         ) {
-            $builder = $this->baseAssetsBuilder($model);
+            $db = $model->db();
 
+            $builder = $db->table('sanitation_assets sa')
+                ->select('sa.sector_id, s.sector_name, COUNT(*) AS registration_count')
+                ->join('sectors s', 'sa.sector_id = s.sector_id', 'left')
+                ->groupBy('sa.sector_id, s.sector_name');
             if ($sectorId !== '') {
                 $builder->where('sa.sector_id', (int) $sectorId);
             }
-
             $this->applyCommonFilters($builder, $dateFrom, $dateTo, $assetType, $status, $gender);
 
-            $totalRecords = $builder->countAllResults(false);
-
+            $allRows = $builder->orderBy('registration_count', $orderDir)->get()->getResultArray();
+            $totalRecords = count($allRows);
             $paging = paging($page, $totalRecords, $length);
-            $builder->orderBy($orderCol, $orderDir);
-            $builder->limit($paging['length'], $paging['offset']);
-
-            $rows = $builder->get()->getResultArray();
-            $paging['remainingrecords'] = $totalRecords - ($paging['offset'] + count($rows));
+            $rows = array_slice($allRows, $paging['offset'], $paging['length']);
+            $paging['remainingrecords'] = $totalRecords - $paging['offset'] - count($rows);
 
             return [
                 'paging' => $paging,
@@ -359,7 +359,7 @@ class SanitationRegistrationReport extends BaseController
     }
 
     /**
-     * Circle-wise registrations: filter by circle, date range, type, status, gender.
+     * Circle-wise registrations: assets list with circle_name and registration_count (per circle) on each row.
      */
     public function circleRegistrations()
     {
@@ -418,22 +418,22 @@ class SanitationRegistrationReport extends BaseController
             $orderCol,
             $orderDir
         ) {
-            $builder = $this->baseAssetsBuilder($model);
+            $db = $model->db();
 
+            $builder = $db->table('sanitation_assets sa')
+                ->select('sa.circle_id, c.circle_name, COUNT(*) AS registration_count')
+                ->join('circles c', 'sa.circle_id = c.circle_id', 'left')
+                ->groupBy('sa.circle_id, c.circle_name');
             if ($circleId !== '') {
                 $builder->where('sa.circle_id', (int) $circleId);
             }
-
             $this->applyCommonFilters($builder, $dateFrom, $dateTo, $assetType, $status, $gender);
 
-            $totalRecords = $builder->countAllResults(false);
-
+            $allRows = $builder->orderBy('registration_count', $orderDir)->get()->getResultArray();
+            $totalRecords = count($allRows);
             $paging = paging($page, $totalRecords, $length);
-            $builder->orderBy($orderCol, $orderDir);
-            $builder->limit($paging['length'], $paging['offset']);
-
-            $rows = $builder->get()->getResultArray();
-            $paging['remainingrecords'] = $totalRecords - ($paging['offset'] + count($rows));
+            $rows = array_slice($allRows, $paging['offset'], $paging['length']);
+            $paging['remainingrecords'] = $totalRecords - $paging['offset'] - count($rows);
 
             return [
                 'paging' => $paging,
