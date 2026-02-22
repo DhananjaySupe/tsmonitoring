@@ -51,14 +51,15 @@ class SanitationRegistrationReport extends BaseController
                 'sa.sanitation_asset_id, sa.asset_type_id, sa.qr_code, sa.asset_name, sa.short_url, sa.description, ' .
                 'sa.gender, sa.vendor_id, sa.vendor_asset_code, sa.status, sa.sector_id, sa.circle_id, ' .
                 'sa.latitude, sa.longitude, sa.photo, sa.created_by, sa.created_at, sa.updated_at, ' .
-                'at.name AS asset_type_name, v.vendor_name, v.vendor_code, ' .
+                'at.name AS asset_type_name, u2.full_name AS vendor_name, v.vendor_code, ' .
                 's.sector_name, c.circle_name, u.full_name AS gsd_name'
             )
             ->join('asset_types at', 'sa.asset_type_id = at.asset_type_id', 'left')
             ->join('vendors v', 'sa.vendor_id = v.vendor_id', 'left')
             ->join('sectors s', 'sa.sector_id = s.sector_id', 'left')
             ->join('circles c', 'sa.circle_id = c.circle_id', 'left')
-            ->join('users u', 'sa.created_by = u.user_id', 'left');
+            ->join('users u', 'sa.created_by = u.user_id', 'left')
+            ->join('users u2', 'sa.vendor_id = u2.user_id', 'left');
 
         return $builder;
     }
@@ -239,9 +240,9 @@ class SanitationRegistrationReport extends BaseController
             $db = $model->db();
 
             $builder = $db->table('sanitation_assets sa')
-                ->select('sa.vendor_id, v.vendor_name, v.vendor_code, COUNT(*) AS registration_count')
-                ->join('vendors v', 'sa.vendor_id = v.vendor_id', 'left')
-                ->groupBy('sa.vendor_id, v.vendor_name, v.vendor_code');
+                ->select('sa.vendor_id, u2.full_name AS vendor_name, COUNT(*) AS registration_count')
+                ->join('users u2', 'sa.vendor_id = u2.user_id', 'left')
+                ->groupBy('sa.vendor_id, u2.full_name');
             if ($vendorId !== '') {
                 $builder->where('sa.vendor_id', (int) $vendorId);
             }

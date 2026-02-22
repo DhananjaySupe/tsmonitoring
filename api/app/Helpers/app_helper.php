@@ -718,7 +718,7 @@
 			}
 
 			$model = new \App\Models\VendorsModel();
-			$rows  = $model->select('vendor_id, vendor_name, vendor_code')->findAll();
+			$rows  = $model->select('vendors.vendor_id, vendors.vendor_code, users.full_name as vendor_name')->join('users', 'users.user_id = vendors.user_id')->findAll();
 			$list  = [];
 			foreach ($rows as $row) {
 				$list[(int) $row['vendor_id']] = [

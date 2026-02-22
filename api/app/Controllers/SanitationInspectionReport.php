@@ -100,13 +100,14 @@ class SanitationInspectionReport extends BaseController
                     'si.inspection_id, si.allocation_id, si.asset_id, si.shift_id, si.swachhagrahi_id, si.inspection_date, ' .
                     'si.total_questions, si.questions_answered, si.compliance_score, si.overall_status, si.notes, si.submitted_at, ' .
                     'sa.asset_name, sa.qr_code, sa.vendor_asset_code, sa.asset_type_id, sa.vendor_id, sa.sector_id, sa.circle_id, ' .
-                    'at.name AS asset_type_name, v.vendor_name, v.vendor_code, sh.shift_name, u.full_name AS gsd_name'
+                    'at.name AS asset_type_name, u2.full_name AS vendor_name, v.vendor_code, sh.shift_name, u.full_name AS gsd_name'
                 )
                 ->join('sanitation_assets sa', 'si.asset_id = sa.sanitation_asset_id', 'inner')
                 ->join('asset_types at', 'sa.asset_type_id = at.asset_type_id', 'left')
                 ->join('vendors v', 'sa.vendor_id = v.vendor_id', 'left')
                 ->join('shifts sh', 'si.shift_id = sh.shift_id', 'left')
-                ->join('users u', 'si.swachhagrahi_id = u.user_id', 'left');
+                ->join('users u', 'si.swachhagrahi_id = u.user_id', 'left')
+                ->join('users u2', 'sa.vendor_id = u2.user_id', 'left');
 
             if ($assetTypes !== '') {
                 $ids = array_map('intval', array_filter(explode(',', $assetTypes)));

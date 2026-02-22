@@ -11,7 +11,6 @@ class VendorsModel extends Model
     protected $allowedFields = [
         'vendor_id',
         'user_id',
-        'vendor_name',
         'vendor_code',
         'contact_person',
         'contact_email',
