@@ -105,6 +105,13 @@
 		public function __construct()
 		{
 			$this->appEmails = array(
+			'enabled' => false,
+			'fromEmail' => '',
+			'fromName' => '',
+			'SMTPHost' => '',
+			'SMTPUser' => '',
+			'SMTPPass' => '',
+			'SMTPPort' => 25,
             'admin' => 'admin@example.com'
 			);
 		}

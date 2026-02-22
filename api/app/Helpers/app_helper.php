@@ -55,6 +55,25 @@
 		}
 	}
 
+	if (!function_exists('validateDateRange')) {
+		function validateDateRange(string $dateFrom, string $dateTo): array
+		{
+			$today = date('Y-m-d');
+			if ($dateTo !== '') {
+				if ($dateTo > $today) {
+					return ['valid' => false, 'error' => 'Date to cannot be in the future.'];
+				}
+				if ($dateTo === $today && ($dateFrom === '' || $dateFrom !== $dateTo)) {
+					return ['valid' => false, 'error' => 'When date to is today, date from must be the same date. Maximum range must end at yesterday.'];
+				}
+			}
+			if ($dateFrom !== '' && $dateTo !== '' && $dateFrom > $dateTo) {
+				return ['valid' => false, 'error' => 'Date from must not be after date to.'];
+			}
+			return ['valid' => true];
+		}
+	}
+
 	if (!function_exists('moneyFormat')) {
 		function moneyFormat($amount, $decimal = 0)
 		{
@@ -560,30 +579,30 @@
 		/**
 		 * Basic email notification sender using CodeIgniter's email service.
 		 */
-		function sendEmailNotification(string $to, string $subject, string $body, \Config\AppConfig $AppConfig): bool
+		function sendEmailNotification(string $to, string $subject, string $body, \Config\AppConfig $AppConfig, array $attachments = []): bool
 		{
-			if (empty($AppConfig->email['enabled']) || !$AppConfig->email['enabled']) {
+			if (empty($AppConfig->appEmails['enabled']) || !$AppConfig->appEmails['enabled']) {
 				return false;
 			}
 
 			try {
 				$email = \Config\Services::email();
 
-				if (!empty($AppConfig->email['SMTPHost'])) {
-					$email->setSMTPHost($AppConfig->email['SMTPHost']);
+				if (!empty($AppConfig->appEmails['SMTPHost'])) {
+					$email->setSMTPHost($AppConfig->appEmails['SMTPHost']);
 				}
-				if (!empty($AppConfig->email['SMTPUser'])) {
-					$email->setSMTPUser($AppConfig->email['SMTPUser']);
+				if (!empty($AppConfig->appEmails['SMTPUser'])) {
+					$email->setSMTPUser($AppConfig->appEmails['SMTPUser']);
 				}
-				if (!empty($AppConfig->email['SMTPPass'])) {
-					$email->setSMTPPass($AppConfig->email['SMTPPass']);
+				if (!empty($AppConfig->appEmails['SMTPPass'])) {
+					$email->setSMTPPass($AppConfig->appEmails['SMTPPass']);
 				}
-				if (!empty($AppConfig->email['SMTPPort'])) {
-					$email->setSMTPPort($AppConfig->email['SMTPPort']);
+				if (!empty($AppConfig->appEmails['SMTPPort'])) {
+					$email->setSMTPPort($AppConfig->appEmails['SMTPPort']);
 				}
 
-				$fromEmail = $AppConfig->email['fromEmail'] ?? null;
-				$fromName  = $AppConfig->email['fromName'] ?? null;
+				$fromEmail = $AppConfig->appEmails['fromEmail'] ?? null;
+				$fromName  = $AppConfig->appEmails['fromName'] ?? null;
 				if ($fromEmail) {
 					$email->setFrom($fromEmail, $fromName ?: $fromEmail);
 				}
@@ -591,6 +610,12 @@
 				$email->setTo($to);
 				$email->setSubject($subject);
 				$email->setMessage($body);
+
+				foreach ($attachments as $path) {
+					if (is_string($path) && is_file($path)) {
+						$email->attach($path);
+					}
+				}
 
 				return $email->send();
 			} catch (\Throwable $e) {

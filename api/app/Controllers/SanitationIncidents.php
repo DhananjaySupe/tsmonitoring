@@ -2,11 +2,14 @@
 
 namespace App\Controllers;
 
+use App\Models\SanitationIncidentsArchiveModel;
 use App\Models\SanitationIncidentsModel;
 use App\Models\UsersModel;
 
 class SanitationIncidents extends BaseController
 {
+    private const INCIDENT_STATUSES = ['OPEN', 'ASSIGNED', 'IN_PROGRESS', 'RESOLVED', 'CLOSED', 'REOPENED'];
+
     public function index()
     {
         if (! $this->isGet()) {
@@ -25,7 +28,6 @@ class SanitationIncidents extends BaseController
             return $this->response();
         }
 
-        $model    = new SanitationIncidentsModel();
         $page     = (int) $this->getParam('page', 1);
         $length   = (int) $this->getParam('per_page', 25);
         $assetId  = $this->getParam('asset_id', '');
@@ -33,10 +35,27 @@ class SanitationIncidents extends BaseController
         $inspectionId = $this->getParam('inspection_id', '');
         $incidentStatus = $this->getParam('incident_status', '');
         $severity = $this->getParam('severity', '');
-        $dateFrom = $this->getParam('created_at_from', '');
-        $dateTo   = $this->getParam('created_at_to', '');
+        $dateFrom = trim($this->getParam('created_at_from', ''));
+        $dateTo   = trim($this->getParam('created_at_to', ''));
         $orderCol = $this->getParam('order_by_col', 'incident_id');
         $orderDir = $this->getParam('order_by', 'DESC');
+
+        $validation = validateDateRange($dateFrom, $dateTo);
+        if (! $validation['valid']) {
+            $this->setError($validation['error'], 400);
+            return $this->response();
+        }
+
+        $today = date('Y-m-d');
+        $useCurrentTable = ($dateTo === $today && $dateFrom === $today);
+        if ($useCurrentTable) {
+            $model = new SanitationIncidentsModel();
+        } else {
+            $model = new SanitationIncidentsArchiveModel();
+            if ($dateTo === '') {
+                $dateTo = date('Y-m-d', strtotime('-1 day'));
+            }
+        }
 
         $builder = $model->builder();
         if ($assetId !== '') {
@@ -101,6 +120,10 @@ class SanitationIncidents extends BaseController
 
         $model = new SanitationIncidentsModel();
         $row   = $model->find($incidentId);
+        if (! $row) {
+            $archiveModel = new SanitationIncidentsArchiveModel();
+            $row = $archiveModel->find($incidentId);
+        }
         if (! $row) {
             $this->setError('Sanitation incident not found.', 404);
             return $this->response();
@@ -201,6 +224,10 @@ class SanitationIncidents extends BaseController
         $model = new SanitationIncidentsModel();
         $row   = $model->find($incidentId);
         if (! $row) {
+            $model = new SanitationIncidentsArchiveModel();
+            $row   = $model->find($incidentId);
+        }
+        if (! $row) {
             $this->setError('Sanitation incident not found.', 404);
             return $this->response();
         }
@@ -214,8 +241,7 @@ class SanitationIncidents extends BaseController
         if (! in_array($severity, $validSeverity, true)) {
             $severity = $row['severity'] ?? 'MEDIUM';
         }
-        $validStatus = ['OPEN', 'ASSIGNED', 'IN_PROGRESS', 'RESOLVED', 'CLOSED', 'REOPENED'];
-        if (! in_array($incidentStatus, $validStatus, true)) {
+        if (! in_array($incidentStatus, self::INCIDENT_STATUSES, true)) {
             $incidentStatus = $row['incident_status'] ?? 'OPEN';
         }
 
@@ -234,11 +260,58 @@ class SanitationIncidents extends BaseController
     }
 
     /**
-     * Close incident: set resolved_by, resolved_date, incident_status=CLOSED.
-     * Allowed for vendor or vendor supervisor only for their vendor's incidents;
-     * admins with incident:close can close any incident.
+     * Update incident status only. Allowed: OPEN, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED, REOPENED.
+     * POST incident_status (required). When CLOSED, sets resolved_by, resolved_date, closed_date.
+     * Vendor users can only set CLOSED for incidents of their vendor_id.
      */
-    public function close($id)
+    public function updateStatus($id)
+    {
+        if (! $this->isPost()) {
+            $this->setError($this->methodNotAllowed, 405);
+            return $this->response();
+        }
+        if (! $this->AuthenticateApikey()) {
+            $this->setError($this->invalidApiKey, 401);
+            return $this->response();
+        }
+        if (! $this->AuthenticateToken()) {
+            $this->setError($this->invalidToken, 401);
+            return $this->response();
+        }
+        if (! $this->CheckUserTypePermissions('incident:edit')) {
+            return $this->response();
+        }
+        $incidentId = (int) $id;
+        if ($incidentId < 1) {
+            $this->setError('Invalid incident id.', 400);
+            return $this->response();
+        }
+        $newStatus = trim($this->getPost('incident_status', ''));
+        if ($newStatus === '' || ! in_array($newStatus, self::INCIDENT_STATUSES, true)) {
+            $this->setError('incident_status is required and must be one of: ' . implode(', ', self::INCIDENT_STATUSES) . '.', 400);
+            return $this->response();
+        }
+        list($model, $row) = $this->findIncidentModelAndRow($incidentId);
+        if ($model === null || $row === null) {
+            $this->setError('Sanitation incident not found.', 404);
+            return $this->response();
+        }
+
+        $result = $this->applyIncidentStatusUpdate($incidentId, $newStatus);
+        if ($result === null) {
+            $this->setError('Sanitation incident not found.', 404);
+            return $this->response();
+        }
+        $this->setSuccess('Incident status updated successfully.');
+        $this->setOutput($result['row']);
+        return $this->response();
+    }
+
+    /**
+     * Bulk update incident status. Date determines table: if date is today use SanitationIncidentsModel, else SanitationIncidentsArchiveModel.
+     * POST: date (required, Y-m-d), incident_status (required), incident_ids (required, array of ints).
+     */
+    public function bulkUpdateStatus()
     {
         if (! $this->isPost()) {
             $this->setError($this->methodNotAllowed, 405);
@@ -256,51 +329,96 @@ class SanitationIncidents extends BaseController
             return $this->response();
         }
 
-        $incidentId = (int) $id;
-        if ($incidentId < 1) {
-            $this->setError('Invalid incident id.', 400);
+        $dateParam = trim($this->getPost('date', ''));
+        if ($dateParam === '') {
+            $this->setError('date is required (Y-m-d).', 400);
+            return $this->response();
+        }
+        $dateObj = \DateTime::createFromFormat('Y-m-d', $dateParam);
+        if (! $dateObj || $dateObj->format('Y-m-d') !== $dateParam) {
+            $this->setError('date must be valid Y-m-d.', 400);
             return $this->response();
         }
 
-        $model = new SanitationIncidentsModel();
-        $row   = $model->select('incident_id, incident_status, vendor_id')->where('incident_id', $incidentId)->first();
-        if (! $row) {
-            $this->setError('Sanitation incident not found.', 404);
+        $newStatus = trim($this->getPost('incident_status', ''));
+        if ($newStatus === '' || ! in_array($newStatus, self::INCIDENT_STATUSES, true)) {
+            $this->setError('incident_status is required and must be one of: ' . implode(', ', self::INCIDENT_STATUSES) . '.', 400);
             return $this->response();
         }
 
-        if (in_array($row['incident_status'] ?? '', ['CLOSED'], true)) {
-            $this->setError('Incident is already closed.', 400);
+        $incidentIdsRaw = $this->getPost('incident_ids', []);
+        if (! is_array($incidentIdsRaw)) {
+            $incidentIdsRaw = [];
+        }
+        $incidentIds = array_values(array_unique(array_filter(array_map('intval', $incidentIdsRaw))));
+        if (empty($incidentIds)) {
+            $this->setError('incident_ids is required and must be a non-empty array of incident ids.', 400);
             return $this->response();
+        }
+
+        $today = date('Y-m-d');
+        if ($dateParam === $today) {
+            $model = new SanitationIncidentsModel();
+        } else {
+            $model = new SanitationIncidentsArchiveModel();
         }
 
         $userId = (int) $this->_userData['user_id'];
-        $usersModel = new UsersModel();
-        $userRow = $usersModel->select('vendor_id')->where('user_id', $userId)->first();
-        $userVendorId = isset($userRow['vendor_id']) && $userRow['vendor_id'] !== null && $userRow['vendor_id'] !== ''
-            ? (int) $userRow['vendor_id']
-            : null;
-
-        if ($userVendorId !== null && $userVendorId > 0) {
-            $incidentVendorId = (int) ($row['vendor_id'] ?? 0);
-            if ($incidentVendorId !== $userVendorId) {
-                $this->setError('You can only close incidents assigned to your vendor.', 403);
-                return $this->response();
-            }
+        $now    = date('Y-m-d H:i:s');
+        $data   = ['incident_status' => $newStatus];
+        if ($newStatus === 'CLOSED') {
+            $data['resolved_by']   = $userId;
+            $data['resolved_date'] = $now;
+            $data['closed_date']   = $now;
         }
 
-        $now = date('Y-m-d H:i:s');
-        $data = [
-            'resolved_by'     => $userId,
-            'resolved_date'   => $now,
-            'incident_status' => 'CLOSED',
-            'closed_date'     => $now,
-        ];
+        $model->builder()->whereIn('incident_id', $incidentIds)->update($data);
+        $affected = $model->db->affectedRows();
 
+        $this->setSuccess('Bulk status update completed.');
+        $this->setOutput([
+            'updated_count' => $affected,
+            'date'          => $dateParam,
+            'incident_status' => $newStatus,
+            'incident_ids'  => $incidentIds,
+        ]);
+        return $this->response();
+    }
+
+    private function findIncidentModelAndRow(int $incidentId): array
+    {
+        $model = new SanitationIncidentsModel();
+        $row   = $model->find($incidentId);
+        if ($row) {
+            return [$model, $row];
+        }
+        $archiveModel = new SanitationIncidentsArchiveModel();
+        $row = $archiveModel->find($incidentId);
+        if ($row) {
+            return [$archiveModel, $row];
+        }
+        return [null, null];
+    }
+
+    private function applyIncidentStatusUpdate(int $incidentId, string $newStatus): ?array
+    {
+        if (! in_array($newStatus, self::INCIDENT_STATUSES, true)) {
+            return null;
+        }
+        [$model, $row] = $this->findIncidentModelAndRow($incidentId);
+        if ($model === null || $row === null) {
+            return null;
+        }
+        $userId = (int) $this->_userData['user_id'];
+        $now    = date('Y-m-d H:i:s');
+        $data   = ['incident_status' => $newStatus];
+        if ($newStatus === 'CLOSED') {
+            $data['resolved_by']   = $userId;
+            $data['resolved_date'] = $now;
+            $data['closed_date']   = $now;
+        }
         $model->update($incidentId, $data);
         $updated = $model->find($incidentId);
-        $this->setSuccess('Incident closed successfully.');
-        $this->setOutput($updated);
-        return $this->response();
+        return $updated ? ['model' => $model, 'row' => $updated] : null;
     }
 }

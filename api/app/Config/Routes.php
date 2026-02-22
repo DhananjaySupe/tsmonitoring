@@ -169,7 +169,8 @@ $routes->group('v1', ['namespace' => 'App\Controllers'], static function (RouteC
     $routes->get('sanitation-incidents/view/(:num)', 'SanitationIncidents::view/$1');
     $routes->post('sanitation-incidents/new', 'SanitationIncidents::create');
     $routes->post('sanitation-incidents/edit/(:num)', 'SanitationIncidents::edit/$1');
-    $routes->post('sanitation-incidents/close/(:num)', 'SanitationIncidents::close/$1');
+    $routes->post('sanitation-incidents/update-status/(:num)', 'SanitationIncidents::updateStatus/$1');
+    $routes->post('sanitation-incidents/bulk-update-status', 'SanitationIncidents::bulkUpdateStatus');
 
     $routes->post('sanitation-asset-tagging', 'AssetTagging::sanitationAssetTagging');
 
@@ -196,6 +197,7 @@ $routes->group('v1', ['namespace' => 'App\Controllers'], static function (RouteC
 
     // Cron (X-API-KEY required; call e.g. daily for day-1)
     $routes->get('cron/archive-inspections', 'Cron::archiveInspections');
+    $routes->get('cron/archive-incidents', 'Cron::archiveIncidents');
     $routes->get('cron/build-inspection-summary', 'Cron::buildInspectionSummary');
     $routes->get('cron/sanitation-email-to-vendor', 'Cron::sanitationEmailToVendor');
 

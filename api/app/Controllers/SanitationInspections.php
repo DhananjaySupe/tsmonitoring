@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\SanitationInspectionsArchiveModel;
 use App\Models\SanitationInspectionsModel;
 
 class SanitationInspections extends BaseController
@@ -24,7 +25,6 @@ class SanitationInspections extends BaseController
             return $this->response();
         }
 
-        $model   = new SanitationInspectionsModel();
         $page    = (int) $this->getParam('page', 1);
         $length  = (int) $this->getParam('per_page', 25);
         $assetId = $this->getParam('asset_id', '');
@@ -32,10 +32,27 @@ class SanitationInspections extends BaseController
         $shiftId = $this->getParam('shift_id', '');
         $swachhagrahiId = $this->getParam('swachhagrahi_id', '');
         $overallStatus = $this->getParam('overall_status', '');
-        $dateFrom = $this->getParam('inspection_date_from', '');
-        $dateTo   = $this->getParam('inspection_date_to', '');
+        $dateFrom = trim($this->getParam('inspection_date_from', ''));
+        $dateTo   = trim($this->getParam('inspection_date_to', ''));
         $orderCol = $this->getParam('order_by_col', 'inspection_id');
         $orderDir = $this->getParam('order_by', 'DESC');
+
+        $validation = validateDateRange($dateFrom, $dateTo);
+        if (! $validation['valid']) {
+            $this->setError($validation['error'], 400);
+            return $this->response();
+        }
+
+        $today = date('Y-m-d');
+        $useCurrentTable = ($dateTo === $today && $dateFrom === $today);
+        if ($useCurrentTable) {
+            $model = new SanitationInspectionsModel();
+        } else {
+            $model = new SanitationInspectionsArchiveModel();
+            if ($dateTo === '') {
+                $dateTo = date('Y-m-d', strtotime('-1 day'));
+            }
+        }
 
         $builder = $model->builder();
         if ($assetId !== '') {
@@ -100,6 +117,10 @@ class SanitationInspections extends BaseController
 
         $model = new SanitationInspectionsModel();
         $row   = $model->find($inspectionId);
+        if (! $row) {
+            $archiveModel = new SanitationInspectionsArchiveModel();
+            $row = $archiveModel->find($inspectionId);
+        }
         if (! $row) {
             $this->setError('Sanitation inspection not found.', 404);
             return $this->response();
@@ -218,6 +239,7 @@ class SanitationInspections extends BaseController
             'notes'                 => $notes,
             'latitude'              => $latitude,
             'longitude'             => $longitude,
+            'submitted_at'          => date('Y-m-d H:i:s'),
         ];
 
         $model = new SanitationInspectionsModel();

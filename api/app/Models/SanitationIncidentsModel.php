@@ -27,5 +27,22 @@ class SanitationIncidentsModel extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * Delete incidents by incident_id list (e.g. after archiving).
+     *
+     * @param list<int> $incidentIds
+     * @return int Number of rows deleted
+     */
+    public function deleteByIds(array $incidentIds): int
+    {
+        if (empty($incidentIds)) {
+            return 0;
+        }
+        $builder = $this->builder();
+        $builder->whereIn('incident_id', $incidentIds);
+        $builder->delete();
+        return $this->db->affectedRows();
+    }
 }
 

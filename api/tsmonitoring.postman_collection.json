@@ -2823,7 +2823,7 @@
           }
         },
         {
-          "name": "Close (Vendor / Vendor Supervisor)",
+          "name": "Update Status",
           "request": {
             "method": "POST",
             "header": [
@@ -2842,21 +2842,57 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{}"
+              "raw": "{\n  \"incident_status\": \"CLOSED\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/v1/sanitation-incidents/close/1",
+              "raw": "{{base_url}}/v1/sanitation-incidents/update-status/1",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "v1",
                 "sanitation-incidents",
-                "close",
+                "update-status",
                 "1"
               ]
             },
-            "description": "Closes incident: sets resolved_by (current user), resolved_date, incident_status=CLOSED. Vendor/vendor supervisor can only close incidents for their vendor_id."
+            "description": "Update incident status only. incident_status (required): OPEN, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED, REOPENED. When CLOSED, sets resolved_by, resolved_date, closed_date. Vendor users can only set CLOSED for their vendor's incidents."
+          }
+        },
+        {
+          "name": "Bulk Update Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2025-02-22\",\n  \"incident_status\": \"CLOSED\",\n  \"incident_ids\": [1, 2, 3]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/sanitation-incidents/bulk-update-status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "sanitation-incidents",
+                "bulk-update-status"
+              ]
+            },
+            "description": "Bulk update incident status. date (required, Y-m-d): if date is today updates SanitationIncidentsModel, otherwise SanitationIncidentsArchiveModel. incident_status (required): OPEN, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED, REOPENED. incident_ids (required): array of incident_id. When CLOSED, sets resolved_by, resolved_date, closed_date for all."
           }
         }
       ]
@@ -3745,6 +3781,30 @@
           }
         },
         {
+          "name": "Archive Incidents",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/cron/archive-incidents",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "cron",
+                "archive-incidents"
+              ]
+            },
+            "description": "Move incidents from sanitation_incidents to sanitation_incidents_archive where created_at is yesterday (day-1). Logged to cron_log."
+          }
+        },
+        {
           "name": "Build Inspection Summary",
           "request": {
             "method": "GET",
@@ -3766,6 +3826,30 @@
               ]
             },
             "description": "Build sanitation_inspection_summary for yesterday (inspection_date day-1). Logged to cron_log."
+          }
+        },
+        {
+          "name": "Sanitation Email to Vendor",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/cron/sanitation-email-to-vendor",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "cron",
+                "sanitation-email-to-vendor"
+              ]
+            },
+            "description": "Send daily incidents summary email to each vendor (user_type_id 11) for yesterday's incidents. PDF attachment and status breakdown (OPEN, ASSIGNED, etc.). Logged to cron_log."
           }
         }
       ]

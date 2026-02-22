@@ -289,6 +289,32 @@ CREATE TABLE `sanitation_incident_history` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sanitation_incidents_archive`
+--
+
+CREATE TABLE `sanitation_incidents_archive` (
+  `incident_id` int(11) NOT NULL,
+  `incident_code` varchar(50) NOT NULL,
+  `inspection_id` int(11) NOT NULL,
+  `response_id` int(11) NOT NULL,
+  `asset_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `reported_by` int(11) NOT NULL,
+  `resolved_by` int(11) DEFAULT NULL,
+  `vendor_id` int(11) NOT NULL,
+  `severity` enum('LOW','MEDIUM','HIGH','CRITICAL') NOT NULL,
+  `description` text DEFAULT NULL,
+  `incident_status` enum('OPEN','ASSIGNED','IN_PROGRESS','RESOLVED','CLOSED','REOPENED') DEFAULT 'OPEN',
+  `due_date` datetime DEFAULT NULL,
+  `resolved_date` datetime DEFAULT NULL,
+  `closed_date` datetime DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sanitation_inspections`
 --
 
@@ -884,6 +910,20 @@ ALTER TABLE `sanitation_incident_history`
   ADD KEY `idx_incident_history_date` (`changed_at`);
 
 --
+-- Indexes for table `sanitation_incidents_archive`
+--
+ALTER TABLE `sanitation_incidents_archive`
+  ADD PRIMARY KEY (`incident_id`),
+  ADD UNIQUE KEY `incident_code` (`incident_code`),
+  ADD KEY `idx_incidents_status` (`incident_status`),
+  ADD KEY `idx_incidents_vendor` (`vendor_id`),
+  ADD KEY `idx_incidents_reported_by` (`reported_by`),
+  ADD KEY `idx_incidents_assigned_to` (`resolved_by`),
+  ADD KEY `idx_incidents_asset` (`asset_id`),
+  ADD KEY `idx_incidents_severity` (`severity`),
+  ADD KEY `idx_incidents_created_date` (`created_at`);
+
+--
 -- Indexes for table `sanitation_inspections`
 --
 ALTER TABLE `sanitation_inspections`
@@ -1112,6 +1152,12 @@ ALTER TABLE `sanitation_asset_allocations`
 -- AUTO_INCREMENT for table `sanitation_incidents`
 --
 ALTER TABLE `sanitation_incidents`
+  MODIFY `incident_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `sanitation_incidents_archive`
+--
+ALTER TABLE `sanitation_incidents_archive`
   MODIFY `incident_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
