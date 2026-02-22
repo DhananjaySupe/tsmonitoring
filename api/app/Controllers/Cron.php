@@ -205,7 +205,7 @@ class Cron extends BaseController
         try {
             // Vendor users: user_type_id = 11, has email, vendor_id, is_active
             $vendorUsers = $usersModel
-                ->select('user_id, email, full_name, vendor_id')
+                ->select('user_id, email, full_name')
                 ->where('user_type_id', 11)
                 ->where('is_active', 1)
                 ->where('email !=', '')
@@ -213,7 +213,7 @@ class Cron extends BaseController
                 ->findAll();
 
             foreach ($vendorUsers as $user) {
-                $vendorId   = isset($user['vendor_id']) ? (int) $user['vendor_id'] : 0;
+                $vendorId   = isset($user['user_id']) ? (int) $user['user_id'] : 0;
                 $toEmail    = isset($user['email']) ? trim((string) $user['email']) : '';
                 $vendorName = isset($user['full_name']) ? trim((string) $user['full_name']) : 'Vendor';
 

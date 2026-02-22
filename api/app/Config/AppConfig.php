@@ -6,7 +6,6 @@
 	{
 		public $appName = 'Tentage and Sanitation';
 		public $appDesc = "Tentage and Sanitation";
-		public $appEmails = array();
 		public $cssVersion = '1.0.0';
 		public $jsVersion = '1.0.0';
 		/* API Keys */
@@ -38,12 +37,14 @@
 		/* Maintenance mode for APIs (handled by MaintenanceMode filter) */
 		public $maintenanceMode = false;
 		public $maintenanceMessage = 'Service is under maintenance. Please try again later.';
+
 		/* cache */
 		public $cache = array(
 			'enabled' => false,
 			'prefix' => 'monitoring_',
 			'expiration' => 60 * 60 * 24, //in seconds
 		);
+
 		/* AWS S3 */
 		public $S3 = array(
 			'enabled' => false,
@@ -52,11 +53,13 @@
 			'bucket' => '',
 			'region' => '',
 		);
+
 		/* Image Sizes */
 		public $imageSizes = array(
         'large'  => array(1024, 768),
 		'thumb'  => array(240, 240),
 		);
+
 		/* Two Factor Authentication */
 		public $twoFactorAuth = array(
 			'enabled' => false,
@@ -66,6 +69,7 @@
 				'whatsapp' => true,
 			),
 		);
+
 		/* SMS */
 		public $sms = array(
 			'enabled' => false,
@@ -88,31 +92,12 @@
 
 		/* Email */
 		public $email = array(
-			'enabled' => false,
-			'fromEmail' => '',
-			'fromName' => '',
-			'SMTPHost' => '',
-			'SMTPUser' => '',
-			'SMTPPass' => '',
-			'SMTPPort' => 25
+			'enabled' => true
 		);
+
 		/* Bhashini API configuration */
 		public $bhashiniConfig = [
 		'apiEndpoint' => 'https://dhruva-api.bhashini.gov.in/services/inference/pipeline',
 		'apiKey' => 'gbes7KiCpI3uqHoYH5OY_TPgPVZ67lsDXT65ZTUFKJ752fvm_xROvoac9yuUdw2V'
 		];
-
-		public function __construct()
-		{
-			$this->appEmails = array(
-			'enabled' => false,
-			'fromEmail' => '',
-			'fromName' => '',
-			'SMTPHost' => '',
-			'SMTPUser' => '',
-			'SMTPPass' => '',
-			'SMTPPort' => 25,
-            'admin' => 'admin@example.com'
-			);
-		}
 	}

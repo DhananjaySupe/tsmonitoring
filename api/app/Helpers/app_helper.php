@@ -581,32 +581,13 @@
 		 */
 		function sendEmailNotification(string $to, string $subject, string $body, \Config\AppConfig $AppConfig, array $attachments = []): bool
 		{
-			if (empty($AppConfig->appEmails['enabled']) || !$AppConfig->appEmails['enabled']) {
+			if (empty($AppConfig->email['enabled']) || !$AppConfig->email['enabled']) {
 				return false;
 			}
 
 			try {
+
 				$email = \Config\Services::email();
-
-				if (!empty($AppConfig->appEmails['SMTPHost'])) {
-					$email->setSMTPHost($AppConfig->appEmails['SMTPHost']);
-				}
-				if (!empty($AppConfig->appEmails['SMTPUser'])) {
-					$email->setSMTPUser($AppConfig->appEmails['SMTPUser']);
-				}
-				if (!empty($AppConfig->appEmails['SMTPPass'])) {
-					$email->setSMTPPass($AppConfig->appEmails['SMTPPass']);
-				}
-				if (!empty($AppConfig->appEmails['SMTPPort'])) {
-					$email->setSMTPPort($AppConfig->appEmails['SMTPPort']);
-				}
-
-				$fromEmail = $AppConfig->appEmails['fromEmail'] ?? null;
-				$fromName  = $AppConfig->appEmails['fromName'] ?? null;
-				if ($fromEmail) {
-					$email->setFrom($fromEmail, $fromName ?: $fromEmail);
-				}
-
 				$email->setTo($to);
 				$email->setSubject($subject);
 				$email->setMessage($body);
