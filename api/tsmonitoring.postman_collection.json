@@ -2631,7 +2631,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"allocation_id\": 1,\n  \"asset_id\": 1,\n  \"shift_id\": 1,\n  \"questions_answers_data\": [\n    { \"que\": 1, \"ans\": \"YES\", \"photo\": \"https://example.com/photo1.jpg\" },\n    { \"que\": 2, \"ans\": \"YES\", \"photo\": \"https://example.com/photo2.jpg\" },\n    { \"que\": 3, \"ans\": \"NO\", \"photo\": \"https://example.com/photo3.jpg\" }\n  ],\n  \"overall_status\": \"COMPLIANT\",\n  \"compliance_score\": 85.5,\n  \"notes\": \"All areas checked.\",\n  \"latitude\": 28.6139,\n  \"longitude\": 77.2090\n}"
+              "raw": "{\n  \"allocation_id\": 1,\n  \"asset_id\": 1,\n  \"asset_type_id\": 1,\n  \"vendor_id\": 1,\n  \"sector_id\": 1,\n  \"circle_id\": 1,\n  \"shift_id\": 1,\n  \"questions_answers_data\": [\n    { \"que\": 1, \"ans\": \"YES\", \"photo\": \"https://example.com/photo1.jpg\" },\n    { \"que\": 2, \"ans\": \"YES\", \"photo\": \"https://example.com/photo2.jpg\" },\n    { \"que\": 3, \"ans\": \"NO\", \"photo\": \"https://example.com/photo3.jpg\" }\n  ],\n  \"overall_status\": \"COMPLIANT\",\n  \"compliance_score\": 85.5,\n  \"notes\": \"All areas checked.\",\n  \"latitude\": 28.6139,\n  \"longitude\": 77.2090\n}"
             },
             "url": {
               "raw": "{{base_url}}/v1/sanitation-inspections/new",
