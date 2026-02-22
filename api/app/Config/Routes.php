@@ -197,6 +197,7 @@ $routes->group('v1', ['namespace' => 'App\Controllers'], static function (RouteC
     // Cron (X-API-KEY required; call e.g. daily for day-1)
     $routes->get('cron/archive-inspections', 'Cron::archiveInspections');
     $routes->get('cron/build-inspection-summary', 'Cron::buildInspectionSummary');
+    $routes->get('cron/sanitation-email-to-vendor', 'Cron::sanitationEmailToVendor');
 
     $routes->get('dev/generate-dummy-data', 'ZeroDev::generateDummyData');
 });
