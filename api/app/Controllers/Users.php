@@ -236,6 +236,56 @@ class Users extends BaseController
         return $this->response();
     }
 
+    public function changePassword($id)
+    {
+        if (! $this->isPost()) {
+            $this->setError($this->methodNotAllowed, 405);
+            return $this->response();
+        }
+        if (! $this->AuthenticateApikey()) {
+            $this->setError($this->invalidApiKey, 401);
+            return $this->response();
+        }
+        if (! $this->AuthenticateToken()) {
+            $this->setError($this->invalidToken, 401);
+            return $this->response();
+        }
+        if (! $this->checkUserTypePermissions('users:edit')) {
+            return $this->response();
+        }
+
+        $userId = (int) $id;
+        if ($userId < 1) {
+            $this->setError('Invalid user id.', 400);
+            return $this->response();
+        }
+
+        $userModel = new UsersModel();
+        $user      = $userModel->find($userId);
+        if (! $user) {
+            $this->setError('User not found.', 404);
+            return $this->response();
+        }
+
+        $password = $this->getPost('password', '');
+        if ($password === '') {
+            $this->setError('Password is required.', 400);
+            return $this->response();
+        }
+        if (strlen($password) < 6) {
+            $this->setError('Password must be at least 6 characters.', 400);
+            return $this->response();
+        }
+
+        $userModel->update($userId, [
+            'password_hash' => password_hash($password, PASSWORD_BCRYPT),
+        ]);
+
+        $this->setSuccess('Password updated successfully.');
+        $this->setOutput([]);
+        return $this->response();
+    }
+
     public function delete($id)
     {
         if (! $this->isPost()) {

@@ -337,6 +337,43 @@
           }
         },
         {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "X-ACCESS-TOKEN",
+                "value": "{{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"NewStrongPassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/users/change-password/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "change-password",
+                "1"
+              ]
+            },
+            "description": "Change a user's password. Does not require current password; only new password is sent in the body."
+          }
+        },
+        {
           "name": "Delete",
           "request": {
             "method": "POST",
@@ -1841,7 +1878,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"vendor_name\": \"ABC Supplies\",\n  \"vendor_code\": \"V001\",\n  \"contact_person\": \"John Doe\",\n  \"contact_email\": \"john@abc.com\",\n  \"contact_phone\": \"9876543210\",\n  \"address\": \"123 Main St\",\n  \"status\": \"ACTIVE\",\n  \"user_id\": 0\n}"
+              "raw": "{\n  \"vendor_code\": \"V001\",\n  \"contact_person\": \"John Doe\",\n  \"contact_email\": \"john@abc.com\",\n  \"contact_phone\": \"9876543210\",\n  \"address\": \"123 Main St\",\n  \"status\": \"ACTIVE\",\n  \"user_id\": 0\n}"
             },
             "url": {
               "raw": "{{base_url}}/v1/vendors/new",
@@ -1876,7 +1913,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"vendor_name\": \"ABC Supplies Updated\",\n  \"vendor_code\": \"V001\",\n  \"contact_person\": \"Jane Doe\",\n  \"contact_email\": \"jane@abc.com\",\n  \"contact_phone\": \"919876543210\",\n  \"address\": \"456 Oak Ave\",\n  \"status\": \"ACTIVE\",\n  \"user_id\": 0\n}"
+              "raw": "{\n  \"vendor_code\": \"V001\",\n  \"contact_person\": \"Jane Doe\",\n  \"contact_email\": \"jane@abc.com\",\n  \"contact_phone\": \"919876543210\",\n  \"address\": \"456 Oak Ave\",\n  \"status\": \"ACTIVE\",\n  \"user_id\": 0\n}"
             },
             "url": {
               "raw": "{{base_url}}/v1/vendors/edit/1",
@@ -2898,7 +2935,7 @@
       ]
     },
     {
-      "name": "Sanitation Asset Tagging",
+      "name": "Sanitation Asset Tagging (Mobile)",
       "item": [
         {
           "name": "Create",
