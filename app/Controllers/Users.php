@@ -137,6 +137,7 @@ class Users extends BaseController
         }
 
         $data = [
+            'code'         => generateUserCode(),
             'phone'        => $phone,
             'password_hash' => password_hash($password, PASSWORD_BCRYPT),
             'full_name'    => $fullName,
@@ -249,7 +250,7 @@ class Users extends BaseController
             $this->setError($this->invalidToken, 401);
             return $this->response();
         }
-        if (! $this->requireAdminOrSuperAdmin()) {
+        if (! $this->checkUserTypePermissions('users:delete')) {
             return $this->response();
         }
 

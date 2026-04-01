@@ -43,6 +43,9 @@ class SanitationAssetAllocationsModel extends Model
         if (! empty($options['status'])) {
             $builder->where('a.status', $options['status']);
         }
+        if (! empty($options['shift_id'])) {
+            $builder->where('a.shift_id', $options['shift_id']);
+        }
         if (! empty($options['allocation_date_from'])) {
             $builder->where('a.allocation_date >=', $options['allocation_date_from']);
         }
@@ -66,6 +69,9 @@ class SanitationAssetAllocationsModel extends Model
             ->where('a.swachhagrahi_id', $swachhagrahiId);
         if (! empty($options['status'])) {
             $dataBuilder->where('a.status', $options['status']);
+        }
+        if (! empty($options['shift_id'])) {
+            $dataBuilder->where('a.shift_id', $options['shift_id']);
         }
         if (! empty($options['allocation_date_from'])) {
             $dataBuilder->where('a.allocation_date >=', $options['allocation_date_from']);
@@ -148,15 +154,40 @@ class SanitationAssetAllocationsModel extends Model
         if (! empty($row['type_questions'])) {
             $questionIds = array_map('intval', array_filter(explode(',', (string) $row['type_questions'])));
         }
-        $questionsMap = [];
+
+        $questionsMap  = [];
         if ($questionIds !== []) {
-            $questionsRows = $db->table('questions')
-                ->whereIn('question_id', $questionIds)
-                ->where('is_active', 1)
-                ->orderBy('sequence', 'ASC')
-                ->orderBy('question_id', 'ASC')
-                ->get()
-                ->getResultArray();
+            $questionsRows = [];
+
+            // Reuse the same cache strategy as inspectQuestionsAndNotify()
+            $AppConfig    = new \Config\AppConfig();
+            $cacheEnabled = ! empty($AppConfig->cache['enabled']);
+            $cache        = null;
+            $cacheKey     = null;
+
+            if ($cacheEnabled) {
+                $cache    = \Config\Services::cache();
+                $cacheKey = $AppConfig->cache['prefix'] . 'questions_' . md5(json_encode($questionIds));
+                $cached   = $cache->get($cacheKey);
+                if (is_array($cached) && ! empty($cached)) {
+                    $questionsRows = $cached;
+                }
+            }
+
+            if (empty($questionsRows)) {
+                $questionsRows = $db->table('questions')
+                    ->whereIn('question_id', $questionIds)
+                    ->where('is_active', 1)
+                    ->orderBy('sequence', 'ASC')
+                    ->orderBy('question_id', 'ASC')
+                    ->get()
+                    ->getResultArray();
+
+                if ($cacheEnabled && $cache && $cacheKey) {
+                    $cache->save($cacheKey, $questionsRows, (int) $AppConfig->cache['expiration']);
+                }
+            }
+
             foreach ($questionsRows as $q) {
                 $questionsMap[$q['question_id']] = $q;
             }

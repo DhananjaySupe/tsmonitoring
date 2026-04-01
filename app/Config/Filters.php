@@ -80,9 +80,10 @@ class Filters extends BaseFilters
         'before' => [
             // 'honeypot',
             // 'invalidchars',
+            'cors',
             'maintenance',
-            // Enable CSRF for non-API routes
-            'csrf' => ['except' => ['api/*']],
+            // Enable CSRF for non-API routes (API routes are under v1)
+            'csrf' => ['except' => ['api/*', 'v1/*']],
         ],
         'after' => [
             // 'honeypot',
@@ -115,7 +116,6 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [
-        // Apply CORS and input sanitization for all API routes
         'cors' => [
             'before' => ['api/*'],
         ],

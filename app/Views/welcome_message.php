@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Page</title>
+    <title>TS Monitoring – Sanitation & Township Management</title>
     <style>
         * {
             margin: 0;
@@ -18,15 +18,16 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
         }
 
         .welcome-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             border-radius: 20px;
             padding: 40px;
-            max-width: 600px;
+            max-width: 640px;
             width: 100%;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             text-align: center;
             animation: fadeIn 0.8s ease-out;
         }
@@ -42,100 +43,128 @@
 
         .welcome-icon {
             font-size: 4rem;
-            margin-bottom: 20px;
-            color: #2575fc;
+            margin-bottom: 16px;
         }
 
         h1 {
-            color: #333;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            color: #1a3a4a;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
             font-weight: 700;
+        }
+
+        .app-tagline {
+            color: #2c5364;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
         }
 
         .subtitle {
             color: #666;
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+            font-size: 1.05rem;
             line-height: 1.6;
+            margin-bottom: 28px;
         }
 
         .welcome-message {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 15px;
-            margin: 25px 0;
-            border-left: 5px solid #2575fc;
+            background: #f0f7fa;
+            padding: 24px;
+            border-radius: 14px;
+            margin: 24px 0;
+            border-left: 5px solid #2c5364;
             text-align: left;
         }
 
         .welcome-message p {
             color: #444;
             line-height: 1.7;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+        }
+
+        .welcome-message p:last-child {
+            margin-bottom: 0;
         }
 
         .features {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 15px;
-            margin: 30px 0;
+            gap: 14px;
+            margin: 28px 0;
         }
 
         .feature {
-            background: #eef5ff;
-            padding: 15px;
-            border-radius: 10px;
+            background: #e8f4f8;
+            padding: 16px;
+            border-radius: 12px;
             flex: 1;
-            min-width: 150px;
-            transition: transform 0.3s;
+            min-width: 160px;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .feature:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(44, 83, 100, 0.15);
         }
 
         .feature h3 {
-            color: #2575fc;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
+            color: #1a3a4a;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .feature p {
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
         .cta-button {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
+            background: linear-gradient(to right, #203a43, #2c5364);
             color: white;
             border: none;
-            padding: 16px 40px;
-            font-size: 1.1rem;
+            padding: 14px 36px;
+            font-size: 1.05rem;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 18px;
             font-weight: 600;
             transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+            box-shadow: 0 4px 14px rgba(26, 58, 74, 0.35);
         }
 
         .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 58, 74, 0.45);
         }
 
         .footer {
-            margin-top: 30px;
+            margin-top: 28px;
             color: #777;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             border-top: 1px solid #eee;
-            padding-top: 20px;
+            padding-top: 18px;
+        }
+
+        .footer a {
+            color: #2c5364;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 600px) {
             .welcome-container {
-                padding: 25px;
+                padding: 24px;
             }
 
             h1 {
-                font-size: 2rem;
+                font-size: 1.85rem;
             }
 
             .features {
@@ -147,55 +176,54 @@
 <body>
     <div class="welcome-container">
         <div class="welcome-header">
-            <div class="welcome-icon">🚀</div>
-            <h1>Welcome Aboard!</h1>
-            <p class="subtitle">We're thrilled to have you here. Let's get started!</p>
+            <div class="welcome-icon">🗑️</div>
+            <h1>TS Monitoring</h1>
+            <p class="app-tagline">Sanitation & Township Management</p>
+            <p class="subtitle">Monitor assets, inspections, vehicles, and operations in one place.</p>
         </div>
 
         <div class="welcome-message">
-            <p>Welcome to our platform! Whether you're here to explore, learn, or create something amazing, you're in the right place.</p>
-            <p>Our goal is to provide you with the best experience possible. Take your time to look around and discover everything we have to offer.</p>
+            <p><strong>TS Monitoring</strong> is a sanitation and township management platform. Use it to manage circles and sectors, sanitation assets and allocations, vehicle fleets, vendors, shifts, and inspection questions.</p>
+            <p>Access the API for login, user management, inspections, and all master data. Use the mobile or web client to get started.</p>
         </div>
 
         <div class="features">
             <div class="feature">
-                <h3>📱 Easy to Use</h3>
-                <p>Intuitive interface designed for everyone</p>
+                <h3>📦 Assets & Allocations</h3>
+                <p>Track sanitation assets and assign them to circles and sectors</p>
             </div>
             <div class="feature">
-                <h3>⚡ Fast & Secure</h3>
-                <p>Lightning speed with top-notch security</p>
+                <h3>🚛 Vehicles & Vendors</h3>
+                <p>Manage fleet and vendor information</p>
             </div>
             <div class="feature">
-                <h3>🌟 Premium Features</h3>
-                <p>Access to exclusive tools and resources</p>
+                <h3>✅ Inspections</h3>
+                <p>Run and record inspections with configurable questions</p>
             </div>
         </div>
 
-        <button class="cta-button" onclick="startJourney()">Get Started →</button>
+        <button class="cta-button" onclick="openApi()">API Documentation →</button>
 
         <div class="footer">
-            <p>Need help? <a href="#" style="color: #2575fc; text-decoration: none;">Contact our support team</a></p>
-            <p style="margin-top: 10px;">© 2024 Your Company. All rights reserved.</p>
+            <p>Use the <strong>api</strong> endpoints for integration. Need help? <a href="#">Contact support</a></p>
+            <p style="margin-top: 10px;">© 2026 TS Monitoring. All rights reserved.</p>
         </div>
     </div>
 
     <script>
-        function startJourney() {
-            alert("Welcome! Let's begin your journey. 🎉");
-            // In a real application, you would redirect or show more content here
-            // window.location.href = "dashboard.html";
+        function openApi() {
+            // API base URL (same origin as this page)
+            window.location.href = window.location.origin + (window.location.pathname.replace(/\/$/, '') || '') + '/';
         }
 
-        // Add a simple animation on load
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.welcome-container').style.opacity = '0';
-            document.querySelector('.welcome-container').style.transform = 'translateY(20px)';
-
-            setTimeout(() => {
-                document.querySelector('.welcome-container').style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-                document.querySelector('.welcome-container').style.opacity = '1';
-                document.querySelector('.welcome-container').style.transform = 'translateY(0)';
+            var el = document.querySelector('.welcome-container');
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            setTimeout(function() {
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
             }, 100);
         });
     </script>

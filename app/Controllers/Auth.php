@@ -45,12 +45,13 @@ class Auth extends BaseController
         $sessionsModel = new SessionsModel();
         $jwt        = new JwtLib();
 
-        if (! empty($this->AppConfig->single_login)) {
+        if (! empty($this->AppConfig->singleLogin)) {
             $sessionsModel->where('user_id', $user['user_id'])->delete();
         }
 
         $tokenPayload = [
             'user_id' => $user['user_id'],
+            'exp' => (int) ($this->_isRequestFromMobileApp ? $this->AppConfig->jwtExpiryMobile : $this->AppConfig->jwtExpiryWebApp), // JWT expiry in seconds
         ];
 
         $accessToken = $jwt->generateToken($tokenPayload);
@@ -303,7 +304,7 @@ class Auth extends BaseController
         if ($sessionRow) {
             $accessToken = $sessionRow['session_token'];
         } else {
-            if (! empty($this->AppConfig->single_login)) {
+            if (! empty($this->AppConfig->singleLogin)) {
                 $sessionsModel->where('user_id', $user['user_id'])->delete();
             }
 

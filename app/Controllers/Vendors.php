@@ -36,8 +36,7 @@ class Vendors extends BaseController
         if ($keywords !== '') {
             $k = $model->db->escapeLikeString($keywords);
             $builder->groupStart()
-                ->like('vendor_name', $k)
-                ->orLike('vendor_code', $k)
+                ->like('vendor_code', $k)
                 ->orLike('contact_person', $k)
                 ->groupEnd();
         }
@@ -113,7 +112,6 @@ class Vendors extends BaseController
             return $this->response();
         }
 
-        $vendorName   = $this->getPost('vendor_name', '');
         $vendorCode   = $this->getPost('vendor_code', '');
         $contactPerson = $this->getPost('contact_person', '');
         $contactEmail  = $this->getPost('contact_email', '');
@@ -122,8 +120,8 @@ class Vendors extends BaseController
         $status        = $this->getPost('status', 'ACTIVE');
         $userId        = $this->getPost('user_id', 0);
 
-        if ($vendorName === '' || $vendorCode === '') {
-            $this->setError('vendor_name and vendor_code are required.', 400);
+        if ($vendorCode === '') {
+            $this->setError('vendor_code is required.', 400);
             return $this->response();
         }
 
@@ -140,8 +138,8 @@ class Vendors extends BaseController
         }
 
         $data = [
+            'vendor_id'      => (int) $userId,
             'user_id'        => (int) $userId,
-            'vendor_name'    => $vendorName,
             'vendor_code'    => $vendorCode,
             'contact_person' => $contactPerson,
             'contact_email'  => $contactEmail,
@@ -193,7 +191,6 @@ class Vendors extends BaseController
             return $this->response();
         }
 
-        $vendorName   = $this->getPost('vendor_name', $row['vendor_name'] ?? '');
         $vendorCode   = $this->getPost('vendor_code', $row['vendor_code'] ?? '');
         $contactPerson = $this->getPost('contact_person', $row['contact_person'] ?? '');
         $contactEmail  = $this->getPost('contact_email', $row['contact_email'] ?? '');
@@ -202,8 +199,8 @@ class Vendors extends BaseController
         $status        = $this->getPost('status', $row['status'] ?? 'ACTIVE');
         $userId        = $this->getPost('user_id', $row['user_id'] ?? 0);
 
-        if ($vendorName === '' || $vendorCode === '') {
-            $this->setError('vendor_name and vendor_code are required.', 400);
+        if ($vendorCode === '') {
+            $this->setError('vendor_code is required.', 400);
             return $this->response();
         }
 
@@ -220,7 +217,6 @@ class Vendors extends BaseController
 
         $data = [
             'user_id'        => (int) $userId,
-            'vendor_name'    => $vendorName,
             'vendor_code'    => $vendorCode,
             'contact_person' => $contactPerson,
             'contact_email'  => $contactEmail,

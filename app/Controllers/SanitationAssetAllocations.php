@@ -127,12 +127,11 @@ class SanitationAssetAllocations extends BaseController
         $assetId         = (int) $this->getPost('asset_id', 0);
         $swachhagrahiId  = (int) $this->getPost('swachhagrahi_id', 0);
         $shiftId         = (int) $this->getPost('shift_id', 0);
-        $allocatedBy     = (int) $this->getPost('allocated_by', 0);
         $allocationDate  = $this->getPost('allocation_date', '');
         $status          = $this->getPost('status', 'ACTIVE');
 
-        if ($assetId < 1 || $swachhagrahiId < 1 || $shiftId < 1 || $allocatedBy < 1 || $allocationDate === '') {
-            $this->setError('asset_id, swachhagrahi_id, shift_id, allocated_by and allocation_date are required.', 400);
+        if ($assetId < 1 || $swachhagrahiId < 1 || $shiftId < 1 || $allocationDate === '') {
+            $this->setError('asset_id, swachhagrahi_id, shift_id and allocation_date are required.', 400);
             return $this->response();
         }
 
@@ -146,10 +145,17 @@ class SanitationAssetAllocations extends BaseController
             'asset_id'         => $assetId,
             'swachhagrahi_id'  => $swachhagrahiId,
             'shift_id'         => $shiftId,
-            'allocated_by'     => $allocatedBy,
+            'allocated_by'     => $this->_userData['user_id'],
             'allocation_date'  => $allocationDate,
             'status'           => $status,
+            'created_at'       => date('Y-m-d H:i:s'),
         ];
+
+        $assetRow = $model->select('allocation_id')->where('asset_id', $assetId)->first();
+        if ($assetRow) {
+            $this->setError('Asset already allocated.', 409);
+            return $this->response();
+        }
 
         $id = $model->insert($data, true);
         if (! $id) {
@@ -197,12 +203,11 @@ class SanitationAssetAllocations extends BaseController
         $assetId         = (int) $this->getPost('asset_id', $row['asset_id'] ?? 0);
         $swachhagrahiId  = (int) $this->getPost('swachhagrahi_id', $row['swachhagrahi_id'] ?? 0);
         $shiftId         = (int) $this->getPost('shift_id', $row['shift_id'] ?? 0);
-        $allocatedBy     = (int) $this->getPost('allocated_by', $row['allocated_by'] ?? 0);
         $allocationDate  = $this->getPost('allocation_date', $row['allocation_date'] ?? '');
         $status          = $this->getPost('status', $row['status'] ?? 'ACTIVE');
 
-        if ($assetId < 1 || $swachhagrahiId < 1 || $shiftId < 1 || $allocatedBy < 1 || $allocationDate === '') {
-            $this->setError('asset_id, swachhagrahi_id, shift_id, allocated_by and allocation_date are required.', 400);
+        if ($assetId < 1 || $swachhagrahiId < 1 || $shiftId < 1 || $allocationDate === '') {
+            $this->setError('asset_id, swachhagrahi_id, shift_id and allocation_date are required.', 400);
             return $this->response();
         }
 
@@ -215,7 +220,7 @@ class SanitationAssetAllocations extends BaseController
             'asset_id'         => $assetId,
             'swachhagrahi_id'  => $swachhagrahiId,
             'shift_id'         => $shiftId,
-            'allocated_by'     => $allocatedBy,
+            'allocated_by'     => $this->_userData['user_id'],
             'allocation_date'  => $allocationDate,
             'status'           => $status,
         ];
@@ -264,6 +269,7 @@ class SanitationAssetAllocations extends BaseController
         return $this->response();
     }
 
+    /** for mobile app */
     public function getallocations()
     {
         if (! $this->isGet()) {
@@ -276,9 +282,6 @@ class SanitationAssetAllocations extends BaseController
         }
         if (! $this->AuthenticateToken()) {
             $this->setError($this->invalidToken, 401);
-            return $this->response();
-        }
-        if (! $this->CheckUserTypePermissions('allocation:view')) {
             return $this->response();
         }
 
@@ -295,10 +298,14 @@ class SanitationAssetAllocations extends BaseController
             'per_page' => $length,
         ];
         $status   = $this->getParam('status', '');
+        $shiftId = $this->getParam('shift_id', '');
         $dateFrom = $this->getParam('allocation_date_from', '');
         $dateTo   = $this->getParam('allocation_date_to', '');
         if ($status !== '') {
             $options['status'] = $status;
+        }
+        if ($shiftId !== '') {
+            $options['shift_id'] = $shiftId;
         }
         if ($dateFrom !== '') {
             $options['allocation_date_from'] = $dateFrom;
@@ -318,10 +325,7 @@ class SanitationAssetAllocations extends BaseController
         return $this->response();
     }
 
-    /**
-     * Get single allocation details with asset, asset type, and inspection questions.
-     * GET api/sanitation-asset-allocations/details/(:num)
-     */
+    /** for mobile app */
     public function allocationDetails($id)
     {
         if (! $this->isGet()) {
@@ -336,9 +340,6 @@ class SanitationAssetAllocations extends BaseController
             $this->setError($this->invalidToken, 401);
             return $this->response();
         }
-        if (! $this->CheckUserTypePermissions('allocation:view')) {
-            return $this->response();
-        }
 
         $allocationId = (int) $id;
         if ($allocationId < 1) {
@@ -348,6 +349,7 @@ class SanitationAssetAllocations extends BaseController
 
         $model = new SanitationAssetAllocationsModel();
         $details = $model->getAllocationDetails($allocationId);
+
         if ($details === null) {
             $this->setError('Sanitation asset allocation not found.', 404);
             return $this->response();

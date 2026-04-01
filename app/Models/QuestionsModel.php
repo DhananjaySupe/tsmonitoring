@@ -17,6 +17,7 @@ class QuestionsModel extends Model
         'condition_type',
         'condition_value',
         'severity',
+        'sla',
         'is_mandatory',
         'is_photo_mandatory',
         'sequence',

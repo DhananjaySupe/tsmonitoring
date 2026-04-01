@@ -14,7 +14,7 @@ class JwtLib
     public function __construct()
     {
         $AppConfig = new \Config\AppConfig();
-        $this->secretKey = $AppConfig->jwt_secret;
+        $this->secretKey = $AppConfig->jwtSecret;
         // Algorithm used for signing token
         $this->algo = 'HS256';
     }
@@ -26,10 +26,10 @@ class JwtLib
      * @param int $expiryInSeconds (optional) token expiry time in seconds
      * @return string JWT token
      */
-    public function generateToken(array $payload, int $expiryInSeconds = 3600): string
+    public function generateToken(array $payload): string
     {
         $issuedAt = time();
-        $expire = $issuedAt + $expiryInSeconds;
+        $expire = $issuedAt + $payload['exp'];
 
         $tokenPayload = array_merge($payload, [
             'iat' => $issuedAt,

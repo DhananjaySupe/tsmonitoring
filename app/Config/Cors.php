@@ -34,12 +34,14 @@ class Cors extends BaseConfig
          *   - ['http://localhost:8080']
          *   - ['https://www.example.com']
          */
-        // Allowed origins. Cannot use "*" when supportsCredentials = true.
-        // Add any front-end origins you use, e.g. Postman, local dev, etc.
+        // Allow all origins (very permissive; use with care).
+        // NOTE: When using "*", supportsCredentials MUST be false.
         'allowedOrigins' => [
+            'https://tsmonitoring.kashitsolution.com',
             'http://tsmonitoring.loc',
+            'http://localhost:3000',
             'http://localhost',
-            'http://127.0.0.1',
+            'https://example.com',
         ],
 
         /**
@@ -63,8 +65,8 @@ class Cors extends BaseConfig
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
          */
-        // Allow credentials (Authorization headers, etc.) in cross-origin requests
-        'supportsCredentials' => true,
+        // With "*" origins we cannot use credentials; disable them.
+        'supportsCredentials' => false,
 
         /**
          * Set headers to allow.
@@ -75,15 +77,8 @@ class Cors extends BaseConfig
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
          */
-        // Common headers plus Authorization and custom API headers
-        'allowedHeaders' => [
-            'Content-Type',
-            'Accept',
-            'Authorization',
-            'X-Requested-With',
-            'X-API-KEY',
-            'X-ACCESS-TOKEN',
-        ],
+        // Allow all headers requested by the client
+        'allowedHeaders' => ['*'],
 
         /**
          * Set headers to expose.

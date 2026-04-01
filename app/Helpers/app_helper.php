@@ -55,6 +55,25 @@
 		}
 	}
 
+	if (!function_exists('validateDateRange')) {
+		function validateDateRange(string $dateFrom, string $dateTo): array
+		{
+			$today = date('Y-m-d');
+			if ($dateTo !== '') {
+				if ($dateTo > $today) {
+					return ['valid' => false, 'error' => 'Date to cannot be in the future.'];
+				}
+				if ($dateTo === $today && ($dateFrom === '' || $dateFrom !== $dateTo)) {
+					return ['valid' => false, 'error' => 'When date to is today, date from must be the same date. Maximum range must end at yesterday.'];
+				}
+			}
+			if ($dateFrom !== '' && $dateTo !== '' && $dateFrom > $dateTo) {
+				return ['valid' => false, 'error' => 'Date from must not be after date to.'];
+			}
+			return ['valid' => true];
+		}
+	}
+
 	if (!function_exists('moneyFormat')) {
 		function moneyFormat($amount, $decimal = 0)
 		{
@@ -199,6 +218,13 @@
 		}
 	}
 
+    if (!function_exists('generateShortUrl')) {
+        function generateShortUrl($qrCode)
+		{
+			return substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8).'-'.$qrCode;
+		}
+    }
+
 	if (!function_exists('sendOtp')) {
 		function sendOtp($user_id) {
 			$model = null;
@@ -232,3 +258,561 @@
 		}
 	}
 
+	if (!function_exists('inspectQuestionsAndNotify')) {
+		function inspectQuestionsAndNotify(array $questionsData, int $inspectionId, int $assetId, int $swachhagrahiId, string $swachhagrahiName): void
+		{
+			if (empty($questionsData)) {
+				return;
+			}
+
+			// Load config (also reused later for notification channels)
+			$AppConfig = new \Config\AppConfig();
+
+			$questionIds = [];
+			foreach ($questionsData as $item) {
+				if (isset($item['que']) && is_numeric($item['que'])) {
+					$questionIds[] = (int) $item['que'];
+				}
+			}
+
+			if (empty($questionIds)) {
+				return;
+			}
+
+			$questionIds = array_values(array_unique($questionIds));
+
+			/** @var array<int, array<string,mixed>> $questions */
+			$questions = [];
+
+			// Use cache if enabled in AppConfig->cache
+			$cacheEnabled = !empty($AppConfig->cache['enabled']);
+			$cache        = null;
+			$cacheKey     = null;
+
+			if ($cacheEnabled) {
+				$cache    = \Config\Services::cache();
+				$cacheKey = $AppConfig->cache['prefix'] . 'questions_' . md5(json_encode($questionIds));
+				$cached   = $cache->get($cacheKey);
+				if (is_array($cached) && !empty($cached)) {
+					$questions = $cached;
+				}
+			}
+
+			if (empty($questions)) {
+				$questionsModel = new \App\Models\QuestionsModel();
+				foreach ($questionsModel->select('question_id, question_text, severity, sla, is_mandatory, condition_type, condition_value')->whereIn('question_id', $questionIds)->where('is_active', 1)->findAll() as $row) {
+					$questions[(int) $row['question_id']] = $row;
+				}
+
+				if ($cacheEnabled && $cache && $cacheKey) {
+					$cache->save($cacheKey, $questions,	(int) $AppConfig->cache['expiration']);
+				}
+			}
+
+			if (empty($questions)) {
+				return;
+			}
+
+			$failed = [];
+			foreach ($questionsData as $item) {
+				$questionId = isset($item['que']) && is_numeric($item['que']) ? (int) $item['que'] : null;
+				if (!$questionId || !isset($questions[$questionId])) {
+					continue;
+				}
+
+				$qRow   = $questions[$questionId];
+				$answer = isset($item['ans']) ? trim((string) $item['ans']) : '';
+
+				// Treat missing answer for mandatory questions as a failure
+				if ((int) ($qRow['is_mandatory'] ?? 1) === 1 && $answer === '') {
+					$failed[] = [
+						'question_id'   => $questionId,
+						'question_text' => $qRow['question_text'] ?? '',
+						'severity'      => $qRow['severity'] ?? 'MEDIUM',
+						'sla'           => $qRow['sla'] ?? 60,
+						'given_answer'  => $answer,
+						'reason'        => 'Mandatory question not answered.',
+					];
+					continue;
+				}
+
+				$conditionType  = $qRow['condition_type'] ?? null;
+				$conditionValue = $qRow['condition_value'] ?? null;
+
+				if (empty($conditionType) || $conditionValue === null || $conditionValue === '') {
+					continue;
+				}
+
+				$conditionFailed = false;
+				$reason          = '';
+
+				switch ($conditionType) {
+					case 'EQUALS':
+						// Failure when the given answer equals the configured condition value
+						if (strcasecmp($answer, (string) $conditionValue) === 0) {
+							$conditionFailed = true;
+							$reason = 'Answer equals disallowed value: ' . $conditionValue;
+						}
+						break;
+
+					case 'NOT_EQUALS':
+						if (strcasecmp($answer, (string) $conditionValue) !== 0) {
+							$conditionFailed = true;
+							$reason = 'Answer must equal ' . $conditionValue;
+						}
+						break;
+
+					case 'GREATER_THAN':
+						if (is_numeric($answer) && is_numeric($conditionValue) && (float) $answer > (float) $conditionValue) {
+							$conditionFailed = true;
+							$reason = 'Answer is greater than ' . $conditionValue;
+						}
+						break;
+
+					case 'LESS_THAN':
+						if (is_numeric($answer) && is_numeric($conditionValue) && (float) $answer < (float) $conditionValue) {
+							$conditionFailed = true;
+							$reason = 'Answer is less than ' . $conditionValue;
+						}
+						break;
+
+					case 'CONTAINS':
+						if (stripos((string) $answer, (string) $conditionValue) !== false) {
+							$conditionFailed = true;
+							$reason = 'Answer contains disallowed value: ' . $conditionValue;
+						}
+						break;
+				}
+
+				if ($conditionFailed) {
+					$failed[] = [
+						'question_id'   => $questionId,
+						'question_text' => $qRow['question_text'] ?? '',
+						'severity'      => $qRow['severity'] ?? 'MEDIUM',
+						'sla'           => $qRow['sla'] ?? 60,
+						'given_answer'  => $answer,
+						'reason'        => $qRow['question_text'] . ' - ' . $reason
+					];
+				}
+			}
+
+			if (empty($failed)) {
+				return;
+			}
+
+			// Derive related asset/vendor details
+			$vendorName         = '';
+			$vendorEmail        = '';
+			$vendorPhone        = '';
+			$vendorId           = 1;
+			$qrCode          = '';
+			try {
+				$assetsModel    = new \App\Models\SanitationAssetsModel();
+				$usersModel     = new \App\Models\UsersModel();
+				$incidentsModel = new \App\Models\SanitationIncidentsModel();
+
+				$assetRow = $assetsModel->select('vendor_id, qr_code')->where('sanitation_asset_id', $assetId)->first();
+				if (is_array($assetRow)) {
+					$qrCode = $assetRow['qr_code'] ?? '';
+					if (!empty($assetRow['vendor_id'])) {
+						$vendorId = (int) $assetRow['vendor_id'];
+					}
+				}
+
+				// If we still do not have a reasonable recipient for phone/email, try user #1 as admin
+				$userRow = $usersModel->select('email, phone')->where('user_id', $vendorId)->first();
+				if (is_array($userRow)) {
+					$vendorEmail = $userRow['email'] ?? '';
+					$vendorPhone = $userRow['phone'] ?? '';
+				}
+
+				// Create one incident per failed question
+				foreach ($failed as $f) {
+					$incidentCode = 'INC' . date('YmdHis') . '_' . $inspectionId . '_' . $f['question_id'];
+
+					$incidentsModel->insert([
+						'incident_code'  => $incidentCode,
+						'inspection_id'  => $inspectionId,
+						'response_id'    => 0,
+						'asset_id'       => $assetId,
+						'question_id'    => $f['question_id'],
+						'reported_by'    => $swachhagrahiId,
+						'resolved_by'    => null,
+						'due_date'       => date('Y-m-d H:i:s', strtotime('+' . ($f['sla'] ?? 60) . ' minutes')),
+						'vendor_id'      => $vendorId,
+						'severity'       => $f['severity'] ?? 'MEDIUM',
+						'description'    => $f['reason'] ?? '',
+						'incident_status'=> 'OPEN',
+					]);
+				}
+			} catch (\Throwable $e) {
+				// In helper context we silently ignore lookup / incident errors and still attempt notification
+			}
+
+			// Build grouped message
+			$lines = [];
+			$lines[] = 'Inspection #' . $inspectionId . ' has validation failures.';
+			$lines[] = 'Asset QR Code: ' . $qrCode;
+			if ($vendorName !== '') {
+				$lines[] = 'Vendor: ' . $vendorName;
+			}
+			$lines[] = 'Performed by Swachhagrahi: ' . $swachhagrahiName;
+			$lines[] = '';
+			$lines[] = 'Failed questions:';
+
+			$highestSeverity = 'MEDIUM';
+			$severityOrder   = ['LOW' => 1, 'MEDIUM' => 2, 'HIGH' => 3, 'CRITICAL' => 4];
+
+			foreach ($failed as $idx => $f) {
+				$line = ($idx + 1) . '. Q#' . $f['question_id'] . ' [' . ($f['severity'] ?? 'MEDIUM') . ']';
+				if (!empty($f['question_text'])) {
+					$line .= ' - ' . $f['question_text'];
+				}
+				if (!empty($f['given_answer'])) {
+					$line .= ' | Answer: ' . $f['given_answer'];
+				}
+				if (!empty($f['reason'])) {
+					$line .= ' | Reason: ' . $f['reason'];
+				}
+				$lines[] = $line;
+
+				$sev  = strtoupper((string) ($f['severity'] ?? 'MEDIUM'));
+				$curr = $severityOrder[$sev] ?? $severityOrder['MEDIUM'];
+				$max  = $severityOrder[$highestSeverity] ?? $severityOrder['MEDIUM'];
+				if ($curr > $max) {
+					$highestSeverity = $sev;
+				}
+			}
+
+			$message = implode("\n", $lines);
+			$title   = 'Inspection validation failures';
+
+			// Persist in-app notification
+			try {
+				$notificationsModel = new \App\Models\NotificationsModel();
+
+				$notificationId = $notificationsModel->insert([
+					'user_id'            => $vendorId,
+					'notification_type'  => 'INCIDENT_ASSIGNED',
+					'title'              => $title,
+					'message'            => $message,
+					'related_entity_type'=> 'INSPECTION',
+					'related_entity_id'  => $inspectionId,
+					'is_read'            => 0,
+					'priority'           => $highestSeverity === 'CRITICAL' ? 'HIGH' : 'MEDIUM',
+				], true);
+
+				if ($notificationId) {
+					// SMS notification
+					if (!empty($AppConfig->sms['enabled']) && $AppConfig->sms['enabled'] && !empty($vendorPhone)) {
+						sendSmsNotification($vendorPhone, $title, $message);
+					}
+
+					// WhatsApp notification
+					if (!empty($AppConfig->whatsapp['enabled']) && $AppConfig->whatsapp['enabled'] && !empty($vendorPhone)) {
+						sendWhatsappNotification($vendorPhone, $title, $message);
+					}
+
+					// Email notification
+					if (!empty($AppConfig->email['enabled']) && $AppConfig->email['enabled'] && !empty($vendorEmail)) {
+						sendEmailNotification($vendorEmail, $title, $message, $AppConfig);
+					}
+				}
+			} catch (\Throwable $e) {
+				// Fail silently: the main inspection creation flow must not break
+			}
+		}
+	}
+
+	if (!function_exists('sendSmsNotification')) {
+		/**
+		 * Basic SMS notification sender.
+		 * This is a lightweight wrapper intended to be adapted to the actual SMS gateway.
+		 */
+		function sendSmsNotification(string $phone, string $title, string $message): bool
+		{
+			$AppConfig = new \Config\AppConfig();
+			if (empty($AppConfig->sms['enabled']) || !$AppConfig->sms['enabled']) {
+				return false;
+			}
+
+			$phone = phoneCleanup($phone);
+			if ($phone === '') {
+				return false;
+			}
+
+			// Prepare a concise SMS-friendly message
+			$text = $title . ': ' . $message;
+			$text = substr($text, 0, 480); // basic safety limit
+			$text = nl2sms($text);
+
+			// Placeholder: integrate with actual SMS provider here.
+			// We keep this as a no-op that returns true to not block the flow.
+			return true;
+		}
+	}
+
+	if (!function_exists('sendWhatsappNotification')) {
+		/**
+		 * Basic WhatsApp notification sender.
+		 * Intended as a placeholder for the real WhatsApp gateway integration.
+		 */
+		function sendWhatsappNotification(string $phone, string $title, string $message): bool
+		{
+			$AppConfig = new \Config\AppConfig();
+			if (empty($AppConfig->whatsapp['enabled']) || !$AppConfig->whatsapp['enabled']) {
+				return false;
+			}
+
+			$phone = phoneCleanup($phone);
+			if ($phone === '') {
+				return false;
+			}
+
+			// Placeholder: build WhatsApp API request using $AppConfig->whatsapp
+			// and send it via cURL. Currently treated as a no-op.
+			return true;
+		}
+	}
+
+	if (!function_exists('sendEmailNotification')) {
+		/**
+		 * Basic email notification sender using CodeIgniter's email service.
+		 */
+		function sendEmailNotification(string $to, string $subject, string $body, \Config\AppConfig $AppConfig, array $attachments = []): bool
+		{
+			if (empty($AppConfig->email['enabled']) || !$AppConfig->email['enabled']) {
+				return false;
+			}
+
+			try {
+
+				$email = \Config\Services::email();
+				$email->setTo($to);
+				$email->setSubject($subject);
+				$email->setMessage($body);
+
+				foreach ($attachments as $path) {
+					if (is_string($path) && is_file($path)) {
+						$email->attach($path);
+					}
+				}
+
+				return $email->send();
+			} catch (\Throwable $e) {
+				return false;
+			}
+		}
+	}
+
+	if (!function_exists('translateText')) {
+		function translateText(string $text, string $lang): string
+		{
+			$lang = $lang ?: 'en';
+
+			static $translations = [];
+			if (empty($translations)) {
+				$file = FCPATH . 'assets/configuration/language/'.$lang.'.json';
+				if (is_file($file)) {
+					$json    = file_get_contents($file);
+					$decoded = json_decode($json, true);
+					if (is_array($decoded)) {
+						$translations = $decoded;
+					}
+				}
+			}
+			if (isset($translations[$text])) {
+				return $translations[$text];
+			}
+			return $text;
+		}
+	}
+
+	if (!function_exists('bhashiniTranslateText')) {
+		function bhashiniTranslateText($sourceLanguageCode, $targetLanguageCode, $text) {
+
+			$AppConfig = new \Config\AppConfig();
+			$bhashiniConfiguration = file_get_contents(base_url('assets/json/bhashini_configuration.json'));
+			$bhashiniConfiguration = json_decode($bhashiniConfiguration, true);
+			$serviceId = '';
+			foreach ($bhashiniConfiguration['pipelineResponseConfig'] as $key => $value) {
+				if($value['taskType'] == 'translation') {
+					foreach($value['config'] as $key => $config){
+						if($config['language']['sourceLanguage'] == $sourceLanguageCode && $config['language']['targetLanguage'] == $targetLanguageCode) {
+							$serviceId = $config['serviceId'];
+							break;
+						}
+					}
+				}
+			}
+
+			if($serviceId == ''){
+				return '-';
+			}
+
+			$curl = curl_init();
+			curl_setopt_array($curl, array(
+			CURLOPT_URL => $AppConfig->bhashiniConfig['apiEndpoint'],
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => '',
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 0,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_POSTFIELDS =>'{
+				"pipelineTasks": [
+					{
+						"taskType": "translation",
+						"config": {
+							"language": {
+								"sourceLanguage": "'.trim($sourceLanguageCode).'",
+								"targetLanguage": "'.trim($targetLanguageCode).'"
+							},
+							"serviceId": "'.trim($serviceId).'"
+						}
+					}
+				],
+				"inputData": {
+					"input": [
+						{
+							"source": "'.trim($text).'"
+						}
+					]
+				}
+			}',
+			CURLOPT_HTTPHEADER => array(
+				'Accept:  */*',
+				'Authorization: '.$AppConfig->bhashiniConfig['apiKey'],
+				'Content-Type: application/json'
+			),
+			));
+
+			$response = curl_exec($curl);
+			curl_close($curl);
+
+			$data = json_decode($response, true);
+			return isset($data['pipelineResponse'][0]['output'][0]['target']) ? $data['pipelineResponse'][0]['output'][0]['target'] : '-';
+		}
+	}
+
+	if (! function_exists('getVendorsList')) {
+		/**
+		 * Get all vendors as id => [vendor_name, vendor_code] for lookup. Cached when AppConfig->cache enabled.
+		 *
+		 * @return array<int, array{vendor_name: string, vendor_code: string}>
+		 */
+		function getVendorsList(): array
+		{
+			$AppConfig    = new \Config\AppConfig();
+			$cacheEnabled = ! empty($AppConfig->cache['enabled']);
+			$cache        = null;
+			$cacheKey     = $AppConfig->cache['prefix'] . 'list_vendors';
+
+			if ($cacheEnabled) {
+				$cache  = \Config\Services::cache();
+				$cached = $cache->get($cacheKey);
+				if (is_array($cached) && ! empty($cached)) {
+					return $cached;
+				}
+			}
+
+			$model = new \App\Models\VendorsModel();
+			$rows  = $model->select('vendors.vendor_id, vendors.vendor_code, users.full_name as vendor_name')->join('users', 'users.user_id = vendors.user_id')->findAll();
+			$list  = [];
+			foreach ($rows as $row) {
+				$list[(int) $row['vendor_id']] = [
+					'vendor_name' => $row['vendor_name'] ?? '',
+					'vendor_code' => $row['vendor_code'] ?? '',
+				];
+			}
+
+			if ($cacheEnabled && $cache && $cacheKey) {
+				$cache->save($cacheKey, $list, (int) $AppConfig->cache['expiration']);
+			}
+
+			return $list;
+		}
+	}
+
+	if (! function_exists('getSectorsList')) {
+		/**
+		 * Get all sectors as id => [sector_name, sector_code] for lookup. Cached when AppConfig->cache enabled.
+		 *
+		 * @return array<int, array{sector_name: string, sector_code: string}>
+		 */
+		function getSectorsList(): array
+		{
+			$AppConfig    = new \Config\AppConfig();
+			$cacheEnabled = ! empty($AppConfig->cache['enabled']);
+			$cache        = null;
+			$cacheKey     = $AppConfig->cache['prefix'] . 'list_sectors';
+
+			if ($cacheEnabled) {
+				$cache  = \Config\Services::cache();
+				$cached = $cache->get($cacheKey);
+				if (is_array($cached) && ! empty($cached)) {
+					return $cached;
+				}
+			}
+
+			$model = new \App\Models\SectorsModel();
+			$rows  = $model->select('sector_id, sector_name, sector_code')->findAll();
+			$list  = [];
+			foreach ($rows as $row) {
+				$list[(int) $row['sector_id']] = [
+					'sector_name' => $row['sector_name'] ?? '',
+					'sector_code' => $row['sector_code'] ?? '',
+				];
+			}
+
+			if ($cacheEnabled && $cache && $cacheKey) {
+				$cache->save($cacheKey, $list, (int) $AppConfig->cache['expiration']);
+			}
+
+			return $list;
+		}
+	}
+
+	if (! function_exists('getAssetTypesList')) {
+		/**
+		 * Get asset types as id => [name, description] for lookup. Optional filter by type (e.g. SANITATION). Cached when AppConfig->cache enabled.
+		 *
+		 * @param string $type Filter by type column (e.g. 'SANITATION'); empty = all
+		 * @return array<int, array{name: string, description: string}>
+		 */
+		function getAssetTypesList(string $type = ''): array
+		{
+			$AppConfig    = new \Config\AppConfig();
+			$cacheEnabled = ! empty($AppConfig->cache['enabled']);
+			$cache        = $cacheEnabled ? \Config\Services::cache() : null;
+			$cacheKey     = $AppConfig->cache['prefix'] . 'list_asset_types_' . ($type !== '' ? $type : 'all');
+
+			if ($cacheEnabled && $cache) {
+				$cached = $cache->get($cacheKey);
+				if (is_array($cached) && ! empty($cached)) {
+					return $cached;
+				}
+			}
+
+			$model = new \App\Models\AssetTypesModel();
+			$model->select('asset_type_id, name, description');
+			if ($type !== '') {
+				$model->where('type', $type);
+			}
+			$rows = $model->findAll();
+			$list = [];
+			foreach ($rows as $row) {
+				$list[(int) $row['asset_type_id']] = [
+					'name'        => $row['name'] ?? '',
+					'description' => $row['description'] ?? '',
+				];
+			}
+
+			if ($cacheEnabled && $cache && $cacheKey) {
+				$cache->save($cacheKey, $list, (int) $AppConfig->cache['expiration']);
+			}
+
+			return $list;
+		}
+	}
