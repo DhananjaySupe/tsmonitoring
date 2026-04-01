@@ -14,22 +14,22 @@ class Email extends BaseConfig
     /**
      * The "user agent"
      */
-    public string $userAgent = 'Tentage and Sanitation';
+    public string $userAgent = 'CodeIgniter';
 
     /**
      * The mail sending protocol: mail, sendmail, smtp
      */
-    public string $protocol = 'smtp';
+    public string $protocol = 'mail';
 
     /**
      * The server path to Sendmail.
      */
-    public string $mailPath = '';
+    public string $mailPath = '/usr/sbin/sendmail';
 
     /**
      * SMTP Server Hostname
      */
-    public string $SMTPHost = 'smtp.gmail.com';
+    public string $SMTPHost = '';
 
     /**
      * SMTP Username
@@ -44,7 +44,7 @@ class Email extends BaseConfig
     /**
      * SMTP Port
      */
-    public int $SMTPPort = 587;
+    public int $SMTPPort = 25;
 
     /**
      * SMTP Timeout (in seconds)
@@ -63,12 +63,12 @@ class Email extends BaseConfig
      *             to the server. 'ssl' means implicit SSL. Connection on port
      *             465 should set this to ''.
      */
-    public string $SMTPCrypto = '';
+    public string $SMTPCrypto = 'tls';
 
     /**
      * Enable word-wrap
      */
-    public bool $wordWrap = false;
+    public bool $wordWrap = true;
 
     /**
      * Character count to wrap at
@@ -119,5 +119,15 @@ class Email extends BaseConfig
      * Enable notify message from server
      */
     public bool $DSN = false;
+
+    public function __construct()
+    {
+        $this->fromEmail = $this->appConfig->email['fromEmail'];
+        $this->fromName = $this->appConfig->email['fromName'];
+        $this->SMTPHost = $this->appConfig->email['SMTPHost'];
+        $this->SMTPUser = $this->appConfig->email['SMTPUser'];
+        $this->SMTPPass = $this->appConfig->email['SMTPPass'];
+        $this->SMTPPort = $this->appConfig->email['SMTPPort'];
+    }
 
 }

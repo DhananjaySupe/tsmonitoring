@@ -30,7 +30,6 @@ $routes->group('v1', ['namespace' => 'App\Controllers'], static function (RouteC
     $routes->get('users/view/(:num)', 'Users::view/$1');
     $routes->post('users/new', 'Users::create');
     $routes->post('users/edit/(:num)', 'Users::edit/$1');
-    $routes->post('users/change-password/(:num)', 'Users::changePassword/$1');
     $routes->post('users/delete/(:num)', 'Users::delete/$1');
 
     $routes->get('user-permissions', 'UserPermissions::index');

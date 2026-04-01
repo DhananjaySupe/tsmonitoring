@@ -6,7 +6,6 @@
 			return $url_parts['scheme'] . '://' . $url_parts['host'] . (isset($url_parts['port']) ? ':' . $url_parts['port'] : '')  . '/' . ltrim($uri, '/');
 		}
 	}
-
 	if (!function_exists('site_title')) {
 		function site_title($title = '')
 		{
@@ -17,7 +16,6 @@
 			return $title;
 		}
 	}
-
 	if (!function_exists('fullname')) {
 		function fullname($firstname = "", $lastname = "")
 		{
@@ -94,14 +92,12 @@
 			}
 		}
 	}
-
 	if (!function_exists('phoneCleanup')) {
 		function phoneCleanup($phone)
 		{
 			return preg_replace('/\D+/', '', $phone);
 		}
 	}
-
 	if (!function_exists('phonePattern')) {
 		function phonePattern($phone)
 		{
@@ -122,7 +118,6 @@
 			return str_replace(array('<br>', '<br/>', '<br />', '/n', '/r/n'), '%0a', $text);
 		}
 	}
-
 	if (!function_exists('previousUrl')) {
 		function previousUrl($url='')
 		{
@@ -141,13 +136,11 @@
 			return $url;
 		}
 	}
-
 	if(!function_exists('replaceWord')) {
 		function replaceWord($search, $replace, $subject) {
 			return str_replace($search, $replace, $subject);
 		}
 	}
-
 	if(!function_exists('replaceWordList')) {
 		function replaceWordList($wordlist, $subject) {
 			foreach($wordlist as $key => $val) {
@@ -156,7 +149,6 @@
 			return $subject;
 		}
 	}
-
 	if(!function_exists('phpDate')){
 		function phpDate($date)
 		{
@@ -164,7 +156,6 @@
 			return date('Y-m-d',strtotime($date));
 		}
 	}
-
 	if(!function_exists('phpDateTime')){
 		function phpDateTime($datetime)
 		{
@@ -174,7 +165,6 @@
 			return date('Y-m-d H:i:s',strtotime($date.' '.$time));
 		}
 	}
-
 	if(!function_exists('text2Array')){
 		function text2Array($values)
 		{
@@ -191,7 +181,6 @@
 			return $values;
 		}
 	}
-
 	if(!function_exists('urlfileExist')){
 		function urlfileExist($url)
 		{
@@ -203,7 +192,6 @@
 			return $code == 200 ? true : false;
 		}
 	}
-
 	if(!function_exists('br2nl')){
 		function br2nl($string='')
 		{
@@ -213,7 +201,6 @@
 			return $string;
 		}
 	}
-
 	if(!function_exists('initials')){
 		function initials($name='')
 		{
@@ -224,7 +211,6 @@
 			return substr($firtsname,0,1).substr($lastname ,0,1);
 		}
 	}
-
 	if (!function_exists('milliseconds')) {
 		function milliseconds() {
 			$mt = explode(' ', microtime());

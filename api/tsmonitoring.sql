@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 07, 2026 at 08:27 AM
+-- Generation Time: Jan 30, 2026 at 01:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -63,13 +63,13 @@ CREATE TABLE `asset_types` (
 --
 
 INSERT INTO `asset_types` (`asset_type_id`, `type`, `name`, `description`, `questions`, `status`) VALUES
-(1, 'SANITATION', 'Type-1 FRP Septic Tank', 'Fiber Reinforced Plastic (FRP) Toilets (with Septic Tank)', '1,2,3,4', 1),
-(2, 'SANITATION', 'Type-2 FRP Soak Pit', 'Fiber Reinforced Plastic (FRP) Toilets (with Soak Pit)', '1,2,3,4', 1),
-(3, 'SANITATION', 'Type-3 FRP Urinals', 'Fiber Reinforced Plastic (FRP) Urinals (with Septic Tank / Soak Pit)', '1,2,3,4', 1),
-(4, 'SANITATION', 'Type-4 Prefab Steel Septic Tank', 'Prefabricated Steel Toilets with Septic Tank', '1,2,3,4', 1),
-(5, 'SANITATION', 'Type-5 Prefab Steel Soak Pit', 'Prefabricated Steel Toilets (with soak pit)', '1,2,3,4', 1),
-(6, 'SANITATION', 'Type-6 Kanath Soak Pit', 'Tentage / Kanath Toilets (with soak pit) – Integrated Structure (Sub Structure & Super Structure)', '1,2,3,4', 1),
-(8, 'SANITATION', 'Type-8 Govt Cemented Toilets', 'Govt Cemented Toilets 4x4 and 8x8', '1,2,3,4', 1),
+(1, 'SANITATION', 'Type-1 FRP Septic Tank', 'Fiber Reinforced Plastic (FRP) Toilets (with Septic Tank)', '1,2,3,4,5,6,7,8,9,10,11,12,13,14', 1),
+(2, 'SANITATION', 'Type-2 FRP Soak Pit', 'Fiber Reinforced Plastic (FRP) Toilets (with Soak Pit)', '1,2,15,4,5,6,7,8,9,10,11,12,13,14', 1),
+(3, 'SANITATION', 'Type-3 FRP Urinals', 'Fiber Reinforced Plastic (FRP) Urinals (with Septic Tank / Soak Pit)', '3,16,17,9', 1),
+(4, 'SANITATION', 'Type-4 Prefab Steel Septic Tank', 'Prefabricated Steel Toilets with Septic Tank', '1,2,3,4,5,6,7,8,9,10,11,12,13,14', 1),
+(5, 'SANITATION', 'Type-5 Prefab Steel Soak Pit', 'Prefabricated Steel Toilets (with soak pit)', '1,2,15,4,5,6,7,8,9,10,11,12,13,14', 1),
+(6, 'SANITATION', 'Type-6 Kanath Soak Pit', 'Tentage / Kanath Toilets (with soak pit) – Integrated Structure (Sub Structure & Super Structure)', '5,10,11,12,13,14,15,16', 1),
+(8, 'SANITATION', 'Type-8 Govt Cemented Toilets', 'Govt Cemented Toilets 4x4 and 8x8', '3,4,5,6,7,8,10,12,13,14,15', 1),
 (9, 'SANITATION', 'Type-9 Vehicle Mounted Mobile Toilets', 'Vehicle mounted mobile toilets –10 toilets/ unit', '0', 1),
 (10, 'SANITATION', 'Type-10 Special Toilets – VIP', 'Special Toilets – Specially Designed Structures VIP', '0', 1);
 
@@ -132,6 +132,81 @@ CREATE TABLE `ci_sessions` (
   `data` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `ci_sessions`
+--
+
+INSERT INTO `ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
+('vepr483q1kpns74bjlcvdge0vis9tg00', '127.0.0.1', 4294967295, 0x5f5f63695f6c6173745f726567656e65726174657c693a313736383831383239303b667461646d696e5f6c6f67696e5f63737266746f6b656e7c733a33323a226335343333336431303530376431633038393464323131613939363732313036223b5f63695f70726576696f75735f75726c7c733a33323a22687474703a2f2f656d692e6c6f632f652d6d616e646174652d7061636b616765223b757365725f69647c733a313a2231223b73657373696f6e5f746f6b656e7c733a33323a226630623366613538643039666534373935663564383763306536633939393564223b);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `incidents`
+--
+
+CREATE TABLE `incidents` (
+  `incident_id` int(11) NOT NULL,
+  `incident_code` varchar(50) NOT NULL,
+  `inspection_id` int(11) NOT NULL,
+  `response_id` int(11) NOT NULL,
+  `asset_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `reported_by` int(11) NOT NULL,
+  `assigned_to` int(11) DEFAULT NULL,
+  `vendor_id` int(11) NOT NULL,
+  `severity` enum('LOW','MEDIUM','HIGH','CRITICAL') NOT NULL,
+  `description` text DEFAULT NULL,
+  `incident_status` enum('OPEN','ASSIGNED','IN_PROGRESS','RESOLVED','CLOSED','REOPENED') DEFAULT 'OPEN',
+  `due_date` datetime DEFAULT NULL,
+  `resolved_date` datetime DEFAULT NULL,
+  `closed_date` datetime DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `incident_history`
+--
+
+CREATE TABLE `incident_history` (
+  `history_id` int(11) NOT NULL,
+  `incident_id` int(11) NOT NULL,
+  `old_status` varchar(50) DEFAULT NULL,
+  `new_status` varchar(50) NOT NULL,
+  `changed_by` int(11) NOT NULL,
+  `comments` text DEFAULT NULL,
+  `action_taken` text DEFAULT NULL,
+  `photos` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`photos`)),
+  `changed_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inspections`
+--
+
+CREATE TABLE `inspections` (
+  `inspection_id` int(11) NOT NULL,
+  `allocation_id` int(11) NOT NULL,
+  `asset_id` int(11) NOT NULL,
+  `shift_id` int(11) NOT NULL DEFAULT 0,
+  `swachhagrahi_id` int(11) NOT NULL,
+  `inspection_date` date NOT NULL,
+  `total_questions` int(11) DEFAULT NULL,
+  `questions_answered` int(11) DEFAULT NULL,
+  `questions_answers_data` text DEFAULT NULL COMMENT 'JSON',
+  `compliance_score` decimal(5,2) DEFAULT NULL,
+  `overall_status` enum('COMPLIANT','NON_COMPLIANT','PARTIAL') NOT NULL,
+  `notes` text DEFAULT NULL,
+  `latitude` varchar(30) NOT NULL DEFAULT '0',
+  `longitude` varchar(30) DEFAULT '0',
+  `submitted_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- --------------------------------------------------------
 
 --
@@ -181,7 +256,6 @@ CREATE TABLE `questions` (
   `condition_type` enum('EQUALS','NOT_EQUALS','GREATER_THAN','LESS_THAN','CONTAINS') DEFAULT NULL,
   `condition_value` varchar(500) DEFAULT NULL,
   `severity` enum('LOW','MEDIUM','HIGH','CRITICAL') DEFAULT 'MEDIUM',
-  `sla` int(11) NOT NULL COMMENT 'in minutes',
   `is_mandatory` tinyint(1) DEFAULT 1,
   `is_photo_mandatory` tinyint(4) NOT NULL DEFAULT 0,
   `sequence` int(11) DEFAULT 0,
@@ -192,11 +266,11 @@ CREATE TABLE `questions` (
 -- Dumping data for table `questions`
 --
 
-INSERT INTO `questions` (`question_id`, `question_text`, `question_type`, `options`, `expected_answer`, `condition_type`, `condition_value`, `severity`, `sla`, `is_mandatory`, `is_photo_mandatory`, `sequence`, `is_active`) VALUES
-(1, 'Is the toilet floor clean?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'MEDIUM', 120, 1, 0, 1, 1),
-(2, 'Are the toilet seats clean?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'MEDIUM', 180, 1, 0, 2, 1),
-(3, 'Is water available in the toilet?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'HIGH', 120, 1, 0, 1, 1),
-(4, 'Rate the overall condition of the toilet infrastructure (1-5)', 'RATING', '[1,2,3,4,5]', '4', 'LESS_THAN', '3', 'MEDIUM', 240, 1, 0, 1, 1);
+INSERT INTO `questions` (`question_id`, `question_text`, `question_type`, `options`, `expected_answer`, `condition_type`, `condition_value`, `severity`, `is_mandatory`, `is_photo_mandatory`, `sequence`, `is_active`) VALUES
+(1, 'Is the toilet floor clean?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'MEDIUM', 1, 0, 1, 1),
+(2, 'Are the toilet seats clean?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'MEDIUM', 1, 0, 2, 1),
+(3, 'Is water available in the toilet?', 'YES_NO', NULL, 'YES', 'EQUALS', 'NO', 'HIGH', 1, 0, 1, 1),
+(4, 'Rate the overall condition of the toilet infrastructure (1-5)', 'RATING', '[1,2,3,4,5]', '4', 'LESS_THAN', '3', 'MEDIUM', 1, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -242,170 +316,12 @@ CREATE TABLE `sanitation_asset_allocations` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `sanitation_incidents`
+-- Dumping data for table `sanitation_asset_allocations`
 --
 
-CREATE TABLE `sanitation_incidents` (
-  `incident_id` int(11) NOT NULL,
-  `incident_code` varchar(50) NOT NULL,
-  `inspection_id` int(11) NOT NULL,
-  `response_id` int(11) NOT NULL,
-  `asset_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL,
-  `reported_by` int(11) NOT NULL,
-  `resolved_by` int(11) DEFAULT NULL,
-  `vendor_id` int(11) NOT NULL,
-  `severity` enum('LOW','MEDIUM','HIGH','CRITICAL') NOT NULL,
-  `description` text DEFAULT NULL,
-  `incident_status` enum('OPEN','ASSIGNED','IN_PROGRESS','RESOLVED','CLOSED','REOPENED') DEFAULT 'OPEN',
-  `due_date` datetime DEFAULT NULL,
-  `resolved_date` datetime DEFAULT NULL,
-  `closed_date` datetime DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sanitation_incident_history`
---
-
-CREATE TABLE `sanitation_incident_history` (
-  `history_id` int(11) NOT NULL,
-  `incident_id` int(11) NOT NULL,
-  `old_status` varchar(50) DEFAULT NULL,
-  `new_status` varchar(50) NOT NULL,
-  `changed_by` int(11) NOT NULL,
-  `comments` text DEFAULT NULL,
-  `action_taken` text DEFAULT NULL,
-  `photos` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`photos`)),
-  `changed_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sanitation_incidents_archive`
---
-
-CREATE TABLE `sanitation_incidents_archive` (
-  `incident_id` int(11) NOT NULL,
-  `incident_code` varchar(50) NOT NULL,
-  `inspection_id` int(11) NOT NULL,
-  `response_id` int(11) NOT NULL,
-  `asset_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL,
-  `reported_by` int(11) NOT NULL,
-  `resolved_by` int(11) DEFAULT NULL,
-  `vendor_id` int(11) NOT NULL,
-  `severity` enum('LOW','MEDIUM','HIGH','CRITICAL') NOT NULL,
-  `description` text DEFAULT NULL,
-  `incident_status` enum('OPEN','ASSIGNED','IN_PROGRESS','RESOLVED','CLOSED','REOPENED') DEFAULT 'OPEN',
-  `due_date` datetime DEFAULT NULL,
-  `resolved_date` datetime DEFAULT NULL,
-  `closed_date` datetime DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sanitation_inspections`
---
-
-CREATE TABLE `sanitation_inspections` (
-  `inspection_id` int(11) NOT NULL,
-  `allocation_id` int(11) NOT NULL,
-  `asset_id` int(11) NOT NULL,
-  `asset_type_id` int(11) NOT NULL DEFAULT 0,
-  `vendor_id` int(11) NOT NULL DEFAULT 0,
-  `sector_id` int(11) NOT NULL DEFAULT 0,
-  `circle_id` int(11) NOT NULL DEFAULT 0,
-  `shift_id` int(11) NOT NULL DEFAULT 0,
-  `swachhagrahi_id` int(11) NOT NULL,
-  `inspection_date` date NOT NULL,
-  `total_questions` int(11) DEFAULT NULL,
-  `questions_answered` int(11) DEFAULT NULL,
-  `questions_answers_data` text DEFAULT NULL COMMENT 'JSON',
-  `compliance_score` decimal(5,2) DEFAULT NULL,
-  `overall_status` enum('COMPLIANT','NON_COMPLIANT','PARTIAL') NOT NULL,
-  `notes` text DEFAULT NULL,
-  `latitude` varchar(30) NOT NULL DEFAULT '0',
-  `longitude` varchar(30) DEFAULT '0',
-  `submitted_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-
---
--- Table structure for table `sanitation_inspections_archive`
---
-
-CREATE TABLE `sanitation_inspections_archive` (
-  `inspection_id` int(11) NOT NULL,
-  `allocation_id` int(11) NOT NULL,
-  `asset_id` int(11) NOT NULL,
-  `asset_type_id` int(11) NOT NULL DEFAULT 0,
-  `vendor_id` int(11) NOT NULL DEFAULT 0,
-  `sector_id` int(11) NOT NULL DEFAULT 0,
-  `circle_id` int(11) NOT NULL DEFAULT 0,
-  `shift_id` int(11) NOT NULL DEFAULT 0,
-  `swachhagrahi_id` int(11) NOT NULL,
-  `inspection_date` date NOT NULL,
-  `total_questions` int(11) DEFAULT NULL,
-  `questions_answered` int(11) DEFAULT NULL,
-  `questions_answers_data` text DEFAULT NULL COMMENT 'JSON',
-  `compliance_score` decimal(5,2) DEFAULT NULL,
-  `overall_status` enum('COMPLIANT','NON_COMPLIANT','PARTIAL') NOT NULL,
-  `notes` text DEFAULT NULL,
-  `latitude` varchar(30) NOT NULL DEFAULT '0',
-  `longitude` varchar(30) DEFAULT '0',
-  `submitted_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-
-
--- Table structure for table `sanitation_inspection_summary`
---
-
-CREATE TABLE `sanitation_inspection_summary` (
-  `summary_id` int(11) NOT NULL,
-  `inspection_date` date NOT NULL,
-  `asset_type_id` int(11) NOT NULL,
-  `sector_id` int(11) NOT NULL,
-  `vendor_id` int(11) NOT NULL,
-  `total_asset_reg_till_date` int(11) NOT NULL DEFAULT 0,
-  `total_inspections` int(11) NOT NULL DEFAULT 0,
-  `total_asset_inspections` int(11) NOT NULL DEFAULT 0,
-  `compliant_count` int(11) NOT NULL DEFAULT 0,
-  `non_compliant_count` int(11) NOT NULL DEFAULT 0,
-  `partial_count` int(11) NOT NULL DEFAULT 0,
-  `avg_compliance_score` decimal(5,2) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `cron_log`
---
-
-CREATE TABLE `cron_log` (
-  `cron_log_id` int(11) NOT NULL,
-  `job_name` varchar(80) NOT NULL,
-  `executed_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `status` enum('success','failed') NOT NULL,
-  `message` text DEFAULT NULL,
-  `details` text DEFAULT NULL COMMENT 'JSON: optional payload e.g. archived count, summary_rows',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `sanitation_asset_allocations` (`allocation_id`, `asset_id`, `swachhagrahi_id`, `shift_id`, `allocated_by`, `allocation_date`, `status`, `created_at`) VALUES
+(1, 1, 1, 1, 1, '2025-01-28', 'ACTIVE', '2026-01-30 10:08:10');
 
 -- --------------------------------------------------------
 
@@ -444,6 +360,13 @@ CREATE TABLE `session` (
   `logged_out` datetime DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `session`
+--
+
+INSERT INTO `session` (`session_id`, `user_id`, `session_token`, `logged_in`, `logged_out`, `status`) VALUES
+(24, 1, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMSIsImlhdCI6MTc2OTc2NzI1NCwiZXhwIjoxNzY5NzcwODU0fQ.VCUsIzZVuZS_DM5ntDCfRGG57K9olYBFIC35eEMaKTw', '2026-01-30 15:30:55', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -524,7 +447,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `code`, `password_hash`, `email`, `phone`, `full_name`, `user_type_id`, `vendor_id`, `is_active`, `otp`, `otp_expiry`, `otp_attempts`, `created_at`, `updated_at`) VALUES
-(1, 'KSH2026012822035279600002', '$2y$10$YRhN3leJLjukd/jbjafuBu/qyPPC6fER5DF/NMN0dHjGF5PYtAS9K', 'admin@example.com', '9876543210', 'Admin User', 1, 0, 1, '380610', '2026-01-30 15:06:50', 0, '2026-01-24 11:03:49', '2026-02-06 16:00:55');
+(1, 'KSH2026012822035279600002', '$2y$10$YRhN3leJLjukd/jbjafuBu/qyPPC6fER5DF/NMN0dHjGF5PYtAS9K', 'admin@example.com', '911234567890', 'Admin User', 1, 0, 1, '380610', '2026-01-30 15:06:50', 0, '2026-01-24 11:03:49', '2026-01-29 06:22:12');
 
 -- --------------------------------------------------------
 
@@ -568,7 +491,7 @@ INSERT INTO `user_types` (`user_type_id`, `user_type`, `index_no`, `status`) VAL
 CREATE TABLE `user_type_permissions` (
   `permission_id` int(11) NOT NULL,
   `user_type_id` int(11) NOT NULL,
-  `permission` enum('users','user-permissions','shift','circle','sector','question','asset-type','asset','vendor','allocation','inspection','asset-tagging','incident') NOT NULL,
+  `permission` enum('users','user-permissions','shift','circle','sector','question','asset-type','asset','vendor','allocation','inspection') NOT NULL,
   `can_create` tinyint(1) DEFAULT 0,
   `can_view` tinyint(1) DEFAULT 0,
   `can_edit` tinyint(1) DEFAULT 0,
@@ -591,9 +514,7 @@ INSERT INTO `user_type_permissions` (`permission_id`, `user_type_id`, `permissio
 (9, 1, 'asset', 1, 1, 1, 1, '2026-01-29 06:28:34'),
 (10, 1, 'vendor', 1, 1, 1, 1, '2026-01-29 06:28:34'),
 (11, 1, 'allocation', 1, 1, 1, 1, '2026-01-29 06:28:34'),
-(12, 1, 'inspection', 1, 1, 1, 1, '2026-01-29 06:28:34'),
-(13, 1, 'asset-tagging', 1, 1, 1, 1, '2026-01-29 06:28:34'),
-(14, 1, 'incident', 1, 1, 1, 1, '2026-02-07 06:32:40');
+(12, 1, 'inspection', 1, 1, 1, 1, '2026-01-29 06:28:34');
 
 -- --------------------------------------------------------
 
@@ -633,7 +554,7 @@ CREATE TABLE `vehicle_collection_points` (
   `ward_number` varchar(10) DEFAULT NULL,
   `zone` varchar(50) DEFAULT NULL,
   `point_type` varchar(30) DEFAULT NULL CHECK (`point_type` in ('Residential','Commercial','Public','Institutional')),
-  `expected_collection_time` varchar(20) DEFAULT NULL,
+  `expected_collection_time` time DEFAULT NULL,
   `collection_frequency` varchar(20) DEFAULT 'Daily',
   `status` varchar(20) DEFAULT 'Active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -844,6 +765,39 @@ ALTER TABLE `ci_sessions`
   ADD KEY `ci_sessions_timestamp` (`timestamp`);
 
 --
+-- Indexes for table `incidents`
+--
+ALTER TABLE `incidents`
+  ADD PRIMARY KEY (`incident_id`),
+  ADD UNIQUE KEY `incident_code` (`incident_code`),
+  ADD KEY `idx_incidents_status` (`incident_status`),
+  ADD KEY `idx_incidents_vendor` (`vendor_id`),
+  ADD KEY `idx_incidents_reported_by` (`reported_by`),
+  ADD KEY `idx_incidents_assigned_to` (`assigned_to`),
+  ADD KEY `idx_incidents_asset` (`asset_id`),
+  ADD KEY `idx_incidents_severity` (`severity`),
+  ADD KEY `idx_incidents_created_date` (`created_at`);
+
+--
+-- Indexes for table `incident_history`
+--
+ALTER TABLE `incident_history`
+  ADD PRIMARY KEY (`history_id`),
+  ADD KEY `idx_incident_history_incident` (`incident_id`),
+  ADD KEY `idx_incident_history_date` (`changed_at`);
+
+--
+-- Indexes for table `inspections`
+--
+ALTER TABLE `inspections`
+  ADD PRIMARY KEY (`inspection_id`),
+  ADD UNIQUE KEY `uniq_asset_shift_date` (`asset_id`,`shift_id`,`inspection_date`),
+  ADD KEY `idx_inspections_asset_date` (`asset_id`,`inspection_date`),
+  ADD KEY `idx_inspections_swachhagrahi` (`swachhagrahi_id`),
+  ADD KEY `idx_inspections_allocation` (`allocation_id`),
+  ADD KEY `idx_inspections_status` (`overall_status`);
+
+--
 -- Indexes for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -886,84 +840,6 @@ ALTER TABLE `sanitation_asset_allocations`
   ADD KEY `idx_allocations_date_status` (`allocation_date`,`status`),
   ADD KEY `idx_allocations_asset` (`asset_id`),
   ADD KEY `idx_allocations_shift` (`shift_id`);
-
---
--- Indexes for table `sanitation_incidents`
---
-ALTER TABLE `sanitation_incidents`
-  ADD PRIMARY KEY (`incident_id`),
-  ADD UNIQUE KEY `incident_code` (`incident_code`),
-  ADD KEY `idx_incidents_status` (`incident_status`),
-  ADD KEY `idx_incidents_vendor` (`vendor_id`),
-  ADD KEY `idx_incidents_reported_by` (`reported_by`),
-  ADD KEY `idx_incidents_assigned_to` (`resolved_by`),
-  ADD KEY `idx_incidents_asset` (`asset_id`),
-  ADD KEY `idx_incidents_severity` (`severity`),
-  ADD KEY `idx_incidents_created_date` (`created_at`);
-
---
--- Indexes for table `sanitation_incident_history`
---
-ALTER TABLE `sanitation_incident_history`
-  ADD PRIMARY KEY (`history_id`),
-  ADD KEY `idx_incident_history_incident` (`incident_id`),
-  ADD KEY `idx_incident_history_date` (`changed_at`);
-
---
--- Indexes for table `sanitation_incidents_archive`
---
-ALTER TABLE `sanitation_incidents_archive`
-  ADD PRIMARY KEY (`incident_id`),
-  ADD UNIQUE KEY `incident_code` (`incident_code`),
-  ADD KEY `idx_incidents_status` (`incident_status`),
-  ADD KEY `idx_incidents_vendor` (`vendor_id`),
-  ADD KEY `idx_incidents_reported_by` (`reported_by`),
-  ADD KEY `idx_incidents_assigned_to` (`resolved_by`),
-  ADD KEY `idx_incidents_asset` (`asset_id`),
-  ADD KEY `idx_incidents_severity` (`severity`),
-  ADD KEY `idx_incidents_created_date` (`created_at`);
-
---
--- Indexes for table `sanitation_inspections`
---
-ALTER TABLE `sanitation_inspections`
-  ADD PRIMARY KEY (`inspection_id`),
-  ADD UNIQUE KEY `uniq_asset_shift_date` (`asset_id`,`shift_id`,`inspection_date`),
-  ADD KEY `idx_inspections_asset_date` (`asset_id`,`inspection_date`),
-  ADD KEY `idx_inspections_swachhagrahi` (`swachhagrahi_id`),
-  ADD KEY `idx_inspections_allocation` (`allocation_id`),
-  ADD KEY `idx_inspections_status` (`overall_status`);
-
---
--- Indexes for table `sanitation_inspections_archive`
---
-ALTER TABLE `sanitation_inspections_archive`
-  ADD PRIMARY KEY (`inspection_id`),
-  ADD UNIQUE KEY `uniq_asset_shift_date` (`asset_id`,`shift_id`,`inspection_date`),
-  ADD KEY `idx_inspections_asset_date` (`asset_id`,`inspection_date`),
-  ADD KEY `idx_inspections_swachhagrahi` (`swachhagrahi_id`),
-  ADD KEY `idx_inspections_allocation` (`allocation_id`),
-  ADD KEY `idx_inspections_status` (`overall_status`);
-
---
--- Indexes for table `sanitation_inspection_summary`
---
-ALTER TABLE `sanitation_inspection_summary`
-  ADD PRIMARY KEY (`summary_id`),
-  ADD UNIQUE KEY `uniq_summary` (`inspection_date`,`asset_type_id`,`sector_id`,`vendor_id`),
-  ADD KEY `idx_date` (`inspection_date`),
-  ADD KEY `idx_sector` (`sector_id`),
-  ADD KEY `idx_vendor` (`vendor_id`),
-  ADD KEY `idx_asset_type` (`asset_type_id`);
-
---
--- Indexes for table `cron_log`
---
-ALTER TABLE `cron_log`
-  ADD PRIMARY KEY (`cron_log_id`),
-  ADD KEY `idx_cron_log_job` (`job_name`),
-  ADD KEY `idx_cron_log_executed` (`executed_at`),
-  ADD KEY `idx_cron_log_status` (`status`);
 
 --
 -- Indexes for table `sectors`
@@ -1119,6 +995,24 @@ ALTER TABLE `circles`
   MODIFY `circle_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `incidents`
+--
+ALTER TABLE `incidents`
+  MODIFY `incident_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `incident_history`
+--
+ALTER TABLE `incident_history`
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `inspections`
+--
+ALTER TABLE `inspections`
+  MODIFY `inspection_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -1146,49 +1040,7 @@ ALTER TABLE `sanitation_assets`
 -- AUTO_INCREMENT for table `sanitation_asset_allocations`
 --
 ALTER TABLE `sanitation_asset_allocations`
-  MODIFY `allocation_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sanitation_incidents`
---
-ALTER TABLE `sanitation_incidents`
-  MODIFY `incident_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sanitation_incidents_archive`
---
-ALTER TABLE `sanitation_incidents_archive`
-  MODIFY `incident_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sanitation_incident_history`
---
-ALTER TABLE `sanitation_incident_history`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sanitation_inspections`
---
-ALTER TABLE `sanitation_inspections`
-  MODIFY `inspection_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sanitation_inspections_archive`
---
-ALTER TABLE `sanitation_inspections_archive`
-  MODIFY `inspection_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sanitation_inspection_summary`
---
-ALTER TABLE `sanitation_inspection_summary`
-  MODIFY `summary_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `cron_log`
---
-ALTER TABLE `cron_log`
-  MODIFY `cron_log_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `allocation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `sectors`
@@ -1200,7 +1052,7 @@ ALTER TABLE `sectors`
 -- AUTO_INCREMENT for table `session`
 --
 ALTER TABLE `session`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `shifts`
@@ -1218,7 +1070,7 @@ ALTER TABLE `system_config`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6375;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_types`
@@ -1230,7 +1082,7 @@ ALTER TABLE `user_types`
 -- AUTO_INCREMENT for table `user_type_permissions`
 --
 ALTER TABLE `user_type_permissions`
-  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=212;
+  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `vehicles`
@@ -1284,7 +1136,7 @@ ALTER TABLE `vehicle_route_points`
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `vendor_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `vendor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
